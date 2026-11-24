@@ -97,7 +97,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker compose config
-      - run: docker compose config -f docker-compose.yml -f docker-compose.gpu.yml
+      - run: docker compose -f docker-compose.yml -f docker-compose.gpu.yml config
       - run: docker compose build
       - name: Boot fixture stack and check health endpoints
         run: |
@@ -125,12 +125,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: gitleaks
-        uses: zricethezav/gitleaks-action@v2
-        with:
-          args: detect --no-git --redact --exit-code 1 --path .
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      # Use the gitleaks CLI directly: the GitHub Action needs a licence in
+      # organisation accounts, and CI must pass with zero repository secrets.
+      - name: install gitleaks CLI
+        run: |
+          curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz -o /tmp/gitleaks.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+          sudo install -m 0755 /tmp/gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+      - name: gitleaks scan
+        run: gitleaks detect --no-git --source . --redact --exit-code 1
       - name: fail if a .env file is tracked
         run: |
           if git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v '\.env\.example$'; then
