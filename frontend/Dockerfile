@@ -1,11 +1,11 @@
 # syntax=docker/dockerfile:1
 # Pinned base images; dev is the default target, build produces static assets.
-FROM node:20.18.1-bookworm-slim AS deps
+FROM node:26.13.0-bookworm-slim AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-FROM node:20.18.1-bookworm-slim AS dev
+FROM node:26.13.0-bookworm-slim AS dev
 WORKDIR /app
 ENV NODE_ENV=development
 COPY --from=deps /app/node_modules ./node_modules
@@ -14,7 +14,7 @@ USER node
 EXPOSE 5173
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 
-FROM node:20.18.1-bookworm-slim AS build
+FROM node:26.13.0-bookworm-slim AS build
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=deps /app/node_modules ./node_modules
