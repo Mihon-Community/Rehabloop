@@ -1,0 +1,21 @@
+name: Bug report
+description: Something is broken or behaves unsafely
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Steps to reproduce, expected vs actual, service and screen/endpoint.
+    validations: { required: true }
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [frontend, backend, vision_service, supabase, docker, docs, other]
+    validations: { required: true }
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety impact
+      description: Could this show a wrong measurement, diagnosis-like language, or expose data?

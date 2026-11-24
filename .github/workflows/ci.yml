@@ -1,0 +1,175 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: frontend (lint, typecheck, test, build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+        env:
+          VITE_SUPABASE_URL: https://example.supabase.co
+          VITE_SUPABASE_ANON_KEY: dummy-anon-key
+          VITE_API_BASE_URL: http://localhost:8000
+      - run: npm run lint
+        working-directory: frontend
+      - run: npm run typecheck
+        working-directory: frontend
+      - run: npm test
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend
+        env:
+          VITE_SUPABASE_URL: https://example.supabase.co
+          VITE_SUPABASE_ANON_KEY: dummy-anon-key
+          VITE_API_BASE_URL: http://localhost:8000
+
+  backend:
+    name: backend (ruff, mypy, pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+        working-directory: backend
+      - run: ruff check .
+        working-directory: backend
+      - run: ruff format --check .
+        working-directory: backend
+      - run: mypy app
+        working-directory: backend
+      - run: pytest --cov=app --cov-report=term-missing
+        working-directory: backend
+        env:
+          SUPABASE_URL: https://example.supabase.co
+          NVIDIA_BASE_URL: https://integrate.api.nvidia.com/v1
+          STORE_RAW_VIDEO: 'false'
+
+  vision_service:
+    name: vision_service (fixture mode, no GPU/weights)
+    runs-on: ubuntu-latest
+    env:
+      VISION_MODE: fixture
+      VISION_DEVICE: cpu
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: vision_service/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+        working-directory: vision_service
+      - run: ruff check .
+        working-directory: vision_service
+      - run: ruff format --check .
+        working-directory: vision_service
+      - run: mypy app
+        working-directory: vision_service
+      - run: pytest --cov=app --cov-report=term-missing
+        working-directory: vision_service
+
+  docker:
+    name: docker (config, build, health smoke)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config
+      - run: docker compose config -f docker-compose.yml -f docker-compose.gpu.yml
+      - run: docker compose build
+      - name: Boot fixture stack and check health endpoints
+        run: |
+          docker compose up -d
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:8000/api/v1/health >/dev/null && \
+               curl -fsS http://localhost:8001/health >/dev/null; then
+              echo "health endpoints responding"; break
+            fi
+            sleep 2
+          done
+          curl -fsS http://localhost:8000/api/v1/health
+          curl -fsS http://localhost:8001/health
+          docker compose ps
+          docker compose down -v
+        env:
+          VISION_MODE: fixture
+          VISION_DEVICE: cpu
+          STORE_RAW_VIDEO: 'false'
+
+  secrets-and-safety:
+    name: secrets and safety scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        uses: zricethezav/gitleaks-action@v2
+        with:
+          args: detect --no-git --redact --exit-code 1 --path .
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: fail if a .env file is tracked
+        run: |
+          if git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v '\.env\.example$'; then
+            echo "A .env file is tracked"; exit 1
+          fi
+          echo "No .env file tracked"
+      - name: fail if service-role key is referenced under frontend/
+        run: |
+          if grep -RIn --exclude-dir=node_modules --exclude=package-lock.json \
+             'SUPABASE_SERVICE_ROLE_KEY' frontend/; then
+            echo "Service-role key must never appear in frontend/"; exit 1
+          fi
+          echo "No service-role key reference in frontend/"
+
+  migrations:
+    name: migration lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: naming and basic SQL sanity
+        run: |
+          set -e
+          found=0
+          for file in supabase/migrations/*.sql; do
+            [ -e "$file" ] || continue
+            found=1
+            base=$(basename "$file")
+            echo "checking $base"
+            echo "$base" | grep -Eq '^[0-9]{14}_[a-z0-9_]+\.sql$' || {
+              echo "Bad migration name: $base"; exit 1; }
+            grep -q 'create table' "$file" || { echo "$base: no create table"; exit 1; }
+            grep -qi 'row level security' "$file" || {
+              echo "$base: missing RLS"; exit 1; }
+            python3 - "$file" <<'PY'
+          import sys
+          sql = open(sys.argv[1], encoding='utf-8').read()
+          if sql.count('(') != sql.count(')'):
+              raise SystemExit('unbalanced parentheses')
+          print('basic syntax OK')
+          PY
+          done
+          [ "$found" -eq 1 ] || { echo "No migrations found"; exit 1; }

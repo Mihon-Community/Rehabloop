@@ -1,0 +1,20 @@
+name: Feature / task
+description: Planned work from the blueprint or a follow-up
+labels: [enhancement]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What should be built, and why?
+    validations: { required: true }
+  - type: dropdown
+    id: area
+    attributes:
+      label: Owner area
+      options: [frontend (Steve), backend/vision/supabase (Lennox), shared (both)]
+    validations: { required: true }
+  - type: textarea
+    id: contract
+    attributes:
+      label: Does this change the API/WebSocket contract?
+      description: If yes, both developers must approve a PR updating docs/api_contract.md.
