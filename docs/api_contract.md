@@ -231,3 +231,27 @@ Coordinates are illustrative and do **not** define Meta keypoint indices.
 3. Get explicit approval from Steve **and** Lennox before merging into `develop`.
 4. Bump a version/field only through a new `/api/v2` prefix if it breaks
    existing clients; additive optional fields are fine in v1.
+
+## PROPOSED (needs Steve's review)
+
+The following additive v1 fields/events are implemented in the backend branch
+and need review before integration:
+
+- Health adds storage_mode, with values memory or supabase.
+- Protocol, session, progress, and summary responses add persisted. It is false
+  for in-memory storage; those responses must not imply durable storage.
+- Session start adds an optional stream_token in its response. The token is
+  short-lived, bound to the patient and session, and is sent as the stream
+  connection token. It is not a long-lived user JWT.
+- Summary responses retain generated_by and add source, model_id, a fixed
+  non-clinical disclaimer, and persisted metadata.
+- Measurement and quality_warning events add simulated. Fixture-generated
+  events set it to true, with a fixture model version.
+- The current stream implementation accepts JSON frame events with a maximum
+  encoded frame length of 2,000,000 characters. It drops frames that exceed the
+  configured server-side rate, rejects non-increasing sequence/timestamps, and
+  emits RATE_LIMITED, BAD_FRAME_ORDER, UNPROCESSABLE, or VISION_UNAVAILABLE
+  error events as applicable.
+- Projected angles are rounded to one decimal place. Memory responses report
+  persisted=false; only canonical numeric metrics, never frames or keypoints,
+  can be sent to the NVIDIA summary service.

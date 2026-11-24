@@ -18,7 +18,9 @@ class ProtocolResponse(BaseModel):
     id: str
     patient_id: str
     clinician_id: str
+    protocol_name: str = ""
     version: int
     parameters: dict
     approved_at: str | None = None
     active: bool
+    persisted: bool = False

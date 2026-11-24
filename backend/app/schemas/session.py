@@ -31,8 +31,11 @@ class SessionSummaryResponse(BaseModel):
     metrics: dict[str, Any]
     quality_flags: list[str]
     raw_video_stored: bool = False
+    persisted: bool = False
+    stream_token: str | None = None
 
 
 class ProgressResponse(BaseModel):
     patient_id: str
     sessions: list[SessionSummaryResponse] = Field(default_factory=list)
+    persisted: bool = False

@@ -21,3 +21,4 @@ disallow_untyped_defs = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q --strict-markers"
+markers = ["live: requires a real NVIDIA API credential and network access"]

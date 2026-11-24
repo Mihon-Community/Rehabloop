@@ -1,0 +1,2952 @@
+{
+  "fixture_id": "synthetic-noisy-8-reps",
+  "simulated": true,
+  "warning": "Synthetic keypoints only; not live model output or clinical data.",
+  "model": "fixture-simulated",
+  "mapping_version": "rehabloop-knee-map-1.0",
+  "engine_settings": {
+    "smoothing_alpha": 0.4
+  },
+  "expected_completed_reps": 8,
+  "note": "Seeded sub-degree coordinate and angle jitter; output is repeatable.",
+  "frames": [
+    {
+      "sequence": 1,
+      "timestamp_ms": 0,
+      "expected_projected_angle_deg": 75.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200281,
+          "y": 0.499205,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500275,
+          "y": 0.500306,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.423742,
+          "y": 0.790468,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "timestamp_ms": 200,
+      "expected_projected_angle_deg": 90.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.19946,
+          "y": 0.499901,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500443,
+          "y": 0.50011,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.499256,
+          "y": 0.80036,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "timestamp_ms": 400,
+      "expected_projected_angle_deg": 105.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200619,
+          "y": 0.500708,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500221,
+          "y": 0.499666,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.577396,
+          "y": 0.790107,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 4,
+      "timestamp_ms": 600,
+      "expected_projected_angle_deg": 115.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200069,
+          "y": 0.500762,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500144,
+          "y": 0.499316,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.629573,
+          "y": 0.771123,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "timestamp_ms": 800,
+      "expected_projected_angle_deg": 119.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200078,
+          "y": 0.499717,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500466,
+          "y": 0.500143,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.64779,
+          "y": 0.76064,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 6,
+      "timestamp_ms": 1000,
+      "expected_projected_angle_deg": 120.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200007,
+          "y": 0.499248,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.49927,
+          "y": 0.500677,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.651162,
+          "y": 0.759597,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 7,
+      "timestamp_ms": 1200,
+      "expected_projected_angle_deg": 120.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199843,
+          "y": 0.499845,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500173,
+          "y": 0.50025,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.649355,
+          "y": 0.760496,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 8,
+      "timestamp_ms": 1400,
+      "expected_projected_angle_deg": 120.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199488,
+          "y": 0.499519,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500551,
+          "y": 0.500226,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.651117,
+          "y": 0.759473,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 9,
+      "timestamp_ms": 1600,
+      "expected_projected_angle_deg": 114.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200633,
+          "y": 0.500695,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499822,
+          "y": 0.499375,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.625561,
+          "y": 0.772525,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 10,
+      "timestamp_ms": 1800,
+      "expected_projected_angle_deg": 99.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200407,
+          "y": 0.500593,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499254,
+          "y": 0.499986,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.551654,
+          "y": 0.795527,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 11,
+      "timestamp_ms": 2000,
+      "expected_projected_angle_deg": 85.2,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200798,
+          "y": 0.499949,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500294,
+          "y": 0.499256,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.475478,
+          "y": 0.798766,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 12,
+      "timestamp_ms": 2200,
+      "expected_projected_angle_deg": 75.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200217,
+          "y": 0.500133,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499213,
+          "y": 0.499422,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.425161,
+          "y": 0.790079,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 13,
+      "timestamp_ms": 2400,
+      "expected_projected_angle_deg": 75.3,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200086,
+          "y": 0.50073,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499527,
+          "y": 0.499904,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.423233,
+          "y": 0.789936,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 14,
+      "timestamp_ms": 2600,
+      "expected_projected_angle_deg": 74.7,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199957,
+          "y": 0.499512,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.49985,
+          "y": 0.500374,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.420595,
+          "y": 0.789869,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 15,
+      "timestamp_ms": 2800,
+      "expected_projected_angle_deg": 74.7,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199778,
+          "y": 0.499786,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500798,
+          "y": 0.499772,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.420191,
+          "y": 0.7894,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 16,
+      "timestamp_ms": 3000,
+      "expected_projected_angle_deg": 90.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200254,
+          "y": 0.49923,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500606,
+          "y": 0.500207,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.50081,
+          "y": 0.799545,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 17,
+      "timestamp_ms": 3200,
+      "expected_projected_angle_deg": 105.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.19943,
+          "y": 0.500213,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500118,
+          "y": 0.500362,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.578177,
+          "y": 0.78896,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 18,
+      "timestamp_ms": 3400,
+      "expected_projected_angle_deg": 115.2,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199973,
+          "y": 0.500151,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500772,
+          "y": 0.49954,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.628158,
+          "y": 0.770879,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 19,
+      "timestamp_ms": 3600,
+      "expected_projected_angle_deg": 120.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199638,
+          "y": 0.500358,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500368,
+          "y": 0.499439,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.650652,
+          "y": 0.760469,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 20,
+      "timestamp_ms": 3800,
+      "expected_projected_angle_deg": 119.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200338,
+          "y": 0.499889,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.49992,
+          "y": 0.500288,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.647414,
+          "y": 0.761323,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 21,
+      "timestamp_ms": 4000,
+      "expected_projected_angle_deg": 119.7,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.20079,
+          "y": 0.500458,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500031,
+          "y": 0.499481,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.649217,
+          "y": 0.761058,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 22,
+      "timestamp_ms": 4200,
+      "expected_projected_angle_deg": 120.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199477,
+          "y": 0.499906,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.50054,
+          "y": 0.500514,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.653084,
+          "y": 0.757993,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 23,
+      "timestamp_ms": 4400,
+      "expected_projected_angle_deg": 115.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200515,
+          "y": 0.500644,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500147,
+          "y": 0.50079,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.626607,
+          "y": 0.771894,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 24,
+      "timestamp_ms": 4600,
+      "expected_projected_angle_deg": 99.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.19994,
+          "y": 0.499976,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499749,
+          "y": 0.500395,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.548617,
+          "y": 0.796529,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 25,
+      "timestamp_ms": 4800,
+      "expected_projected_angle_deg": 85.2,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200008,
+          "y": 0.49968,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500339,
+          "y": 0.500537,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.475341,
+          "y": 0.799585,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 26,
+      "timestamp_ms": 5000,
+      "expected_projected_angle_deg": 75.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200776,
+          "y": 0.499516,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500219,
+          "y": 0.500667,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.424281,
+          "y": 0.790457,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 27,
+      "timestamp_ms": 5200,
+      "expected_projected_angle_deg": 74.7,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200438,
+          "y": 0.499758,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500087,
+          "y": 0.499651,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.420837,
+          "y": 0.789704,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 28,
+      "timestamp_ms": 5400,
+      "expected_projected_angle_deg": 74.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200736,
+          "y": 0.499492,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.49933,
+          "y": 0.500401,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.419023,
+          "y": 0.788771,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 29,
+      "timestamp_ms": 5600,
+      "expected_projected_angle_deg": 74.7,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199695,
+          "y": 0.500069,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499602,
+          "y": 0.500037,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.421242,
+          "y": 0.789545,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 30,
+      "timestamp_ms": 5800,
+      "expected_projected_angle_deg": 89.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200183,
+          "y": 0.499262,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500137,
+          "y": 0.500544,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.499333,
+          "y": 0.800326,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 31,
+      "timestamp_ms": 6000,
+      "expected_projected_angle_deg": 104.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.19958,
+          "y": 0.499443,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500612,
+          "y": 0.50035,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.575523,
+          "y": 0.790666,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 32,
+      "timestamp_ms": 6200,
+      "expected_projected_angle_deg": 115.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.20015,
+          "y": 0.499885,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500535,
+          "y": 0.499537,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.626995,
+          "y": 0.772473,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 33,
+      "timestamp_ms": 6400,
+      "expected_projected_angle_deg": 119.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199357,
+          "y": 0.500156,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499459,
+          "y": 0.500509,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.649749,
+          "y": 0.760139,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 34,
+      "timestamp_ms": 6600,
+      "expected_projected_angle_deg": 119.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200364,
+          "y": 0.500703,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499605,
+          "y": 0.499673,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.648818,
+          "y": 0.759736,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 35,
+      "timestamp_ms": 6800,
+      "expected_projected_angle_deg": 119.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199442,
+          "y": 0.500789,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500556,
+          "y": 0.499894,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.649138,
+          "y": 0.75999,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 36,
+      "timestamp_ms": 7000,
+      "expected_projected_angle_deg": 119.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199974,
+          "y": 0.499632,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499764,
+          "y": 0.499513,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.649222,
+          "y": 0.760829,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 37,
+      "timestamp_ms": 7200,
+      "expected_projected_angle_deg": 115.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200148,
+          "y": 0.500157,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500577,
+          "y": 0.499949,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.628466,
+          "y": 0.77127,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 38,
+      "timestamp_ms": 7400,
+      "expected_projected_angle_deg": 100.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199762,
+          "y": 0.499822,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.4993,
+          "y": 0.499635,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.552747,
+          "y": 0.795794,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 39,
+      "timestamp_ms": 7600,
+      "expected_projected_angle_deg": 85.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199561,
+          "y": 0.499794,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500371,
+          "y": 0.499718,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.474231,
+          "y": 0.799645,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 40,
+      "timestamp_ms": 7800,
+      "expected_projected_angle_deg": 75.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199434,
+          "y": 0.500494,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500108,
+          "y": 0.499353,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.42428,
+          "y": 0.790156,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 41,
+      "timestamp_ms": 8000,
+      "expected_projected_angle_deg": 74.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199416,
+          "y": 0.50009,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499719,
+          "y": 0.49984,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.419883,
+          "y": 0.789017,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 42,
+      "timestamp_ms": 8200,
+      "expected_projected_angle_deg": 74.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199969,
+          "y": 0.49965,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500431,
+          "y": 0.500621,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.420888,
+          "y": 0.789175,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 43,
+      "timestamp_ms": 8400,
+      "expected_projected_angle_deg": 75.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199927,
+          "y": 0.500216,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499461,
+          "y": 0.500772,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.421753,
+          "y": 0.789556,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 44,
+      "timestamp_ms": 8600,
+      "expected_projected_angle_deg": 89.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200262,
+          "y": 0.499857,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.50002,
+          "y": 0.499635,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.49738,
+          "y": 0.800078,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 45,
+      "timestamp_ms": 8800,
+      "expected_projected_angle_deg": 104.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200023,
+          "y": 0.499353,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500673,
+          "y": 0.499218,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.577488,
+          "y": 0.789242,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 46,
+      "timestamp_ms": 9000,
+      "expected_projected_angle_deg": 114.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199976,
+          "y": 0.500208,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499575,
+          "y": 0.50014,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.626098,
+          "y": 0.771395,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 47,
+      "timestamp_ms": 9200,
+      "expected_projected_angle_deg": 120.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199263,
+          "y": 0.500757,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500726,
+          "y": 0.500063,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.652097,
+          "y": 0.757509,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 48,
+      "timestamp_ms": 9400,
+      "expected_projected_angle_deg": 120.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199547,
+          "y": 0.500186,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499691,
+          "y": 0.499946,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.652099,
+          "y": 0.758373,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 49,
+      "timestamp_ms": 9600,
+      "expected_projected_angle_deg": 119.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200749,
+          "y": 0.500742,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500026,
+          "y": 0.499922,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.647061,
+          "y": 0.760843,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 50,
+      "timestamp_ms": 9800,
+      "expected_projected_angle_deg": 119.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200345,
+          "y": 0.500205,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499272,
+          "y": 0.500762,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.648517,
+          "y": 0.760391,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 51,
+      "timestamp_ms": 10000,
+      "expected_projected_angle_deg": 114.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200524,
+          "y": 0.499297,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499476,
+          "y": 0.500172,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.626191,
+          "y": 0.772004,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 52,
+      "timestamp_ms": 10200,
+      "expected_projected_angle_deg": 100.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199756,
+          "y": 0.499874,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499685,
+          "y": 0.499439,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.55544,
+          "y": 0.795201,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 53,
+      "timestamp_ms": 10400,
+      "expected_projected_angle_deg": 85.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199868,
+          "y": 0.500545,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499253,
+          "y": 0.499317,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.474762,
+          "y": 0.798538,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 54,
+      "timestamp_ms": 10600,
+      "expected_projected_angle_deg": 75.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199666,
+          "y": 0.499945,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500482,
+          "y": 0.499943,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.422611,
+          "y": 0.789281,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 55,
+      "timestamp_ms": 10800,
+      "expected_projected_angle_deg": 75.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.20061,
+          "y": 0.499638,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500703,
+          "y": 0.500175,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.422902,
+          "y": 0.79051,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 56,
+      "timestamp_ms": 11000,
+      "expected_projected_angle_deg": 74.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199246,
+          "y": 0.499658,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499426,
+          "y": 0.500476,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.420482,
+          "y": 0.789987,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 57,
+      "timestamp_ms": 11200,
+      "expected_projected_angle_deg": 75.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200277,
+          "y": 0.499477,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500364,
+          "y": 0.500282,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.424649,
+          "y": 0.789857,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 58,
+      "timestamp_ms": 11400,
+      "expected_projected_angle_deg": 90.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199595,
+          "y": 0.499958,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499255,
+          "y": 0.499242,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.500105,
+          "y": 0.799616,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 59,
+      "timestamp_ms": 11600,
+      "expected_projected_angle_deg": 104.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199823,
+          "y": 0.499406,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499534,
+          "y": 0.499275,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.574944,
+          "y": 0.790791,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 60,
+      "timestamp_ms": 11800,
+      "expected_projected_angle_deg": 114.7,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199676,
+          "y": 0.500312,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499994,
+          "y": 0.500224,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.625334,
+          "y": 0.772284,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 61,
+      "timestamp_ms": 12000,
+      "expected_projected_angle_deg": 120.3,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200143,
+          "y": 0.500631,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500092,
+          "y": 0.500615,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.650784,
+          "y": 0.759219,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 62,
+      "timestamp_ms": 12200,
+      "expected_projected_angle_deg": 119.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200677,
+          "y": 0.499872,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500269,
+          "y": 0.499482,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.647127,
+          "y": 0.761186,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 63,
+      "timestamp_ms": 12400,
+      "expected_projected_angle_deg": 119.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.19973,
+          "y": 0.499765,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499926,
+          "y": 0.500621,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.648001,
+          "y": 0.761563,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 64,
+      "timestamp_ms": 12600,
+      "expected_projected_angle_deg": 119.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200487,
+          "y": 0.49999,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499448,
+          "y": 0.499544,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.647428,
+          "y": 0.761115,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 65,
+      "timestamp_ms": 12800,
+      "expected_projected_angle_deg": 115.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200423,
+          "y": 0.499561,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500086,
+          "y": 0.500007,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.629784,
+          "y": 0.770053,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 66,
+      "timestamp_ms": 13000,
+      "expected_projected_angle_deg": 99.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199974,
+          "y": 0.499354,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500742,
+          "y": 0.499304,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.550653,
+          "y": 0.796556,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 67,
+      "timestamp_ms": 13200,
+      "expected_projected_angle_deg": 84.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200521,
+          "y": 0.499874,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499912,
+          "y": 0.500796,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.473491,
+          "y": 0.798151,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 68,
+      "timestamp_ms": 13400,
+      "expected_projected_angle_deg": 75.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.20068,
+          "y": 0.499641,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500131,
+          "y": 0.500366,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.42338,
+          "y": 0.79015,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 69,
+      "timestamp_ms": 13600,
+      "expected_projected_angle_deg": 74.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199745,
+          "y": 0.499481,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499239,
+          "y": 0.499344,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.421639,
+          "y": 0.789622,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 70,
+      "timestamp_ms": 13800,
+      "expected_projected_angle_deg": 75.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199809,
+          "y": 0.499868,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500161,
+          "y": 0.500782,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.424489,
+          "y": 0.790991,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 71,
+      "timestamp_ms": 14000,
+      "expected_projected_angle_deg": 75.3,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200207,
+          "y": 0.500753,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500616,
+          "y": 0.499395,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.423901,
+          "y": 0.790468,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 72,
+      "timestamp_ms": 14200,
+      "expected_projected_angle_deg": 90.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200795,
+          "y": 0.500201,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499817,
+          "y": 0.500585,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.50304,
+          "y": 0.80069,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 73,
+      "timestamp_ms": 14400,
+      "expected_projected_angle_deg": 105.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.19944,
+          "y": 0.499772,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500284,
+          "y": 0.500218,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.578335,
+          "y": 0.790412,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 74,
+      "timestamp_ms": 14600,
+      "expected_projected_angle_deg": 114.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199604,
+          "y": 0.499479,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500282,
+          "y": 0.500578,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.626193,
+          "y": 0.772865,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 75,
+      "timestamp_ms": 14800,
+      "expected_projected_angle_deg": 119.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199632,
+          "y": 0.500406,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500394,
+          "y": 0.499841,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.64821,
+          "y": 0.760021,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 76,
+      "timestamp_ms": 15000,
+      "expected_projected_angle_deg": 119.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199951,
+          "y": 0.499953,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.49969,
+          "y": 0.500079,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.647019,
+          "y": 0.761898,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 77,
+      "timestamp_ms": 15200,
+      "expected_projected_angle_deg": 120.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200724,
+          "y": 0.500329,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500484,
+          "y": 0.500776,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.651327,
+          "y": 0.759792,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 78,
+      "timestamp_ms": 15400,
+      "expected_projected_angle_deg": 120.2,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199868,
+          "y": 0.499668,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.50066,
+          "y": 0.50015,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.650399,
+          "y": 0.759676,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 79,
+      "timestamp_ms": 15600,
+      "expected_projected_angle_deg": 115.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200386,
+          "y": 0.499239,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500201,
+          "y": 0.500747,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.628967,
+          "y": 0.771325,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 80,
+      "timestamp_ms": 15800,
+      "expected_projected_angle_deg": 100.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199775,
+          "y": 0.500281,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499673,
+          "y": 0.500716,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.554626,
+          "y": 0.794332,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 81,
+      "timestamp_ms": 16000,
+      "expected_projected_angle_deg": 85.1,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200686,
+          "y": 0.499632,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500341,
+          "y": 0.499603,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.474153,
+          "y": 0.798832,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 82,
+      "timestamp_ms": 16200,
+      "expected_projected_angle_deg": 75.3,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200483,
+          "y": 0.50037,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499888,
+          "y": 0.499483,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.423755,
+          "y": 0.789533,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 83,
+      "timestamp_ms": 16400,
+      "expected_projected_angle_deg": 75.0,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200119,
+          "y": 0.500603,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500397,
+          "y": 0.499292,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.422755,
+          "y": 0.78925,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 84,
+      "timestamp_ms": 16600,
+      "expected_projected_angle_deg": 75.3,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199795,
+          "y": 0.500442,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500558,
+          "y": 0.499881,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.423323,
+          "y": 0.790717,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 85,
+      "timestamp_ms": 16800,
+      "expected_projected_angle_deg": 74.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200077,
+          "y": 0.499999,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499218,
+          "y": 0.500346,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.42124,
+          "y": 0.790036,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 86,
+      "timestamp_ms": 17000,
+      "expected_projected_angle_deg": 90.2,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199437,
+          "y": 0.500688,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500691,
+          "y": 0.499413,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.50141,
+          "y": 0.800591,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 87,
+      "timestamp_ms": 17200,
+      "expected_projected_angle_deg": 105.2,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199455,
+          "y": 0.500378,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500289,
+          "y": 0.499958,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.578608,
+          "y": 0.790194,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 88,
+      "timestamp_ms": 17400,
+      "expected_projected_angle_deg": 115.3,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.1993,
+          "y": 0.500263,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499628,
+          "y": 0.500322,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.628489,
+          "y": 0.771162,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 89,
+      "timestamp_ms": 17600,
+      "expected_projected_angle_deg": 119.7,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199946,
+          "y": 0.499421,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499721,
+          "y": 0.500122,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.648854,
+          "y": 0.761335,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 90,
+      "timestamp_ms": 17800,
+      "expected_projected_angle_deg": 120.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200174,
+          "y": 0.499626,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500307,
+          "y": 0.499329,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.651811,
+          "y": 0.758477,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 91,
+      "timestamp_ms": 18000,
+      "expected_projected_angle_deg": 120.3,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200551,
+          "y": 0.499405,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499276,
+          "y": 0.499974,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.652314,
+          "y": 0.759345,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 92,
+      "timestamp_ms": 18200,
+      "expected_projected_angle_deg": 120.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200554,
+          "y": 0.500191,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500475,
+          "y": 0.499896,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.651501,
+          "y": 0.75845,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 93,
+      "timestamp_ms": 18400,
+      "expected_projected_angle_deg": 115.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199601,
+          "y": 0.500793,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500503,
+          "y": 0.500783,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.628856,
+          "y": 0.771053,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 94,
+      "timestamp_ms": 18600,
+      "expected_projected_angle_deg": 100.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199417,
+          "y": 0.500631,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499356,
+          "y": 0.499458,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.555468,
+          "y": 0.794786,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 95,
+      "timestamp_ms": 18800,
+      "expected_projected_angle_deg": 84.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.20042,
+          "y": 0.49961,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.50065,
+          "y": 0.499966,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.47277,
+          "y": 0.799502,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 96,
+      "timestamp_ms": 19000,
+      "expected_projected_angle_deg": 74.7,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199751,
+          "y": 0.500702,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500762,
+          "y": 0.500193,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.421434,
+          "y": 0.789905,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 97,
+      "timestamp_ms": 19200,
+      "expected_projected_angle_deg": 75.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199573,
+          "y": 0.499267,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500798,
+          "y": 0.500432,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.424351,
+          "y": 0.790802,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 98,
+      "timestamp_ms": 19400,
+      "expected_projected_angle_deg": 74.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200593,
+          "y": 0.499803,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499724,
+          "y": 0.500356,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.421947,
+          "y": 0.789091,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 99,
+      "timestamp_ms": 19600,
+      "expected_projected_angle_deg": 75.2,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199628,
+          "y": 0.499202,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499255,
+          "y": 0.500118,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.423169,
+          "y": 0.789663,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 100,
+      "timestamp_ms": 19800,
+      "expected_projected_angle_deg": 89.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.20053,
+          "y": 0.499852,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499913,
+          "y": 0.499996,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.499143,
+          "y": 0.800012,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 101,
+      "timestamp_ms": 20000,
+      "expected_projected_angle_deg": 104.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199539,
+          "y": 0.500226,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499272,
+          "y": 0.500248,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.575698,
+          "y": 0.790555,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 102,
+      "timestamp_ms": 20200,
+      "expected_projected_angle_deg": 115.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200457,
+          "y": 0.500626,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499788,
+          "y": 0.500275,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.629579,
+          "y": 0.770417,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 103,
+      "timestamp_ms": 20400,
+      "expected_projected_angle_deg": 119.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.19987,
+          "y": 0.500652,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499264,
+          "y": 0.500656,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.648669,
+          "y": 0.760724,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 104,
+      "timestamp_ms": 20600,
+      "expected_projected_angle_deg": 119.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199406,
+          "y": 0.500303,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.50025,
+          "y": 0.49928,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.648048,
+          "y": 0.760744,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 105,
+      "timestamp_ms": 20800,
+      "expected_projected_angle_deg": 120.4,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200653,
+          "y": 0.499846,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.50037,
+          "y": 0.499964,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.652349,
+          "y": 0.758751,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 106,
+      "timestamp_ms": 21000,
+      "expected_projected_angle_deg": 120.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199474,
+          "y": 0.500312,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.50015,
+          "y": 0.500601,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.652433,
+          "y": 0.75761,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 107,
+      "timestamp_ms": 21200,
+      "expected_projected_angle_deg": 114.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199697,
+          "y": 0.500202,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499474,
+          "y": 0.500078,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.624399,
+          "y": 0.772143,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 108,
+      "timestamp_ms": 21400,
+      "expected_projected_angle_deg": 100.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200189,
+          "y": 0.499938,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500607,
+          "y": 0.500053,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.555729,
+          "y": 0.795583,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 109,
+      "timestamp_ms": 21600,
+      "expected_projected_angle_deg": 84.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199865,
+          "y": 0.499496,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499793,
+          "y": 0.500512,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.471342,
+          "y": 0.797935,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 110,
+      "timestamp_ms": 21800,
+      "expected_projected_angle_deg": 75.5,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200518,
+          "y": 0.500547,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500732,
+          "y": 0.499908,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.425221,
+          "y": 0.791258,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 111,
+      "timestamp_ms": 22000,
+      "expected_projected_angle_deg": 74.9,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.199588,
+          "y": 0.499871,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.499935,
+          "y": 0.500096,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.42183,
+          "y": 0.789966,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 112,
+      "timestamp_ms": 22200,
+      "expected_projected_angle_deg": 74.8,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200127,
+          "y": 0.500772,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.49977,
+          "y": 0.499837,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.421796,
+          "y": 0.789856,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    },
+    {
+      "sequence": 113,
+      "timestamp_ms": 22400,
+      "expected_projected_angle_deg": 75.6,
+      "person_count": 1,
+      "landmarks": {
+        "selected_hip": {
+          "x": 0.200506,
+          "y": 0.500519,
+          "confidence": 0.94,
+          "valid": true
+        },
+        "selected_knee": {
+          "x": 0.500167,
+          "y": 0.500302,
+          "confidence": 0.93,
+          "valid": true
+        },
+        "selected_ankle": {
+          "x": 0.425537,
+          "y": 0.790173,
+          "confidence": 0.92,
+          "valid": true
+        }
+      }
+    }
+  ]
+}

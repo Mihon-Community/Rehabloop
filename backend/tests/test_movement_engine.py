@@ -1,34 +1,81 @@
-"""Angle geometry tests from blueprint Appendix A3 (math only, not model accuracy)."""
+"""Movement math and labelled fixture sequence checks."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from typing import Any
 
 import pytest
 from app.services.movement_engine import (
     ExponentialSmoother,
+    MovementEngine,
     ProjectedPoint,
     RepConfig,
     RepStateMachine,
     landmarks_usable,
     projected_joint_angle,
 )
+from scripts.generate_synthetic_fixtures import generated_fixtures
+
+FIXTURE_ROOT = Path(__file__).resolve().parents[2] / "fixtures" / "synthetic_keypoint_sequences"
 
 
-def test_right_angle():
+def _load_fixture(filename: str) -> dict[str, Any]:
+    return json.loads((FIXTURE_ROOT / filename).read_text(encoding="utf-8"))
+
+
+def _run_fixture(filename: str) -> tuple[MovementEngine, list[Any], dict[str, Any]]:
+    data = _load_fixture(filename)
+    settings = data.get("engine_settings", {})
+    engine = MovementEngine(
+        rep_config=RepConfig(
+            rest_min_deg=70,
+            rest_max_deg=80,
+            target_min_deg=110,
+            target_max_deg=125,
+            dwell_ms=200,
+            hold_ms=400,
+            min_rep_duration_ms=250,
+        ),
+        target_reps=8,
+        smoothing_alpha=settings.get("smoothing_alpha", 0.4),
+        model_version=data["model"],
+        mapping_version=data["mapping_version"],
+    )
+    results = []
+    for frame in data["frames"]:
+        landmarks = {
+            name: ProjectedPoint(**point) for name, point in frame.get("landmarks", {}).items()
+        }
+        results.append(
+            engine.process(
+                landmarks,
+                frame["timestamp_ms"],
+                person_count=frame["person_count"],
+                model_version=data["model"],
+                mapping_version=data["mapping_version"],
+                simulated=data["simulated"],
+            )
+        )
+    return engine, results, data
+
+
+def test_right_angle_is_rounded_projected_estimate() -> None:
     angle = projected_joint_angle(ProjectedPoint(0, 1), ProjectedPoint(0, 0), ProjectedPoint(1, 0))
-    assert angle is not None and angle == pytest.approx(90.0, abs=1e-6)
+    assert angle == pytest.approx(90.0, abs=1e-6)
 
 
-def test_straight_line_is_180():
+def test_straight_line_is_180_degrees() -> None:
     angle = projected_joint_angle(ProjectedPoint(-1, 0), ProjectedPoint(0, 0), ProjectedPoint(1, 0))
-    assert angle is not None and angle == pytest.approx(180.0, abs=1e-6)
+    assert angle == pytest.approx(180.0, abs=1e-6)
 
 
-def test_zero_length_vector_returns_none():
+def test_zero_length_or_invalid_landmark_returns_none() -> None:
     assert (
         projected_joint_angle(ProjectedPoint(0, 0), ProjectedPoint(0, 0), ProjectedPoint(1, 0))
         is None
     )
-
-
-def test_invalid_landmark_returns_none():
     assert (
         projected_joint_angle(
             ProjectedPoint(0, 1, valid=False), ProjectedPoint(0, 0), ProjectedPoint(1, 0)
@@ -37,7 +84,7 @@ def test_invalid_landmark_returns_none():
     )
 
 
-def test_confidence_gate_before_smoothing():
+def test_confidence_gate_precedes_smoothing() -> None:
     points = {
         "selected_hip": ProjectedPoint(0, 1, 0.9),
         "selected_knee": ProjectedPoint(0, 0, 0.2),
@@ -46,32 +93,72 @@ def test_confidence_gate_before_smoothing():
     assert not landmarks_usable(points, 0.6, points.keys())
 
 
-def test_smoother_stays_bounded():
+def test_exponential_smoother_is_bounded_and_resets() -> None:
     smoother = ExponentialSmoother(0.5)
     assert smoother.update(100) == 100
-    assert 100 < smoother.update(120) <= 120
+    assert smoother.update(120) == 110
     smoother.reset()
     assert smoother.update(80) == 80
 
 
-def test_one_full_rep_counts():
-    machine = RepStateMachine(RepConfig(70, 80, 110, 125, dwell_ms=50, hold_ms=80))
-    trace = [
-        (75, 0, True),
-        (115, 100, True),
-        (115, 200, True),
-        (75, 300, True),
-        (75, 400, True),
-    ]
-    for angle, ts, valid in trace:
-        machine.process(angle, ts, valid)
+def test_rep_state_machine_enforces_hold_and_minimum_duration() -> None:
+    machine = RepStateMachine(
+        RepConfig(70, 80, 110, 125, dwell_ms=50, hold_ms=80, min_rep_duration_ms=250)
+    )
+    trace = [(75, 0), (115, 100), (115, 200), (75, 300), (75, 400)]
+    for angle, timestamp in trace:
+        machine.process(angle, timestamp)
     assert machine.rep_count == 1
-    assert machine.usable_frame_pct == pytest.approx(100.0)
+    assert machine.events[0].duration_ms == 300
 
 
-def test_low_confidence_frame_never_counts():
-    machine = RepStateMachine(RepConfig(70, 80, 110, 125, dwell_ms=0, hold_ms=0))
-    machine.process(75, 0, True)
-    machine.process(115, 100, False)
-    assert machine.state == "INVALID"
-    assert machine.rep_count == 0
+def test_clean_fixture_counts_eight_reps_and_reports_aggregates() -> None:
+    engine, results, data = _run_fixture("clean_8_reps.json")
+    metrics = engine.metrics()
+    assert engine.rep_count == data["expected_completed_reps"] == 8
+    assert all(result.simulated for result in results)
+    assert metrics["projected_range_deg"] is not None
+    assert metrics["median_rep_duration_seconds"] is not None
+    assert engine.quality_flags == ["CAMERA_SIDE_VIEW_ASSUMED", "SIMULATED_INPUT"]
+
+
+def test_seeded_noisy_fixture_is_deterministic_and_counts_eight_reps() -> None:
+    assert generated_fixtures() == generated_fixtures()
+    engine, _results, data = _run_fixture("noisy.json")
+    assert engine.rep_count == data["expected_completed_reps"] == 8
+
+
+def test_dropout_never_completes_partial_cycle_across_long_gap() -> None:
+    engine, results, data = _run_fixture("dropout.json")
+    assert engine.rep_count == data["expected_completed_reps"] == 1
+    assert any("TEMPORAL_GAP" in result.quality_flags for result in results)
+
+
+def test_low_confidence_partial_and_second_person_sequences_count_nothing() -> None:
+    for filename in (
+        "low_confidence.json",
+        "partial_reps.json",
+        "second_person_in_frame.json",
+    ):
+        engine, _results, data = _run_fixture(filename)
+        assert engine.rep_count == data["expected_completed_reps"] == 0
+
+    engine, _results, _data = _run_fixture("low_confidence.json")
+    assert "LANDMARK_CONFIDENCE_LOW" in engine.quality_flags
+    engine, _results, _data = _run_fixture("second_person_in_frame.json")
+    assert "PERSON_COUNT_NOT_ONE" in engine.quality_flags
+
+
+def test_model_and_mapping_changes_are_rejected() -> None:
+    engine = MovementEngine(
+        RepConfig(70, 80, 110, 125), target_reps=8, model_version="fixture-simulated"
+    )
+    points = {
+        "selected_hip": ProjectedPoint(0.2, 0.5),
+        "selected_knee": ProjectedPoint(0.5, 0.5),
+        "selected_ankle": ProjectedPoint(0.6, 0.8),
+    }
+    result = engine.process(points, 0, model_version="different-model")
+    assert not result.usable
+    assert result.projected_knee_angle_deg is None
+    assert "MODEL_VERSION_MISMATCH" in result.quality_flags
