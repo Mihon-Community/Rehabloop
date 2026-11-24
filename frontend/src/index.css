@@ -1,0 +1,109 @@
+:root {
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  color: #10243a;
+  background: #f5f7fa;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.app-shell {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.app-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.app-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+}
+.app-nav a {
+  color: #155e75;
+  text-decoration: none;
+  font-weight: 600;
+}
+.app-nav a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #d7dee8;
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+.card h2 {
+  margin-top: 0;
+}
+
+.safety-banner {
+  background: #fff8e1;
+  border-left: 5px solid #b45309;
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+}
+.simulated-badge {
+  display: inline-block;
+  background: #4c1d95;
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.state-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+.state-list li {
+  background: #e8eef6;
+  border-radius: 4px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.85rem;
+}
+button {
+  font: inherit;
+  padding: 0.55rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #94a3b8;
+  background: #fff;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+button.primary {
+  background: #155e75;
+  border-color: #155e75;
+  color: #fff;
+}
+.meta {
+  color: #475569;
+  font-size: 0.9rem;
+}
