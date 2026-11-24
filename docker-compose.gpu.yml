@@ -1,0 +1,23 @@
+# Real Sapiens2 inference. Prerequisites:
+#   - NVIDIA Driver + NVIDIA Container Toolkit installed on the host
+#   - `docker info | grep -i nvidia` shows a GPU runtime
+#   - SAPIENS_CHECKPOINT_ROOT in .env points to licensed, local checkpoints
+#   - Sapiens2 licence reviewed for this movement-analysis use
+# Use: docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build
+# Weights are mounted read-only and are NEVER committed or downloaded by Compose.
+
+services:
+  vision_service:
+    environment:
+      VISION_MODE: sapiens
+      VISION_DEVICE: cuda
+      SAPIENS_CHECKPOINT_ROOT: /checkpoints
+    volumes:
+      - ${SAPIENS_CHECKPOINT_ROOT:-./fixtures/approved_test_frames}:/checkpoints:ro
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
