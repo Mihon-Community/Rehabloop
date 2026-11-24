@@ -79,6 +79,7 @@ fixtures/approved_test_frames/*
 !fixtures/approved_test_frames/README.md
 
 # Logs and local state
+.playwright-mcp/
 *.log
 *.sqlite3
 *.db
