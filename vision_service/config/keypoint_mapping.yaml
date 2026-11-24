@@ -1,0 +1,22 @@
+# PLACEHOLDER — DO NOT USE FOR REAL INFERENCE.
+# The Sapiens2 pose output uses 308 Sociopticon-format keypoints. We must NOT
+# guess indices. Resolve them from the released official keypoint specification,
+# pin them here, and manually review overlays before real use (blueprint s6/s7).
+version: rehabloop-knee-map-1.0
+status: PLACEHOLDER_INDICES_NOT_RESOLVED
+keypoint_format: Sociopticon-308
+notes: >-
+  Every index below is null on purpose. The fixture mode emits named landmarks
+  directly; it does not use these indices. Sapiens mode refuses to start until
+  real indices are filled in from the official spec and reviewed.
+required_confidence: 0.6
+landmarks:
+  selected_hip:
+    index: null
+    official_name: null
+  selected_knee:
+    index: null
+    official_name: null
+  selected_ankle:
+    index: null
+    official_name: null
