@@ -1,0 +1,85 @@
+# ---------------------------------------------------------------------------
+# RehabLoop — do not commit secrets, patient data, media, or model weights.
+# ---------------------------------------------------------------------------
+
+# Environments (keep the example, ignore everything else)
+.env
+.env.*
+!.env.example
+
+# Node / frontend
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Python / backend / vision
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Docker local overrides with secrets
+docker-compose.override.yml
+.compose/
+
+# Editors / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local agent tooling (installed by npx skills)
+.agents/
+.claude/
+skills-lock.json
+
+# Model weights and checkpoints — never commit
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.onnx
+*.bin
+*.h5
+*.gguf
+checkpoints/
+weights/
+models/
+
+# Raw video / patient media — never commit
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.wav
+*.m4a
+*.jpg
+*.jpeg
+*.png
+*.dcm
+fixtures/approved_test_frames/*
+!fixtures/approved_test_frames/README.md
+
+# Logs and local state
+*.log
+*.sqlite3
+*.db
+SETUP_NOTES.md

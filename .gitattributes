@@ -1,0 +1,22 @@
+# Normalise line endings to LF in the repository.
+* text=auto eol=lf
+
+*.sh text eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files (do not attempt to diff or normalise).
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.glb binary
+*.gltf binary
+*.pth binary
+*.pt binary
+*.safetensors binary
