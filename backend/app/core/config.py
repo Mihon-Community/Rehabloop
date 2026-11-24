@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     supabase_url: str = ""
+    supabase_jwks_url: str = ""
     supabase_service_role_key: SecretStr = Field(default_factory=lambda: SecretStr(""))
     nvidia_api_key: SecretStr = Field(default_factory=lambda: SecretStr(""))
     nvidia_base_url: str = "https://integrate.api.nvidia.com/v1"
