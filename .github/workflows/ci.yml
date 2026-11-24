@@ -17,7 +17,7 @@ jobs:
     name: frontend (lint, typecheck, test, build)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -46,7 +46,7 @@ jobs:
     name: backend (ruff, mypy, pytest)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -74,7 +74,7 @@ jobs:
       VISION_MODE: fixture
       VISION_DEVICE: cpu
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -95,7 +95,7 @@ jobs:
     name: docker (config, build, health smoke)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: docker compose config
       - run: docker compose -f docker-compose.yml -f docker-compose.gpu.yml config
       - run: docker compose build
@@ -122,7 +122,7 @@ jobs:
     name: secrets and safety scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       # Use the gitleaks CLI directly: the GitHub Action needs a licence in
@@ -153,7 +153,7 @@ jobs:
     name: migration lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: naming and basic SQL sanity
         run: |
           set -e
