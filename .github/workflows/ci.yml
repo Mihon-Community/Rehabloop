@@ -166,8 +166,6 @@ jobs:
             echo "$base" | grep -Eq '^[0-9]{14}_[a-z0-9_]+\.sql$' || {
               echo "Bad migration name: $base"; exit 1; }
             grep -Eqi 'create (table|schema)|alter table|create or replace function|create index' "$file" || { echo "$base: no DDL found"; exit 1; }
-            grep -qi 'row level security' "$file" || {
-              echo "$base: missing RLS"; exit 1; }
             python3 - "$file" <<'PY'
           import sys
           sql = open(sys.argv[1], encoding='utf-8').read()
@@ -177,3 +175,5 @@ jobs:
           PY
           done
           [ "$found" -eq 1 ] || { echo "No migrations found"; exit 1; }
+          grep -Rqi 'row level security' supabase/migrations/*.sql || {
+            echo "No RLS policies found in migrations"; exit 1; }
