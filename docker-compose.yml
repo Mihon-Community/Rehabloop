@@ -41,8 +41,8 @@ services:
       vision_service:
         condition: service_healthy
     environment:
-      APP_ENV: ${APP_ENV:-development}
-      AUTH_MODE: ${AUTH_MODE:-supabase}
+      APP_ENV: ${APP_ENV:-local}
+      AUTH_MODE: ${AUTH_MODE:-dev}
       VISION_MODE: ${VISION_MODE:-fixture}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}

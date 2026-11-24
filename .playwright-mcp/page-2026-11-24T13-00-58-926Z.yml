@@ -1,0 +1,43 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - heading "RehabLoop" [level=1] [ref=e6]
+      - paragraph [ref=e7]: AI-assisted rehabilitation movement intelligence — prototype
+    - generic "Fixture mode is never real inference" [ref=e8]: DEMO BUILD
+  - navigation "Screens" [ref=e9]:
+    - link "Auth" [ref=e10] [cursor=pointer]:
+      - /url: /
+    - link "Patient home" [ref=e11] [cursor=pointer]:
+      - /url: /home
+    - link "Protocol" [ref=e12] [cursor=pointer]:
+      - /url: /protocols/demo
+    - link "Camera setup" [ref=e13] [cursor=pointer]:
+      - /url: /setup
+    - link "Live session" [ref=e14] [cursor=pointer]:
+      - /url: /sessions/demo/live
+    - link "Result" [ref=e15] [cursor=pointer]:
+      - /url: /sessions/demo/result
+    - link "Clinician" [ref=e16] [cursor=pointer]:
+      - /url: /clinician
+    - link "Recovery Twin" [ref=e17] [cursor=pointer]:
+      - /url: /twin
+  - main [ref=e18]:
+    - region [ref=e19]:
+      - heading "1. Authentication" [level=1] [ref=e20]
+      - note [ref=e21]:
+        - strong [ref=e22]: Prototype, not a medical device.
+        - text: RehabLoop measures estimated movement from one camera view. It does not diagnose, treat or advise. Angles are projected estimates, not clinical measurements. A clinician owns the exercise protocol and interprets the results.
+      - paragraph [ref=e23]: Patient / clinician sign-in and a role-aware landing page. UI role is never an authorization control; the backend verifies identity and patient assignment.
+      - paragraph [ref=e24]: "Data source: Supabase Auth (anon key, RLS) + GET /api/v1/me"
+      - heading "Required states" [level=2] [ref=e25]
+      - list [ref=e26]:
+        - listitem [ref=e27]: sign in
+        - listitem [ref=e28]: role-aware landing
+        - listitem [ref=e29]: camera denied — non-camera review mode
+        - listitem [ref=e30]: loading
+        - listitem [ref=e31]: empty
+        - listitem [ref=e32]: error
+  - contentinfo [ref=e33]:
+    - note [ref=e34]:
+      - strong [ref=e35]: Prototype, not a medical device.
+      - text: RehabLoop measures estimated movement from one camera view. It does not diagnose, treat or advise. Angles are projected estimates, not clinical measurements. A clinician owns the exercise protocol and interprets the results.

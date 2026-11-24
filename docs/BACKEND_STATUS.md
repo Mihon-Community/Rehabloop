@@ -1,6 +1,6 @@
 # Backend status
 
-Updated: 2026-11-24 17:11 Africa/Nairobi
+Updated: 2026-11-24 17:34 Africa/Nairobi
 
 ## Baseline audit
 
@@ -124,6 +124,9 @@ Updated: 2026-11-24 17:11 Africa/Nairobi
 - Added the reviewed but unapplied Supabase authorization migration, proposed
   API contract additions, backend run guide, `.env.example` documentation,
   fixture documentation, and root `AGENTS.md`. No frontend files were changed.
+- Aligned the Compose fallback environment to `APP_ENV=local` and
+  `AUTH_MODE=dev`, matching `.env.example` and the documented one-command
+  fixture workflow. The dev auth verifier still rejects non-local environments.
 - Final checks: Ruff `check` passed; Ruff `format --check` passed (35 files);
   mypy passed (25 source files); pytest passed (29 passed, 1 live test skipped);
   `git diff --check` passed. Python checks used the available Python runtime
@@ -145,10 +148,12 @@ Updated: 2026-11-24 17:11 Africa/Nairobi
 
 ## Blocked
 
-- Docker CLI was present, but access to
-  `C:\Users\Administrator\.docker\config.json` was denied. Compose config
-  emitted that warning; backend image build failed, so no container health
-  check was possible.
+- Docker Desktop processes are running, but access to
+  `C:\Users\Administrator\.docker\config.json` and the Docker Engine named
+  pipe `npipe:////./pipe/docker_engine` is denied in this execution context.
+  `docker compose config --quiet` succeeds and the three services resolve;
+  `docker compose up --build` fails before build/start with the named-pipe
+  permission error. No image build or container health check was possible.
 - The sandbox denied `git switch feature/lennox` when it tried to create
   `.git/index.lock`. No further Git writes were attempted. The current branch
   is `chore/mcp-setup`; both local `feature/lennox` and `origin/feature/lennox`
