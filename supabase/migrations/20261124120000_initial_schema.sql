@@ -11,24 +11,28 @@ create extension if not exists pgcrypto;
 -- ---------------------------------------------------------------------------
 create or replace function public.is_clinician()
 returns boolean
-language sql stable security definer set search_path = public
+language plpgsql stable security definer set search_path = public, pg_temp
 as $$
-  select exists (
+begin
+  return exists (
     select 1 from public.profiles p
     where p.id = (select auth.uid()) and p.role in ('clinician','admin')
   );
+end;
 $$;
 
 create or replace function public.clinician_link_active(p_patient uuid)
 returns boolean
-language sql stable security definer set search_path = public
+language plpgsql stable security definer set search_path = public, pg_temp
 as $$
-  select exists (
+begin
+  return exists (
     select 1 from public.clinician_patient_links l
     where l.clinician_id = (select auth.uid())
       and l.patient_id = p_patient
       and l.status = 'active'
   );
+end;
 $$;
 
 create or replace function public.set_updated_at()
