@@ -1,21 +1,20 @@
-# TODO: replace the placeholder handles below with real GitHub usernames.
 # Steve (frontend) and Lennox (backend) are the two owners. Shared files need both.
 # Contract changes need PR approval from both developers.
 
 # Default owners (shared files: docs, compose, env example, CI, root config)
-*                         @TODO-STEVE-USERNAME @TODO-LENNOX-USERNAME
+*                         @Pinyotimo @Le-n-n-ox
 
-/docs/                    @TODO-STEVE-USERNAME @TODO-LENNOX-USERNAME
-/docker-compose.yml       @TODO-STEVE-USERNAME @TODO-LENNOX-USERNAME
-/docker-compose.gpu.yml   @TODO-STEVE-USERNAME @TODO-LENNOX-USERNAME
-/.env.example             @TODO-STEVE-USERNAME @TODO-LENNOX-USERNAME
-/.github/                 @TODO-STEVE-USERNAME @TODO-LENNOX-USERNAME
-/README.md                @TODO-STEVE-USERNAME @TODO-LENNOX-USERNAME
-/CONTRIBUTING.md          @TODO-STEVE-USERNAME @TODO-LENNOX-USERNAME
-/SECURITY.md              @TODO-STEVE-USERNAME @TODO-LENNOX-USERNAME
+/docs/                    @Pinyotimo @Le-n-n-ox
+/docker-compose.yml       @Pinyotimo @Le-n-n-ox
+/docker-compose.gpu.yml   @Pinyotimo @Le-n-n-ox
+/.env.example             @Pinyotimo @Le-n-n-ox
+/.github/                 @Pinyotimo @Le-n-n-ox
+/README.md                @Pinyotimo @Le-n-n-ox
+/CONTRIBUTING.md          @Pinyotimo @Le-n-n-ox
+/SECURITY.md              @Pinyotimo @Le-n-n-ox
 
-/frontend/                @TODO-STEVE-USERNAME
-/backend/                 @TODO-LENNOX-USERNAME
-/vision_service/          @TODO-LENNOX-USERNAME
-/supabase/                @TODO-LENNOX-USERNAME
-/fixtures/                @TODO-LENNOX-USERNAME
+/frontend/                @Pinyotimo
+/backend/                 @Le-n-n-ox
+/vision_service/          @Le-n-n-ox
+/supabase/                @Le-n-n-ox
+/fixtures/                @Le-n-n-ox
