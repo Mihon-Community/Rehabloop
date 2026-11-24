@@ -1,0 +1,49 @@
+{
+  "fixture_id": "synthetic-knee-extension-1",
+  "simulated": true,
+  "warning": "Labelled synthetic fixture. Not real Sapiens2 inference and not clinical data.",
+  "mapping_version": "rehabloop-knee-map-1.0",
+  "model": "fixture-simulated",
+  "frames": [
+    {
+      "sequence": 1,
+      "timestamp_ms": 0,
+      "expected_rep_state": "REST",
+      "landmarks": {
+        "selected_hip": {"x": 0.42, "y": 0.39, "confidence": 0.94, "valid": true},
+        "selected_knee": {"x": 0.58, "y": 0.63, "confidence": 0.92, "valid": true},
+        "selected_ankle": {"x": 0.74, "y": 0.68, "confidence": 0.90, "valid": true}
+      }
+    },
+    {
+      "sequence": 2,
+      "timestamp_ms": 125,
+      "expected_rep_state": "EXTENDING",
+      "landmarks": {
+        "selected_hip": {"x": 0.42, "y": 0.39, "confidence": 0.93, "valid": true},
+        "selected_knee": {"x": 0.56, "y": 0.58, "confidence": 0.91, "valid": true},
+        "selected_ankle": {"x": 0.76, "y": 0.69, "confidence": 0.89, "valid": true}
+      }
+    },
+    {
+      "sequence": 3,
+      "timestamp_ms": 250,
+      "expected_rep_state": "TARGET_HOLD",
+      "landmarks": {
+        "selected_hip": {"x": 0.42, "y": 0.39, "confidence": 0.92, "valid": true},
+        "selected_knee": {"x": 0.54, "y": 0.52, "confidence": 0.90, "valid": true},
+        "selected_ankle": {"x": 0.78, "y": 0.70, "confidence": 0.88, "valid": true}
+      }
+    },
+    {
+      "sequence": 4,
+      "timestamp_ms": 375,
+      "expected_rep_state": "RETURNING",
+      "landmarks": {
+        "selected_hip": {"x": 0.42, "y": 0.39, "confidence": 0.91, "valid": true},
+        "selected_knee": {"x": 0.58, "y": 0.63, "confidence": 0.90, "valid": true},
+        "selected_ankle": {"x": 0.74, "y": 0.68, "confidence": 0.87, "valid": true}
+      }
+    }
+  ]
+}
