@@ -16,3 +16,18 @@ EXPOSE 8001
 HEALTHCHECK --interval=10s --timeout=3s --retries=10 \
   CMD python -c "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8001/health',timeout=2)" || exit 1
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001", "--reload", "--reload-dir", "app", "--reload-dir", "config"]
+
+# GPU target for real Sapiens2 inference. No weights or licensed source are
+# copied into the image; both are mounted read-only by docker-compose.gpu.yml.
+FROM python:3.12-slim AS gpu
+WORKDIR /app
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 VISION_MODE=sapiens VISION_DEVICE=cuda
+COPY requirements.txt requirements-gpu.txt ./
+RUN pip install --no-cache-dir -r requirements-gpu.txt
+COPY . .
+RUN useradd --create-home --uid 10002 appuser && chown -R appuser:appuser /app
+USER appuser
+EXPOSE 8001
+HEALTHCHECK --interval=15s --timeout=5s --retries=10 \
+  CMD python -c "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8001/health',timeout=3)" || exit 1
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]

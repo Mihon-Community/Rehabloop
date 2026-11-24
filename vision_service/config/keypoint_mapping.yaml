@@ -1,22 +1,31 @@
-# PLACEHOLDER — DO NOT USE FOR REAL INFERENCE.
-# The Sapiens2 pose output uses 308 Sociopticon-format keypoints. We must NOT
-# guess indices. Resolve them from the released official keypoint specification,
-# pin them here, and manually review overlays before real use (blueprint s6/s7).
+# Indices resolved from the official released spec, NOT guessed:
+# https://github.com/facebookresearch/sapiens2/blob/main/sapiens/pose/configs/_base_/keypoints308.py
+# COCO wholebody indices: left hip 11 / knee 13 / ankle 15; right hip 12 /
+# knee 14 / ankle 16. Manually review overlays before any patient-facing use.
 version: rehabloop-knee-map-1.0
-status: PLACEHOLDER_INDICES_NOT_RESOLVED
+status: RESOLVED_FROM_OFFICIAL_SPEC_PENDING_MANUAL_REVIEW
 keypoint_format: Sociopticon-308
+source: https://github.com/facebookresearch/sapiens2/blob/main/sapiens/pose/configs/_base_/keypoints308.py
 notes: >-
-  Every index below is null on purpose. The fixture mode emits named landmarks
-  directly; it does not use these indices. Sapiens mode refuses to start until
-  real indices are filled in from the official spec and reviewed.
+  Indices come from the official config. The side is chosen at runtime with
+  SAPIENS_TARGET_SIDE (left/right). Manual overlay review is still required.
 required_confidence: 0.6
+sides:
+  left:
+    hip: 11
+    knee: 13
+    ankle: 15
+  right:
+    hip: 12
+    knee: 14
+    ankle: 16
 landmarks:
   selected_hip:
-    index: null
-    official_name: null
+    index: 11
+    official_name: left_hip
   selected_knee:
-    index: null
-    official_name: null
+    index: 13
+    official_name: left_knee
   selected_ankle:
-    index: null
-    official_name: null
+    index: 15
+    official_name: left_ankle

@@ -25,6 +25,8 @@ class Mapping(BaseModel):
     status: str
     landmarks: dict[str, Any]
     required_confidence: float = 0.6
+    sides: dict[str, dict[str, int]] | None = None
+    source: str = ""
 
     @property
     def is_placeholder(self) -> bool:
@@ -39,17 +41,33 @@ def load_mapping(path: Path = MAPPING_PATH) -> Mapping:
     return Mapping.model_validate(data)
 
 
-def map_raw_keypoints(raw: list[dict[str, Any]], mapping: Mapping) -> dict[str, Any]:
+def map_raw_keypoints(
+    raw: list[dict[str, Any]], mapping: Mapping, side: str = "left"
+) -> dict[str, Any]:
     """Map raw Sapiens2 keypoints. Refuse when indices are unresolved."""
     if mapping.is_placeholder:
         raise KeypointMappingError(
             "keypoint mapping indices are placeholders; resolve them from the official "
             "Sapiens2 keypoint specification before real inference"
         )
+    indices: dict[str, int]
+    if mapping.sides:
+        if side not in mapping.sides:
+            raise KeypointMappingError(
+                f"unsupported SAPIENS_TARGET_SIDE={side!r}; use left or right"
+            )
+        side_map = mapping.sides[side]
+        indices = {
+            "selected_hip": side_map["hip"],
+            "selected_knee": side_map["knee"],
+            "selected_ankle": side_map["ankle"],
+        }
+    else:
+        indices = {name: int(mapping.landmarks[name]["index"]) for name in REQUIRED_LANDMARKS}
     result: dict[str, Any] = {}
     for name in REQUIRED_LANDMARKS:
-        index = int(mapping.landmarks[name]["index"])
-        if index >= len(raw):
+        index = indices[name]
+        if index < 0 or index >= len(raw):
             raise KeypointMappingError(f"raw keypoint index {index} for {name} is out of range")
         result[name] = raw[index]
     return result

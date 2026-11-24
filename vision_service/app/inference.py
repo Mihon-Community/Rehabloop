@@ -47,6 +47,11 @@ class InferenceEngine:
         self.settings = settings
         self.detector = PersonDetector(settings)
         self.mapping = load_mapping()
+        self.runner = None
+        if settings.mode == "sapiens":
+            from .sapiens_runner import SapiensRunner
+
+            self.runner = SapiensRunner(settings)
         self._cursor = 0
         if settings.mode not in ("fixture", "sapiens"):
             raise VisionUnavailableError(
@@ -92,13 +97,21 @@ class InferenceEngine:
             }
             quality = {"source": "labelled_synthetic_fixture", "person_detected": person}
         else:
+            assert self.runner is not None
             try:
-                raw = self._sapiens_keypoints(frame)
-                mapped = map_raw_keypoints(raw, self.mapping)
+                raw = self.runner.infer(image_b64)
+                mapped = map_raw_keypoints(raw, self.mapping, self.settings.sapiens_target_side)
             except KeypointMappingError as exc:
                 raise VisionUnavailableError(f"vision service unavailable: {exc}") from exc
+            for values in mapped.values():
+                values["valid"] = float(values["confidence"]) >= self.mapping.required_confidence
             landmarks = {name: Landmark(**values) for name, values in mapped.items()}
-            quality = {"source": "sapiens2", "person_detected": person}
+            quality = {
+                "source": "sapiens2",
+                "person_detected": person,
+                "side": self.settings.sapiens_target_side,
+                "mapping_source": self.mapping.source if hasattr(self.mapping, "source") else "",
+            }
 
         return InferenceResponse(
             frame_id=f"frame-{sequence:06d}",
@@ -111,10 +124,4 @@ class InferenceEngine:
             person_detected=person,
             simulated=self.simulated,
             quality=quality,
-        )
-
-    def _sapiens_keypoints(self, _frame: bytes) -> list[dict[str, float]]:
-        raise VisionUnavailableError(
-            "vision service unavailable: Sapiens2 runtime is not installed in this image; "
-            "install the licensed package in the GPU override image and run the smoke test"
         )
