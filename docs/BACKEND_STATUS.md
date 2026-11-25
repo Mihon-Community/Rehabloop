@@ -34,8 +34,11 @@ Branch: `feature/lennox`
   model and a generated 640x480 synthetic seated figure. It detected the person,
   marked all three selected-side landmarks valid, and returned them in 14.8 ms.
   This is a wiring smoke test, not pose-accuracy or clinical validation.
-- Compose configuration parsed successfully. No container build or health check
-  ran because a Docker daemon was not available.
+- The CPU vision and backend images built successfully. Both containers reached
+  `healthy`; backend `/api/v1/health` returned `ok`.
+- The same synthetic HTTP smoke test passed inside the CPU container: MoveNet
+  detected the figure and returned all three selected-side landmarks as valid
+  in 35.3 ms. No Supabase writes or migrations were run.
 - `.env` remains git-ignored. No environment values were printed or committed.
 
 ## Limits and follow-up

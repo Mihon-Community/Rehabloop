@@ -40,16 +40,36 @@ validated anatomical measurements.
    The model directory is mounted read-only. The model file must stay outside
    Git and is never copied into the Docker image.
 
-3. Start the CPU stack:
+3. Start the CPU vision service (or start the backend too if you want its API):
 
    ```powershell
-   docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build
+   docker-compose -f docker-compose.yml -f docker-compose.cpu.yml up --build -d vision_service
    ```
 
-4. Verify `GET http://localhost:8001/health` reports `mode=movenet`,
-   `model=movenet-singlepose-lightning`, and `simulated=false`. A synthetic
-   640×480 image can exercise the full service; it validates wiring and output
-   shape only, not pose accuracy.
+4. Run the repeatable synthetic check from inside the container:
+
+   ```powershell
+   docker-compose -f docker-compose.yml -f docker-compose.cpu.yml exec -T vision_service python scripts/synthetic_movenet_smoke.py --url http://127.0.0.1:8001
+   ```
+
+   It checks `/health`, `/mapping`, and `/infer` using a generated 640×480
+   seated figure held in memory. Expected output includes
+   `valid_landmarks=3/3` and `Smoke test passed`. This verifies wiring only;
+   it does not measure pose accuracy.
+
+5. You can also open `http://localhost:8001/health` in a browser. It should
+   report `mode=movenet`, `model=movenet-singlepose-lightning`, and
+   `simulated=false`.
+
+To start the backend and its required vision dependency, run:
+
+```powershell
+docker-compose -f docker-compose.yml -f docker-compose.cpu.yml up --build -d backend
+```
+
+The current frontend camera setup and live-session screens are placeholders;
+they do not yet send real camera frames to the backend. Use the synthetic
+service check above to verify MoveNet. Do not use it as clinical validation.
 
 The mapping comes from the official model card's COCO-17 order: left
 hip/knee/ankle = 11/13/15, right = 12/14/16. Output coordinates are mapped
