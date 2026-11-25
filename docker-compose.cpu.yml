@@ -1,9 +1,7 @@
-# Real Sapiens2 inference on a CPU-only host. This is intended for slow,
-# single-frame/offline checks, not live 5-10 fps sessions.
-# Before using real frames, review the Sapiens2 licence for this use.
-# Set SAPIENS_CHECKPOINT_ROOT and SAPIENS_SOURCE_ROOT in the ignored root .env.
+# Real MoveNet SinglePose Lightning inference on CPU.
+# The Apache-2.0 model file stays outside Git and is mounted read-only.
+# Set MOVENET_MODEL_ROOT in the ignored root .env.
 # Use: docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build
-# Licensed source and checkpoints are mounted read-only and are never committed.
 
 services:
   vision_service:
@@ -11,22 +9,16 @@ services:
       context: ./vision_service
       target: cpu
     environment:
-      VISION_MODE: sapiens
+      VISION_MODE: movenet
       VISION_DEVICE: cpu
-      OMP_NUM_THREADS: ${SAPIENS_CPU_THREADS:-2}
-      MKL_NUM_THREADS: ${SAPIENS_CPU_THREADS:-2}
-      SAPIENS_CHECKPOINT_ROOT: /checkpoints
-      SAPIENS_ROOT: /sapiens
-      SAPIENS_POSE_MODEL: ${SAPIENS_POSE_MODEL:-facebook/sapiens2-pose-0.4b}
-      SAPIENS_DETECTOR_MODEL: ${SAPIENS_DETECTOR_MODEL:-facebook/detr-resnet-101-dc5}
-      SAPIENS_POSE_CONFIG: ${SAPIENS_POSE_CONFIG:-}
-      SAPIENS_DATASET: ${SAPIENS_DATASET:-shutterstock_goliath_3po}
-      SAPIENS_CHECKPOINT_FILE: ${SAPIENS_CHECKPOINT_FILE:-}
-      SAPIENS_TARGET_SIDE: ${SAPIENS_TARGET_SIDE:-left}
+      MOVENET_MODEL_PATH: /models/movenet_singlepose_lightning.tflite
+      MOVENET_MODEL_NAME: ${MOVENET_MODEL_NAME:-movenet-singlepose-lightning}
+      MOVENET_TARGET_SIDE: ${MOVENET_TARGET_SIDE:-left}
+      OMP_NUM_THREADS: ${MOVENET_CPU_THREADS:-2}
+      MKL_NUM_THREADS: ${MOVENET_CPU_THREADS:-2}
     volumes:
-      - ${SAPIENS_CHECKPOINT_ROOT:?Set SAPIENS_CHECKPOINT_ROOT to the host checkpoint directory}:/checkpoints:ro
-      - ${SAPIENS_SOURCE_ROOT:?Set SAPIENS_SOURCE_ROOT to the licensed host source directory}:/sapiens:ro
+      - ${MOVENET_MODEL_ROOT:?Set MOVENET_MODEL_ROOT to the external model directory}:/models:ro
 
   backend:
     environment:
-      VISION_MODE: sapiens
+      VISION_MODE: movenet

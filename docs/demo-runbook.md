@@ -4,7 +4,9 @@ Owner: both. Blueprint Sections 10, 14, 17 and 18.
 
 ## Before the demo
 
-- Confirm the Sapiens2 licence status; restrict non-cleared use to fixtures.
+- Confirm the selected path is MoveNet or labelled fixture. Patient-facing use
+  requires consent, privacy review and validation; do not treat pose estimates
+  as clinically validated measurements.
 - Start vision first, check `/health` (mode + simulated flag), then API, then UI.
 - Verify no raw-video persistence and that the Supabase bucket is private.
 - Confirm RLS matrix passes, synthetic accounts have the right roles, and no

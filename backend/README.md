@@ -40,11 +40,10 @@ mypy app
 pytest
 ```
 
-The CPU Sapiens2 Compose override is in `../docker-compose.cpu.yml`; it needs
-the licensed source tree and checkpoints outside the repository. On a machine
-without those files, stay in fixture mode. See
-[`model-smoke-test.md`](../docs/model-smoke-test.md) for the license gate and
-the model setup steps.
+The CPU MoveNet Compose override is in `../docker-compose.cpu.yml`; it needs the
+official `.tflite` model in a local directory outside the repository. See
+[`model-smoke-test.md`](../docs/model-smoke-test.md) for the model setup and
+limitations. The Sapiens2 runner remains optional and licence-gated.
 
 ## Supabase status
 

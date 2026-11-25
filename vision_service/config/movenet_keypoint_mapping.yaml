@@ -1,0 +1,29 @@
+version: rehabloop-movenet-knee-map-1.0
+status: RESOLVED_FROM_OFFICIAL_MOVENET_MODEL_CARD_PENDING_MANUAL_REVIEW
+keypoint_format: COCO-17
+source: https://storage.googleapis.com/movenet/MoveNet.SinglePose%20Model%20Card.pdf
+notes: >-
+  COCO keypoint indices published by Google's official MoveNet model card.
+  The side is selected at runtime with MOVENET_TARGET_SIDE (left/right).
+  Manual synthetic and consented overlay review is required before use beyond
+  engineering tests.
+required_confidence: 0.6
+sides:
+  left:
+    hip: 11
+    knee: 13
+    ankle: 15
+  right:
+    hip: 12
+    knee: 14
+    ankle: 16
+landmarks:
+  selected_hip:
+    index: 11
+    official_name: left_hip
+  selected_knee:
+    index: 13
+    official_name: left_knee
+  selected_ankle:
+    index: 15
+    official_name: left_ankle

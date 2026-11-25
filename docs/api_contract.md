@@ -82,7 +82,7 @@ the implementation; the JSON below is the logical contract.
   "rep_count": 3,
   "state": "RETURNING",
   "quality": {"usable": true, "reason": null, "confidence": 0.89},
-  "model_version": "sapiens2-pose-0.4b"
+  "model_version": "movenet-singlepose-lightning"
 }
 ```
 
@@ -173,8 +173,8 @@ thresholds):
   "session_id": "00000000-0000-0000-0000-000000000123",
   "protocol_id": "00000000-0000-0000-0000-000000000456",
   "protocol_version": 1,
-  "model_version": "sapiens2-pose-0.4b",
-  "keypoint_mapping_version": "rehabloop-knee-map-1.0",
+  "model_version": "movenet-singlepose-lightning",
+  "keypoint_mapping_version": "rehabloop-movenet-knee-map-1.0",
   "analytics_version": "knee-extension-engine-0.1.0",
   "status": "completed",
   "metrics": {
@@ -214,7 +214,7 @@ Internal named-keypoint frame (vision service → movement engine):
 {
   "frame_id": "frame-000123",
   "timestamp_ms": 4100,
-  "model": "sapiens2-pose-0.4b",
+  "model": "movenet-singlepose-lightning",
   "mapping_version": "rehabloop-knee-map-1.0",
   "landmarks": {
     "selected_hip":   {"x": 0.48, "y": 0.39, "confidence": 0.91, "valid": true},

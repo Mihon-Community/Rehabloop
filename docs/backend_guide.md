@@ -106,10 +106,10 @@ Environment variables — mark the secrets:
 | `NVIDIA_BASE_URL`, `NVIDIA_MODEL_ID` | hosted LLM config | no |
 | `STORE_RAW_VIDEO` | default `false`; must stay false | no |
 | `MAX_FRAME_RATE`, `SESSION_TOKEN_TTL_SECONDS`, `VISION_SERVICE_URL` | backend limits/routing | no |
-| `VISION_MODE` | `fixture` (default) or `sapiens` | no |
-| `VISION_DEVICE` | `cpu` / `cuda` | no |
-| `SAPIENS_CHECKPOINT_ROOT` | local checkpoint directory (mounted read-only) | no |
-| `SAPIENS_POSE_MODEL`, `SAPIENS_DETECTOR_MODEL` | model IDs, env-configured | no |
+| `VISION_MODE` | `fixture` (default), `movenet`, or legacy `sapiens` | no |
+| `VISION_DEVICE` | `cpu` for MoveNet; legacy Sapiens also accepts `cuda` | no |
+| `MOVENET_MODEL_ROOT`, `MOVENET_MODEL_PATH` | host model directory and read-only container path | no |
+| `MOVENET_MODEL_NAME`, `MOVENET_TARGET_SIDE` | model label and selected leg | no |
 
 Never commit `.env` or secrets; CI must pass with no repository secrets.
 
@@ -159,7 +159,7 @@ protocol fields; no default angle range is supplied.
 Tests cover known geometry, clean and noisy synthetic repetitions, missing data,
 long gaps, low confidence, partial repetitions, multiple people, model/mapping
 version mismatch, and deterministic fixture generation. These validate engine
-math only, not Sapiens2 accuracy or clinical performance.
+math only, not MoveNet accuracy or clinical performance.
 
 ## 7. Supabase
 
@@ -223,23 +223,26 @@ run the synthetic RLS matrix.
   non-clinical disclaimer. The current client omits response_format because the
   candidate model does not advertise structured-output support.
 
-## 9. Sapiens2, fixtures and the licence gate
+## 9. MoveNet, fixtures and pose quality
 
-- Sapiens2 Pose 0.4B is the engineering target; Sapiens2 terms restrict
-  biometric processing and unlicensed medical practice. **License review is a
-  go/no-go gate** before identifiable or patient-facing use. No bypass.
-- `vision_service/config/keypoint_mapping.yaml` resolves the selected
-  hip/knee/ankle indices from the official 308-keypoint specification. The
-  mapping still needs manual overlay review; do not use it for patient-facing
-  measurements until that review and the Sapiens2 licence gate are cleared.
+- `VISION_MODE=movenet` runs Google's MoveNet SinglePose Lightning model on CPU
+  through LiteRT. The model is Apache-2.0 licensed and should be mounted from a
+  local directory outside Git.
+- The COCO-17 landmark mapping is `vision_service/config/movenet_keypoint_mapping.yaml`.
+  Left hip/knee/ankle are 11/13/15; right are 12/14/16, as published in Google's
+  model card. The mapping and overlay still require manual review.
+- MoveNet returns a single pose and may focus on a person near the image centre
+  when multiple people are visible. It does not provide reliable multi-person
+  selection or tracking. Outputs remain estimates, not validated biomechanics.
 - `VISION_MODE=fixture` (default) replays labelled synthetic keypoints. Every
   response has `simulated: true` and `model: fixture-simulated`. Never present
   it as real inference. Fixtures live in `fixtures/synthetic_keypoint_sequences/`;
   `fixtures/approved_test_frames/` stays empty in Git.
-- Smoke test: see `docs/model-smoke-test.md` — record model id, checkpoint hash,
-  detector, driver/GPU, image size and inference time; report pose quality
-  separately from engine math accuracy and end-to-end reliability.
-
+- Smoke test: see `docs/model-smoke-test.md`. Record model ID, file hash,
+  runtime, image size and inference time; report pose quality separately from
+  movement-engine math accuracy and end-to-end reliability.
+- The Sapiens2 runner remains legacy and licence-gated. Do not enable it for
+  movement analysis without specific legal clearance.
 ## 10. Privacy, safety and Kenya context (blueprint Section 13)
 
 - `STORE_RAW_VIDEO=false` by default; frames are transient, buffers cleared
@@ -250,8 +253,8 @@ run the synthetic RLS matrix.
   guidance covers health data, storage limitation, DPIAs and treats biometric
   data as sensitive. Removing names does not make footage anonymous. Obtain
   legal advice on controller/processor roles, complete a DPIA determination,
-  document consent/retention/incident processes, and clear the Sapiens2 licence
-  **before** any real-patient pilot. Competition demos use synthetic or
+  document consent/retention/incident processes, and complete privacy and
+  clinical validation **before** any real-patient pilot. Competition demos use synthetic or
   explicitly approved data only.
 
 ## 11. Testing strategy

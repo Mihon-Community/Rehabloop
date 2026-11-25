@@ -62,6 +62,22 @@ def _create_protocol(client: TestClient) -> str:
     return response.json()["id"]
 
 
+def test_movenet_session_records_selected_model_and_mapping_versions() -> None:
+    app = create_app(
+        _settings(vision_mode="movenet"),
+        repository=InMemoryRepository(),
+    )
+    with TestClient(app) as client:
+        protocol_id = _create_protocol(client)
+        response = client.post(
+            "/api/v1/sessions", headers=PATIENT, json={"protocol_id": protocol_id}
+        )
+        assert response.status_code == 200
+        session = response.json()
+        assert session["model_version"] == "movenet-singlepose-lightning"
+        assert session["keypoint_mapping_version"] == "rehabloop-movenet-knee-map-1.0"
+
+
 def test_in_memory_session_lifecycle_and_safe_summary() -> None:
     with _client() as client:
         health = client.get("/api/v1/health")

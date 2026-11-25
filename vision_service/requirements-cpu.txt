@@ -1,21 +1,6 @@
-# CPU-only Sapiens2 inference dependencies.
-# Keep the torch versions aligned with requirements-gpu.txt, using PyTorch's
-# CPU wheel index so this image never needs CUDA libraries or an NVIDIA device.
---extra-index-url https://download.pytorch.org/whl/cpu
+# CPU MoveNet SinglePose Lightning runtime. Model weights are mounted from the
+# host and are not copied into the image or repository.
 -r requirements.txt
-torch==2.7.1+cpu
-torchvision==0.22.1+cpu
-transformers>=4.49,<5
-opencv-python-headless>=4.10,<5
+ai-edge-litert==2.4.0
 pillow>=10.4,<12
 numpy>=1.26,<3
-tqdm>=4.66,<5
-safetensors
-scipy
-matplotlib
-iopath
-prettytable
-termcolor
-accelerate
-rich
-timm

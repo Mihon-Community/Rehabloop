@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 from .config import get_settings
 from .detector import VisionUnavailableError
 from .inference import InferenceEngine
-from .keypoint_adapter import load_mapping
 from .schemas import (
     ErrorResponse,
     FrameRequest,
@@ -44,7 +43,7 @@ def health() -> HealthResponse:
 
 @app.get("/mapping", response_model=MappingResponse)
 def mapping() -> MappingResponse:
-    current = load_mapping()
+    current = engine.mapping
     return MappingResponse(
         version=current.version,
         status=current.status,

@@ -114,11 +114,15 @@ class SessionService:
             raise HTTPException(status_code=403, detail="Role cannot create sessions")
 
         config, target_reps = self._protocol_configuration(protocol["parameters"])
-        model_version = (
-            "fixture-simulated"
-            if self.settings.vision_mode == "fixture"
-            else self.settings.sapiens_pose_model
-        )
+        if self.settings.vision_mode == "fixture":
+            model_version = "fixture-simulated"
+            mapping_version = self.settings.keypoint_mapping_version
+        elif self.settings.vision_mode == "movenet":
+            model_version = self.settings.movenet_model_name
+            mapping_version = self.settings.movenet_keypoint_mapping_version
+        else:
+            model_version = self.settings.sapiens_pose_model
+            mapping_version = self.settings.keypoint_mapping_version
         session_id = str(uuid4())
         engine = MovementEngine(
             rep_config=config,
@@ -126,7 +130,7 @@ class SessionService:
             min_confidence=self.settings.landmark_min_confidence,
             smoothing_alpha=self.settings.knee_angle_smoothing_alpha,
             model_version=model_version,
-            mapping_version=self.settings.keypoint_mapping_version,
+            mapping_version=mapping_version,
         )
         self._engines[session_id] = engine
         session = {
@@ -136,7 +140,7 @@ class SessionService:
             "patient_id": protocol["patient_id"],
             "clinician_id": protocol["clinician_id"],
             "model_version": model_version,
-            "keypoint_mapping_version": self.settings.keypoint_mapping_version,
+            "keypoint_mapping_version": mapping_version,
             "analytics_version": self.settings.analytics_version,
             "status": "draft",
             "metrics": engine.metrics(),
