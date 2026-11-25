@@ -162,15 +162,18 @@ math only, not MoveNet accuracy or clinical performance.
 ## 7. Supabase
 
 - Migrations are timestamped SQL in `supabase/migrations/`; apply with the
-  Supabase MCP `apply_migration` or `supabase db push`. Never edit an applied
+  Supabase MCP `apply_migration`. Never edit an applied
   migration — add a new one. After applying, run the security and performance
   advisors and fix RLS findings in a new migration.
+- This connected project's MCP ledger assigns server-generated versions that
+  differ from local filename timestamps, including for earlier migrations.
+  Do not run `supabase db push` until local and remote history is reconciled.
 - RLS is enabled on every exposed table. Policy pattern: patient reads own rows;
   assigned clinician reads linked patients via `clinician_link_active()`;
-  derived tables (metrics, rep events, flags, summaries, audit) are readable
-  through the parent session but written only by the service role. Roles come
-  from application-managed profile data set by the trusted backend, not from
-  user-editable auth metadata.
+  metrics, rep events, flags, and summaries are readable through the parent
+  session; audit events are readable by their actor or an admin. Derived rows
+  are written by the service role. Roles come from application-managed profile
+  data set by the trusted backend, not from user-editable auth metadata.
 - Test the RLS matrix (patient A, patient B, assigned clinician, unassigned
   clinician, anonymous) for zero cross-patient reads before any non-synthetic data.
 - `supabase/seed/001_synthetic_demo.sql` is **synthetic only** — fake UUIDs and
@@ -178,18 +181,16 @@ math only, not MoveNet accuracy or clinical performance.
   key on the backend only; never in the frontend or a Vite variable. Private
   storage only if an approved asset is needed; no public patient bucket.
 
-### Supabase MCP (Hermes Agent)
+### Supabase MCP
 
-Generic steps, no credentials in docs: configure the remote MCP server in your
-agent (`hermes mcp add supabase --url "<project MCP URL>" --auth oauth`, then
-`hermes mcp login supabase --flow browser`), approve the browser OAuth once, and
-confirm with `hermes mcp list` / `hermes mcp test supabase`. Then list tools,
-apply each migration, run the security/performance advisors, and verify RLS
-with synthetic accounts. Never paste an access token or service-role key into
+Configure and authenticate the remote Supabase MCP server for the intended
+project and confirm its URL before writing. Inspect migration history, tables,
+and advisories first; apply with `apply_migration`, then verify history, grants,
+and RLS with synthetic accounts. Never paste an access token or service-role key into
 the repo or chat. If the connection is not authenticated, skip the migration
 and report it — do not work around the login.
 
-### Pending security correction
+### Applied security correction
 
 The read-only Section 12 review identified client-side write paths for
 clinician links, sessions, and in-place protocol changes, broad clinician
@@ -197,9 +198,9 @@ access to audit rows, missing indexes on two session child tables, and no
 database constraint on raw-video metadata. The new
 20261124120300_backend_write_boundaries.sql and
 20261124200048_backend_atomic_session_writes_and_service_grants.sql migrations
-address these issues and add atomic protocol/session writes. Neither has been
-applied; review and apply them through the authorized Supabase workflow, then
-run the synthetic RLS matrix.
+address these issues and add atomic protocol/session writes. Both were applied
+through Supabase MCP. The synthetic patient/clinician RLS matrix and both RPCs
+passed in a transaction that was rolled back.
 
 ## 8. NVIDIA integration
 
@@ -290,9 +291,9 @@ reviewed and merged into `develop`.
 
 Angles are 2D projected estimates; clinical accuracy and real-time performance
 are not validated. The synthetic MoveNet overlay was visually checked, but
-clinical accuracy remains unvalidated. Supabase JWT verification and
-PostgREST behavior are covered by mocks only; neither
-corrective migration has been applied. No real patient data was used. The
+clinical accuracy remains unvalidated. Supabase JWT verification and HTTP
+PostgREST behavior are covered by mocks only; live SQL/RLS/RPC checks used
+synthetic accounts. No real patient data was used. The
 
 
 ## 15. Remaining integration steps
@@ -301,8 +302,9 @@ corrective migration has been applied. No real patient data was used. The
    patient-facing use of MoveNet measurements.
 2. Have Steve review the proposed API contract and coordinate the camera
    consent UI with the backend's required purpose/version markers.
-3. Review and apply both pending Supabase migrations through the authorized
-   workflow; test the patient/clinician RLS matrix with synthetic accounts.
+3. Enable leaked-password protection in Supabase Auth and reconcile the
+   MCP-generated remote migration versions with local migration filenames
+   before returning to the Supabase CLI workflow.
 4. NVIDIA's live numeric summary check passed; its verified model is pinned in
    the ignored local `.env`. Re-run the smoke script after changing provider or
    model configuration.
