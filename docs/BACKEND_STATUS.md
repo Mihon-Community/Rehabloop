@@ -79,4 +79,5 @@ Branch: `feature/lennox`
   patient-facing use remain pending. Steve's review of proposed API changes
   also remains pending.
 
-No branch deletion, git push, or commit was performed.
+These changes are committed and pushed to `feature/lennox`; no branch was
+deleted or force-pushed.

@@ -370,7 +370,7 @@ configuration passed this live check.
 
 PostgREST is selected only when both SUPABASE_URL and
 SUPABASE_SERVICE_ROLE_KEY are configured. Supabase repository and JWT behavior
-were tested with mocks only; no live Supabase project was contacted. Both
-20261124120300_backend_write_boundaries.sql and
-20261124200048_backend_atomic_session_writes_and_service_grants.sql remain
-unapplied and require the authorized Supabase workflow.
+remain covered by mocks at the HTTP/JWT layer. The corrective migrations,
+table grants, RLS policies, and atomic RPCs were tested against the connected
+Supabase project with synthetic records in a rollback-only transaction. No
+real patient data was used.
