@@ -22,14 +22,15 @@ Branch: `feature/lennox`
 - Backend session metadata records the MoveNet model and COCO-17 mapping
   version. The vision service maps official left/right hip, knee and ankle
   indices into normalized source-frame coordinates.
+- Fixture and MoveNet CPU are the only supported vision modes. Unused model
+  runners, mappings, and dependencies were removed.
 - Shared API examples and smoke-test docs describe MoveNet. Contract and
   Compose changes need Steve's review before merge.
 
 ## Validation
 
-- Vision service pytest: 11 passed. Ruff, Ruff format and mypy passed.
-- Backend pytest: 38 passed, 1 skipped. Ruff, Ruff format and mypy passed.
-  The skipped test needs the external NVIDIA service.
+- Vision pytest: 8 passed. Backend pytest: 39 passed, 1 opt-in live test skipped.
+  Ruff, Ruff format, and mypy passed for both services.
 - FastAPI health, mapping and `/infer` requests passed with the downloaded CPU
   model and a generated 640x480 synthetic seated figure. It detected the person,
   marked all three selected-side landmarks valid, and returned them in 14.8 ms.
@@ -39,6 +40,12 @@ Branch: `feature/lennox`
 - The same synthetic HTTP smoke test passed inside the CPU container: MoveNet
   detected the figure and returned all three selected-side landmarks as valid
   in 35.3 ms. No Supabase writes or migrations were run.
+- A generated synthetic seated-figure overlay was manually inspected on
+  2026-11-25; hip, knee, and ankle points were placed on the expected joints.
+  This checks visual wiring only, not pose accuracy or clinical suitability.
+- NVIDIA model discovery and a live synthetic numeric-summary check passed;
+  the validated model is pinned in the ignored local `.env`. The provider
+  received only generated numeric metrics.
 - `.env` remains git-ignored. No environment values were printed or committed.
 
 ## Limits and follow-up
@@ -50,8 +57,8 @@ Branch: `feature/lennox`
   `20261124200048_backend_atomic_session_writes_and_service_grants.sql` has
   been applied. Review and apply them only through the authorized Supabase
   workflow, then run the synthetic RLS matrix.
-- The legacy Sapiens2 runner remains licence-gated; it is not the selected CPU
-  workflow.
+- MoveNet clinical accuracy, consent/privacy/legal review, and readiness for
+  patient-facing use remain pending. Steve's review of proposed API changes
+  also remains pending.
 
-No frontend files were changed. No migration was applied, branch deleted, push,
-or commit performed.
+No migration was applied, branch deleted, push, or commit performed.

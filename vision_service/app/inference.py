@@ -1,11 +1,8 @@
-"""Pose inference engine with fixture, MoveNet and Sapiens modes.
+"""Pose inference engine with fixture and MoveNet modes.
 
 fixture (default): replays labelled synthetic keypoints. EVERY response is
-marked simulated=True because the blueprint forbids presenting fake output as
-real inference.
+marked simulated=True so fixture output cannot be presented as real inference.
 movenet: CPU MoveNet SinglePose Lightning with a locally mounted LiteRT model.
-sapiens: requires approved checkpoints and a resolved keypoint mapping; fails
-with a clear 'vision service unavailable' error otherwise.
 """
 
 from __future__ import annotations
@@ -15,9 +12,8 @@ import time
 from typing import Any, Protocol
 
 from .config import VisionSettings
-from .detector import PersonDetector, VisionUnavailableError
+from .errors import VisionUnavailableError
 from .keypoint_adapter import (
-    MAPPING_PATH,
     MOVENET_MAPPING_PATH,
     KeypointMappingError,
     load_mapping,
@@ -57,31 +53,21 @@ class PoseRunner(Protocol):
 class InferenceEngine:
     def __init__(self, settings: VisionSettings) -> None:
         self.settings = settings
-        self.detector = PersonDetector(settings)
-        mapping_path = MOVENET_MAPPING_PATH if settings.mode == "movenet" else MAPPING_PATH
-        self.mapping = load_mapping(mapping_path)
+        self.mapping = load_mapping(MOVENET_MAPPING_PATH)
         self.runner: PoseRunner | None = None
         if settings.mode == "movenet":
             from .movenet_runner import MoveNetRunner
 
             self.runner = MoveNetRunner(settings)
-        elif settings.mode == "sapiens":
-            from .sapiens_runner import SapiensRunner
-
-            self.runner = SapiensRunner(settings)
         self._cursor = 0
-        if settings.mode not in ("fixture", "movenet", "sapiens"):
+        if settings.mode not in ("fixture", "movenet"):
             raise VisionUnavailableError(
                 f"vision service unavailable: unsupported VISION_MODE={settings.mode!r}; "
-                "use 'fixture', 'movenet' or 'sapiens'"
+                "use 'fixture' or 'movenet'"
             )
         if settings.mode == "movenet" and settings.movenet_target_side not in ("left", "right"):
             raise VisionUnavailableError(
                 "vision service unavailable: MOVENET_TARGET_SIDE must be left or right"
-            )
-        if settings.mode == "sapiens" and settings.sapiens_checkpoint_root == "":
-            raise VisionUnavailableError(
-                "vision service unavailable: SAPIENS_CHECKPOINT_ROOT must be set in sapiens mode"
             )
 
     @property
@@ -91,20 +77,18 @@ class InferenceEngine:
     def model_name(self) -> str:
         if self.simulated:
             return "fixture-simulated"
-        if self.settings.mode == "movenet":
-            return self.settings.movenet_model_name
-        return self.settings.sapiens_pose_model
+        return self.settings.movenet_model_name
 
     def infer(self, sequence: int, timestamp_ms: int, image_b64: str) -> InferenceResponse:
         started = time.perf_counter()
         # Decode only to validate that a frame was supplied; never persist bytes.
         try:
-            frame = base64.b64decode(image_b64, validate=True)
+            base64.b64decode(image_b64, validate=True)
         except Exception as exc:  # noqa: BLE001
             raise VisionUnavailableError(
                 "vision service unavailable: invalid frame payload"
             ) from exc
-        person = self.detector.detect(frame) if self.settings.mode != "movenet" else False
+        person = self.simulated
 
         if self.simulated:
             sample = _FIXTURE_SEQUENCE[self._cursor % len(_FIXTURE_SEQUENCE)]
@@ -125,11 +109,7 @@ class InferenceEngine:
             assert self.runner is not None
             try:
                 raw = self.runner.infer(image_b64)
-                side = (
-                    self.settings.movenet_target_side
-                    if self.settings.mode == "movenet"
-                    else self.settings.sapiens_target_side
-                )
+                side = self.settings.movenet_target_side
                 mapped = map_raw_keypoints(raw, self.mapping, side)
             except KeypointMappingError as exc:
                 raise VisionUnavailableError(f"vision service unavailable: {exc}") from exc
@@ -143,9 +123,7 @@ class InferenceEngine:
             if self.settings.mode == "movenet":
                 person = any(values["valid"] for values in mapped.values())
             quality = {
-                "source": "movenet-singlepose-lightning"
-                if self.settings.mode == "movenet"
-                else "sapiens2",
+                "source": "movenet-singlepose-lightning",
                 "person_detected": person,
                 "side": side,
                 "mapping_source": self.mapping.source,

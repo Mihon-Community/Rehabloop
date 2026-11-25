@@ -15,4 +15,3 @@ mypy app
 ```
 
 MoveNet's COCO-17 mapping is listed in `config/movenet_keypoint_mapping.yaml`.
-Sapiens2 remains an optional legacy runner and is licence-gated.

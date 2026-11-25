@@ -1,4 +1,4 @@
-# Git workflow (blueprint Section 10)
+# Git workflow
 
 ## Branches
 
@@ -59,7 +59,7 @@ Never stage `.env`, secrets, tokens, model weights, patient data or raw frames.
 A unit of work is done when it runs locally from a clean checkout, has passing
 automated checks, is documented, respects the safety rules, is reviewed by the
 right owner(s), and is merged through a PR into `develop` (or `main` for a
-release/demo). At hour 48 the blueprint's full definition of done applies:
+release/demo). The project definition of done applies:
 one complete, truthful end-to-end demo with known limitations.
 
 ## Branch protection (to set in GitHub when authenticated)

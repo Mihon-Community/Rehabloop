@@ -1,7 +1,7 @@
 {
   "fixture_id": "synthetic-knee-extension-1",
   "simulated": true,
-  "warning": "Labelled synthetic fixture. Not real Sapiens2 inference and not clinical data.",
+  "warning": "Labelled synthetic fixture. Not real pose-model inference and not clinical data.",
   "mapping_version": "rehabloop-knee-map-1.0",
   "model": "fixture-simulated",
   "frames": [

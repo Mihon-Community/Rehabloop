@@ -8,7 +8,7 @@ import { SessionResultScreen } from '../features/sessions/SessionResultScreen';
 import { ClinicianDashboardScreen } from '../features/protocols/ClinicianDashboardScreen';
 import { RecoveryTwinScreen } from '../features/recovery-twin/RecoveryTwinScreen';
 
-/** Screen map from blueprint Section 4. Auth is a UI gate only, never authorization. */
+/** Screen map for the app. Auth is a UI gate only, never authorization. */
 export function AppRoutes() {
   return (
     <Routes>

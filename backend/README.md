@@ -43,7 +43,7 @@ pytest
 The CPU MoveNet Compose override is in `../docker-compose.cpu.yml`; it needs the
 official `.tflite` model in a local directory outside the repository. See
 [`model-smoke-test.md`](../docs/model-smoke-test.md) for the model setup and
-limitations. The Sapiens2 runner remains optional and licence-gated.
+limitations. MoveNet is the only real pose model supported by the vision service.
 
 ## Supabase status
 

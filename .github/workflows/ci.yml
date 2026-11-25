@@ -72,7 +72,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VISION_MODE: fixture
-      VISION_DEVICE: cpu
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -97,7 +96,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker compose config
-      - run: docker compose -f docker-compose.yml -f docker-compose.gpu.yml config
       - run: docker compose build
       - name: Boot fixture stack and check health endpoints
         run: |
@@ -115,7 +113,6 @@ jobs:
           docker compose down -v
         env:
           VISION_MODE: fixture
-          VISION_DEVICE: cpu
           STORE_RAW_VIDEO: 'false'
 
   secrets-and-safety:

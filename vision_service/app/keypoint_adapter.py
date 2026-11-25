@@ -8,7 +8,6 @@ from typing import Any
 import yaml  # type: ignore[import-untyped]
 from pydantic import BaseModel
 
-MAPPING_PATH = Path(__file__).resolve().parent.parent / "config" / "keypoint_mapping.yaml"
 MOVENET_MAPPING_PATH = (
     Path(__file__).resolve().parent.parent / "config" / "movenet_keypoint_mapping.yaml"
 )
@@ -34,7 +33,7 @@ class Mapping(BaseModel):
         )
 
 
-def load_mapping(path: Path = MAPPING_PATH) -> Mapping:
+def load_mapping(path: Path = MOVENET_MAPPING_PATH) -> Mapping:
     with path.open(encoding="utf-8") as handle:
         data = yaml.safe_load(handle)
     return Mapping.model_validate(data)

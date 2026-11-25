@@ -33,4 +33,4 @@ Conventional Commits: `feat:`, `fix:`, `docs:`, `chore:`, `build:`, `ci:`,
 
 No diagnosis, treatment advice or false precision. No real patient data or raw
 video in the repository. Fixture output must be labelled simulated. Read
-`SECURITY.md` and the blueprint's Sections 3, 9, 12 and 13.
+`SECURITY.md`, `docs/ARCHITECTURE.md`, and `docs/backend_guide.md`.

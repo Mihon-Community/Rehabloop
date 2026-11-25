@@ -25,8 +25,8 @@
   diagnosis, treatment, progression, medication, or recovery claims.
 - Label all fixture output simulated/synthetic. Do not claim in-memory data was
   saved. Round projected angles and call them estimates.
-- Never guess Sapiens2 keypoint indices; use the YAML mapping and fail closed
-  while indices are placeholders.
+- Never guess pose keypoint indices; use the active model's YAML mapping and
+  fail closed while indices are placeholders.
 - Dev auth is allowed only with APP_ENV=local. No auth or RLS bypasses.
 
 ## Changes and review

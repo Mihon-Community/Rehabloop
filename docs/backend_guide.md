@@ -1,12 +1,12 @@
 # Backend developer guide — Lennox
 
 Owner: **Lennox** · branch: `feature/lennox` · area: `backend/`, `vision_service/`,
-`supabase/`, `fixtures/` · Read first: the blueprint (Sections 6–14) and
-`docs/api_contract.md`. Architecture map: `docs/ARCHITECTURE.md`.
+`supabase/`, `fixtures/` · Read first: `docs/api_contract.md` and
+`docs/ARCHITECTURE.md`.
 
 ## 1. Your role
 
-You build the API, the Sapiens2 vision worker, the deterministic movement
+You build the API, the MoveNet vision worker, the deterministic movement
 engine, Supabase schema/RLS and the constrained NVIDIA summary. The system must
 produce reproducible numbers and reject unreliable input — it must never
 fabricate inference or make clinical decisions.
@@ -23,14 +23,14 @@ patient assignment on the server — the UI is not an authorization layer.
 
 Three local processes: Vite frontend (:5173), FastAPI API (:8000), FastAPI
 vision service (:8001). Supabase stays hosted; NVIDIA is called server-side
-only. The vision worker is separate because model imports, CUDA memory and
-latency must not destabilize auth/session routes; it can be swapped between
-local GPU, remote GPU and labelled fixture mode.
+only. The vision worker is separate so model imports and latency do not
+destabilize auth/session routes. It supports labelled fixture mode and the
+real CPU MoveNet path.
 
 ```mermaid
 flowchart LR
   B[Browser: getUserMedia + sampling] -->|WS frames + session token| API[FastAPI API]
-  API -->|named keypoints request| V[Vision service: Sapiens2 / fixture]
+  API -->|named keypoints request| V[Vision service: MoveNet / fixture]
   V -->|2D landmarks + confidence| E[Movement engine: gates, smoothing, angle, rep FSM]
   E -->|measurement / quality events| API
   API -->|WS events + 3D metric trace| B
@@ -51,8 +51,8 @@ backend/app/
 ├── schemas/{common,session,protocol,summary}.py  # Pydantic request/response types
 └── services/{session_service,movement_engine,nvidia_summary,supabase_repository}.py
 backend/tests/              # health + Appendix A3 angle tests (passing)
-vision_service/app/{main,inference,detector,keypoint_adapter,schemas,config}.py
-vision_service/config/keypoint_mapping.yaml    # resolved indices; overlay review pending
+vision_service/app/{main,inference,keypoint_adapter,schemas,config}.py
+vision_service/config/movenet_keypoint_mapping.yaml
 vision_service/tests/
 supabase/migrations/20261124120000_initial_schema.sql
 supabase/seed/001_synthetic_demo.sql
@@ -74,11 +74,10 @@ Docker (whole stack, fixture mode, no GPU):
 copy .env.example .env && docker compose up --build
 curl localhost:8000/api/v1/health; curl localhost:8001/health
 ```
-Real model (CPU, slow/offline):
+Real model (CPU):
 `docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build`
-after the licensed source and checkpoints are in place. For NVIDIA, use
-`docker-compose.gpu.yml` and install the NVIDIA Container Toolkit. See
-`docs/model-smoke-test.md`; do not use real frames until the licence gate is cleared.
+after downloading the MoveNet model to a local directory outside Git. See
+`docs/model-smoke-test.md`; use only synthetic or explicitly approved frames.
 
 Without Docker (Python 3.12):
 ```bash
@@ -106,8 +105,7 @@ Environment variables — mark the secrets:
 | `NVIDIA_BASE_URL`, `NVIDIA_MODEL_ID` | hosted LLM config | no |
 | `STORE_RAW_VIDEO` | default `false`; must stay false | no |
 | `MAX_FRAME_RATE`, `SESSION_TOKEN_TTL_SECONDS`, `VISION_SERVICE_URL` | backend limits/routing | no |
-| `VISION_MODE` | `fixture` (default), `movenet`, or legacy `sapiens` | no |
-| `VISION_DEVICE` | `cpu` for MoveNet; legacy Sapiens also accepts `cuda` | no |
+| `VISION_MODE` | `fixture` (default) or `movenet` | no |
 | `MOVENET_MODEL_ROOT`, `MOVENET_MODEL_PATH` | host model directory and read-only container path | no |
 | `MOVENET_MODEL_NAME`, `MOVENET_TARGET_SIDE` | model label and selected leg | no |
 
@@ -128,7 +126,7 @@ are machine-readable scope markers, not consent text. The UI must write them
 only after explicit acceptance of approved camera-consent copy; coordinate
 that integration with Steve.
 
-## 6. Movement engine (blueprint Section 7, Appendix A3)
+## 6. Movement engine
 
 Implemented in `backend/app/services/movement_engine.py`:
 
@@ -203,7 +201,7 @@ address these issues and add atomic protocol/session writes. Neither has been
 applied; review and apply them through the authorized Supabase workflow, then
 run the synthetic RLS matrix.
 
-## 8. NVIDIA integration (blueprint Section 9)
+## 8. NVIDIA integration
 
 - Input is a **minimised, de-identified numeric metrics object only** — never
   frames, identifiers or raw keypoints. Base URL and model ID come from env;
@@ -220,8 +218,8 @@ run the synthetic RLS matrix.
   model id and schema version with the summary.
 - HTTPX calls have bounded timeouts and one retry after provider, parsing, or
   validation failure. Results include source, model_id, and the fixed
-  non-clinical disclaimer. The current client omits response_format because the
-  candidate model does not advertise structured-output support.
+  non-clinical disclaimer. The client requests a strict JSON schema, and the
+  live-tested provider endpoint accepted it.
 
 ## 9. MoveNet, fixtures and pose quality
 
@@ -230,7 +228,8 @@ run the synthetic RLS matrix.
   local directory outside Git.
 - The COCO-17 landmark mapping is `vision_service/config/movenet_keypoint_mapping.yaml`.
   Left hip/knee/ankle are 11/13/15; right are 12/14/16, as published in Google's
-  model card. The mapping and overlay still require manual review.
+  model card. A synthetic seated-figure overlay was visually reviewed;
+  clinical accuracy remains unvalidated.
 - MoveNet returns a single pose and may focus on a person near the image centre
   when multiple people are visible. It does not provide reliable multi-person
   selection or tracking. Outputs remain estimates, not validated biomechanics.
@@ -241,9 +240,7 @@ run the synthetic RLS matrix.
 - Smoke test: see `docs/model-smoke-test.md`. Record model ID, file hash,
   runtime, image size and inference time; report pose quality separately from
   movement-engine math accuracy and end-to-end reliability.
-- The Sapiens2 runner remains legacy and licence-gated. Do not enable it for
-  movement analysis without specific legal clearance.
-## 10. Privacy, safety and Kenya context (blueprint Section 13)
+## 10. Privacy, safety and Kenya context
 
 - `STORE_RAW_VIDEO=false` by default; frames are transient, buffers cleared
   after inference; no video recording endpoint. No raw frames to third parties
@@ -292,25 +289,23 @@ reviewed and merged into `develop`.
 ## 14. Known limitations
 
 Angles are 2D projected estimates; clinical accuracy and real-time performance
-are not validated. Sapiens2 licensing is unresolved for this rehabilitation
-use; the source and checkpoints are absent on the current host, and the
-official landmark mapping still needs manual overlay review. Supabase JWT
-verification and PostgREST behavior are covered by mocks only; neither
+are not validated. The synthetic MoveNet overlay was visually checked, but
+clinical accuracy remains unvalidated. Supabase JWT verification and
+PostgREST behavior are covered by mocks only; neither
 corrective migration has been applied. No real patient data was used. The
-blueprint's media folder was absent, so example screenshots are not bundled.
+
 
 ## 15. Remaining integration steps
 
-1. Obtain legal/licensing clearance for the intended Sapiens2 use, then accept
-   any gated model terms and put source/checkpoints outside the repository.
-   Run the CPU smoke test on synthetic or explicitly approved frames and review
-   overlays before relying on landmark outputs.
+1. Complete the required clinical, privacy and legal review before any
+   patient-facing use of MoveNet measurements.
 2. Have Steve review the proposed API contract and coordinate the camera
    consent UI with the backend's required purpose/version markers.
 3. Review and apply both pending Supabase migrations through the authorized
    workflow; test the patient/clinician RLS matrix with synthetic accounts.
-4. Run a live NVIDIA summary check when the service is reachable; pin a model
-   only after its response passes numeric and safety validation.
+4. NVIDIA's live numeric summary check passed; its verified model is pinned in
+   the ignored local `.env`. Re-run the smoke script after changing provider or
+   model configuration.
 
 ## Current local backend workflow
 
@@ -362,16 +357,12 @@ From backend, with the local .env containing the NVIDIA credential, run:
 
     python -m scripts.nvidia_smoke_test
 
-The script lists available models, selects a listed instruct model, sends a
-synthetic numeric metrics object, validates the returned summary, and prints
-the model and observed latency. It never prints the credential or provider
-response. The pytest live check is marked live, skipped by default, and
-disabled when CI is set. Do not pin NVIDIA_MODEL_ID unless a real summary
-passes. This workspace could not reach the endpoint, so no model or latency
-has been selected. NVIDIA's Catalog currently describes
-meta/llama-3.3-70b-instruct as instruction-following capable but says
-structured output is unsupported; the client does not send response_format.
-See https://build.nvidia.com/meta/llama-3_3-70b-instruct.
+The script lists available models, selects an explicitly supported summary
+model, sends synthetic numeric metrics, validates the returned summary, and
+reports whether a model is pinned plus observed latency. It never prints the
+credential, provider response or local model setting. The pytest live check is
+marked live, skipped by default, and disabled when CI is set. The current local
+configuration passed this live check.
 
 ### Supabase and authentication limits
 

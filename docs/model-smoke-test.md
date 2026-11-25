@@ -1,4 +1,4 @@
-﻿# Model smoke test — MoveNet SinglePose Lightning
+# Model smoke test — MoveNet SinglePose Lightning
 
 Owner: Lennox. This is the default real pose model for CPU inference. The
 [official model card](https://storage.googleapis.com/movenet/MoveNet.SinglePose%20Model%20Card.pdf)
@@ -32,7 +32,6 @@ validated anatomical measurements.
    | Variable | Meaning |
    |---|---|
    | `VISION_MODE=movenet` | Enables real MoveNet inference |
-   | `VISION_DEVICE=cpu` | Uses the CPU runtime |
    | `MOVENET_MODEL_ROOT` | Host directory containing `movenet_singlepose_lightning.tflite` |
    | `MOVENET_MODEL_PATH=/models/movenet_singlepose_lightning.tflite` | Read-only container path |
    | `MOVENET_TARGET_SIDE=left` | Selects `left` or `right` leg |
@@ -67,9 +66,21 @@ To start the backend and its required vision dependency, run:
 docker-compose -f docker-compose.yml -f docker-compose.cpu.yml up --build -d backend
 ```
 
-The current frontend camera setup and live-session screens are placeholders;
-they do not yet send real camera frames to the backend. Use the synthetic
-service check above to verify MoveNet. Do not use it as clinical validation.
+The frontend camera setup and live-session flow can capture and stream camera
+frames to the backend after the user accepts the session consent prompt. For
+a model-only check, use synthetic input as described above; this does not test
+camera quality or clinical accuracy.
+
+To create a visual overlay from the generated seated figure, run:
+
+```powershell
+docker-compose -f docker-compose.yml -f docker-compose.cpu.yml exec -T vision_service python scripts/synthetic_movenet_overlay.py --url http://127.0.0.1:8001 --output /app/synthetic-movenet-overlay.png
+```
+
+The script saves the generated PNG at
+`vision_service/synthetic-movenet-overlay.png` (ignored by Git) and reports the
+selected-leg landmark count. It uses no camera or patient footage. A successful
+overlay is an engineering visual check only, not clinical validation.
 
 The mapping comes from the official model card's COCO-17 order: left
 hip/knee/ankle = 11/13/15, right = 12/14/16. Output coordinates are mapped
@@ -81,11 +92,3 @@ MoveNet's model licence does not replace consent, privacy, data-protection, or
 clinical validation requirements. Obtain explicit consent before any
 patient-facing use. Do not claim diagnosis, recovery, treatment, or clinical
 accuracy based on model output.
-
-## Optional Sapiens2 runner
-
-The legacy Sapiens2 runner remains available in code but is not selected by the
-CPU workflow. Its licence has restrictions that may prohibit biometric
-processing, including rehabilitation movement analysis. Do not enable it unless
-legal review confirms the exact intended use is allowed. See the
-[official Sapiens2 licence](https://github.com/facebookresearch/sapiens2/blob/main/LICENSE.md).

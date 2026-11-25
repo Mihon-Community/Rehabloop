@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from .config import get_settings
-from .detector import VisionUnavailableError
+from .errors import VisionUnavailableError
 from .inference import InferenceEngine
 from .schemas import (
     ErrorResponse,

@@ -22,8 +22,8 @@ licensed general pose model; patient-facing use still requires consent, privacy
 review, clinical validation and manual quality review. Fixture mode replays labelled synthetic keypoints
 and is **always** marked simulated — it is never presented as real inference.
 
-See `docs/RehabLoop_Full_Product_and_Technical_Blueprint.md` (source of truth)
-and `docs/ARCHITECTURE.md`.
+See `docs/ARCHITECTURE.md`, `docs/backend_guide.md`, and
+`docs/api_contract.md` for the current architecture and implementation details.
 
 ## Architecture (概览 / overview)
 
@@ -49,9 +49,8 @@ docker compose up --build     # whole stack in fixture mode, no GPU/weights
 Health endpoints: `http://localhost:8000/api/v1/health`,
 `http://localhost:8001/health`, `http://localhost:5173/`.
 
-Real MoveNet inference uses the CPU-only setup and a local model file outside
-the repo. See `docs/model-smoke-test.md` for setup and limitations. Sapiens2
-remains disabled unless its licence is separately cleared.
+Real pose inference uses the CPU-only MoveNet setup and a local model file
+outside the repo. See `docs/model-smoke-test.md` for setup and limitations.
 
 CPU MoveNet:
 `docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build`

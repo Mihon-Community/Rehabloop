@@ -1,9 +1,9 @@
 # Frontend developer guide — Steve
 
 Owner: **Steve** · branch: `feature/steve` · area: `frontend/`
-Read first: `docs/RehabLoop_Full_Product_and_Technical_Blueprint.md` (Sections 4,
-5, 8, 10, 11, 13, 15) and `docs/api_contract.md`. Architecture map:
-`docs/ARCHITECTURE.md`. Workflow: `docs/GIT_WORKFLOW.md`.
+Read first: `docs/api_contract.md` and `docs/ARCHITECTURE.md`.
+Backend integration details: `docs/backend_guide.md`. Workflow:
+`docs/GIT_WORKFLOW.md`.
 
 Verified against the repository on branch `feature/lennox`, commit `f96fd28`.
 Every command, file and variable below was read from this checkout. Where the
@@ -23,8 +23,7 @@ disagreement is called out explicitly.
   events implemented on `feature/lennox` but **pending Steve's review** before
   merge. Section 6.5 lists them. Do not silently treat them as agreed.
 - Vision is CPU-first now: default `VISION_MODE=fixture`, real path is MoveNet
-  SinglePose Lightning via `VISION_MODE=movenet`; Sapiens2 is a legacy,
-  licence-gated runner. See `docs/model-smoke-test.md` and
+  SinglePose Lightning via `VISION_MODE=movenet`. See `docs/model-smoke-test.md` and
   `docs/BACKEND_STATUS.md`.
 - Backend HTTP routes require `Authorization: Bearer <token>`. The API client
   now obtains the Supabase access token or a development-only synthetic token.
@@ -196,7 +195,7 @@ When both Supabase values are empty, `supabaseConfigured` is false and
 Do not fake one. Composing passes `VITE_FRAME_SAMPLE_RATE` into the container,
 but no source file reads it yet — sampling is unimplemented.
 
-## 4. Required screens (blueprint Section 4)
+## 4. Required screens
 
 Every screen must handle **loading**, **empty**, **error**, **camera denied**
 where relevant, and **vision service unavailable** where relevant. The auth,
@@ -385,7 +384,7 @@ visible on all screens.
   operation and reduced-width layouts.
 - Provide the non-camera review path and plain-language errors.
 - **Clinical gate:** with no clinician-approved protocol, stay in read-only
-  demo mode and never suggest or start an exercise (blueprint Section 5).
+  demo mode and never suggest or start an exercise.
 - Auth/RLS: UI role only chooses what to display. The Supabase anon key is
   public and RLS-scoped; the service-role key must never appear in frontend
   code, `VITE_*` variables, the bundle or chat. CI greps `frontend/` for
@@ -462,7 +461,6 @@ through a PR into `develop`.
 - **Quality gate** — rule that rejects unusable frames before measurement.
 - **Fixture** — labelled synthetic input; output must be marked `simulated`.
 - **MoveNet** — CPU pose model used by the current real-vision path.
-- **Sapiens2** — legacy, licence-gated pose runner.
 - **Stream token** — short-lived token from session start used only for the WebSocket.
 - **`persisted` / `storage_mode`** — proposed response flags showing whether data is durable.
 - **Recovery Twin** — rigged avatar driven by measured projected motion.
@@ -490,16 +488,14 @@ No true 3D biomechanics, no clinical validation, no real-time guarantee, no
 multi-exercise catalogue and no patient-facing diagnosis. Fixture mode is
 synthetic and labelled. The live API does not send pose landmarks to the
 browser, so a skeleton overlay is unavailable. `VITE_FRAME_SAMPLE_RATE` is
-consumed and capped at 8 fps. The blueprint's `_media` folder was absent, so
-its example screenshots are not bundled. Contract items in Section
+consumed and capped at 8 fps. Contract items in Section
 5.5 are implemented on `feature/lennox` but not yet approved by you. The
 Playwright MCP files are on an unmerged branch. The CPU MoveNet path is
-described in `docs/model-smoke-test.md`; Sapiens2 remains licence-gated.
+described in `docs/model-smoke-test.md`.
 
 ## 14. First tasks for Steve
 
-Derived from blueprint Section 15 rows 0–4 h, 4–8 h and 8–16 h, updated for the
-current repository:
+These implementation tasks reflect the current repository state:
 
 0–4 h (foundation already scaffolded; finish the integration plumbing):
 1. Wire `Authorization: Bearer <token>` into `src/lib/api.ts` and add a real
@@ -531,9 +527,8 @@ states, and all screens render safely without camera access.
 - `docs/ARCHITECTURE.md` — boundaries and data flow
 - `docs/api_contract.md` — HTTP/WebSocket/error/state contracts and PROPOSED items
 - `docs/BACKEND_STATUS.md` — what the backend currently implements and its limits
-- `docs/model-smoke-test.md` — fixture, MoveNet CPU and legacy Sapiens2 paths
+- `docs/model-smoke-test.md` — fixture and MoveNet CPU paths
 - `docs/GIT_WORKFLOW.md` — branches, PRs and branch protection
-- `docs/RehabLoop_Full_Product_and_Technical_Blueprint.md` — Sections 4, 5, 8, 10, 11, 13, 15
 
 ## Current UI implementation note
 

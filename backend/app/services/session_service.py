@@ -117,12 +117,9 @@ class SessionService:
         if self.settings.vision_mode == "fixture":
             model_version = "fixture-simulated"
             mapping_version = self.settings.keypoint_mapping_version
-        elif self.settings.vision_mode == "movenet":
+        else:
             model_version = self.settings.movenet_model_name
             mapping_version = self.settings.movenet_keypoint_mapping_version
-        else:
-            model_version = self.settings.sapiens_pose_model
-            mapping_version = self.settings.keypoint_mapping_version
         session_id = str(uuid4())
         engine = MovementEngine(
             rep_config=config,

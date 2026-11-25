@@ -22,7 +22,7 @@ developers, and report the exposure. Use a private channel to the project lead.
 - RLS is enabled on every exposed Supabase table; verify isolation with the
   patient / linked-clinician / unlinked-clinician / anonymous test matrix.
 - The NVIDIA endpoint receives numbers only, never frames or identifiers.
-- Sapiens2 fixture mode output is labelled simulated; real inference is blocked
-  until the licence review is complete.
+- Fixture mode output is labelled simulated; the only real pose mode currently
+  supported is CPU MoveNet.
 
-See `docs/backend_guide.md` and blueprint Sections 12 and 13.
+See `docs/backend_guide.md` and `docs/ARCHITECTURE.md`.

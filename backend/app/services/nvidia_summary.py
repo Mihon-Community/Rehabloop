@@ -78,6 +78,18 @@ def build_prompt(metrics: SessionMetrics) -> tuple[str, str]:
     return system, user
 
 
+def summary_response_format() -> dict[str, Any]:
+    """Ask compatible providers to constrain output to the exact summary schema."""
+    return {
+        "type": "json_schema",
+        "json_schema": {
+            "name": "rehabloop_summary",
+            "strict": True,
+            "schema": SummaryContent.model_json_schema(),
+        },
+    }
+
+
 def _summary_text(content: SummaryContent) -> str:
     return " ".join(
         [
@@ -181,6 +193,10 @@ async def generate_summary(
                             {"role": "system", "content": system},
                             {"role": "user", "content": user},
                         ],
+                        "response_format": summary_response_format(),
+                        "stream": False,
+                        "temperature": 0.1,
+                        "max_tokens": 512,
                     },
                 )
                 response.raise_for_status()
