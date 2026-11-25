@@ -8,11 +8,6 @@ def error_response(status: int, detail: str, code: str) -> JSONResponse:
     return JSONResponse(status_code=status, content={"detail": detail, "code": code})
 
 
-def not_implemented(resource: str) -> JSONResponse:
-    """Contract stub used until Lennox implements the endpoint."""
-    return error_response(501, f"{resource} is not implemented yet", "NOT_IMPLEMENTED")
-
-
 async def validation_exception_handler(
     _request: Request, exc: RequestValidationError
 ) -> JSONResponse:
@@ -35,7 +30,17 @@ def install_exception_handlers(app) -> None:  # type: ignore[no-untyped-def]
             409: "INVALID_STATE",
             422: "UNPROCESSABLE",
             429: "RATE_LIMITED",
+            502: "BAD_GATEWAY",
+            503: "DEPENDENCY_UNAVAILABLE",
         }.get(exc.status_code, "HTTP_ERROR")
-        return error_response(exc.status_code, str(exc.detail), code)
+        response = error_response(exc.status_code, str(exc.detail), code)
+        if exc.headers:
+            response.headers.update(exc.headers)
+        return response
+
+    async def unexpected_exception_handler(_request: Request, _exc: Exception) -> JSONResponse:
+        # Do not echo exceptions: dependency errors can contain request details.
+        return error_response(500, "Internal server error", "INTERNAL_SERVER_ERROR")
 
     app.add_exception_handler(StarletteHTTPException, http_exception_handler)
+    app.add_exception_handler(Exception, unexpected_exception_handler)

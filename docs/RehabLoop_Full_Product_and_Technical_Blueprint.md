@@ -1,5 +1,12 @@
 # REHABLOOP
 
+> **Implementation update (2026-11-25):** The initial Sapiens2 model choice
+> below is superseded for the current implementation by CPU MoveNet SinglePose
+> Lightning. See `docs/model-smoke-test.md` for the active model, Apache-2.0
+> licence, setup, output mapping and limits. The historical Sapiens2 licence
+> discussion remains a record of the original proposal; do not enable that
+> legacy runner without specific legal clearance.
+
 ## AI-ASSISTED REHABILITATION
 ## MOVEMENT & RECOVERY INTELLIGENCE
 

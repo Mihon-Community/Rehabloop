@@ -13,9 +13,9 @@ services:
     environment:
       VISION_MODE: ${VISION_MODE:-fixture}
       VISION_DEVICE: ${VISION_DEVICE:-cpu}
-      SAPIENS_CHECKPOINT_ROOT: ${SAPIENS_CHECKPOINT_ROOT:-}
-      SAPIENS_POSE_MODEL: ${SAPIENS_POSE_MODEL:-facebook/sapiens2-pose-0.4b}
-      SAPIENS_DETECTOR_MODEL: ${SAPIENS_DETECTOR_MODEL:-facebook/detr-resnet-101-dc5}
+      MOVENET_MODEL_PATH: ${MOVENET_MODEL_PATH:-/models/movenet_singlepose_lightning.tflite}
+      MOVENET_MODEL_NAME: ${MOVENET_MODEL_NAME:-movenet-singlepose-lightning}
+      MOVENET_TARGET_SIDE: ${MOVENET_TARGET_SIDE:-left}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       MAX_FRAME_RATE: ${MAX_FRAME_RATE:-8}
     volumes:
@@ -23,6 +23,8 @@ services:
       - ./vision_service:/app
       # Synthetic fixtures only, read-only. No patient footage, no weights.
       - ./fixtures:/fixtures:ro
+      # Optional local model directory; empty fixture installs can use fixtures/.
+      - ${MOVENET_MODEL_ROOT:-./fixtures}:/models:ro
     ports:
       - "8001:8001"
     healthcheck:
@@ -41,11 +43,14 @@ services:
       vision_service:
         condition: service_healthy
     environment:
-      APP_ENV: ${APP_ENV:-development}
+      APP_ENV: ${APP_ENV:-local}
+      AUTH_MODE: ${AUTH_MODE:-dev}
+      VISION_MODE: ${VISION_MODE:-fixture}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
       SUPABASE_URL: ${SUPABASE_URL:-}
       SUPABASE_JWKS_URL: ${SUPABASE_JWKS_URL:-}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY:-}
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
       NVIDIA_API_KEY: ${NVIDIA_API_KEY:-}
       NVIDIA_BASE_URL: ${NVIDIA_BASE_URL:-https://integrate.api.nvidia.com/v1}
@@ -54,6 +59,7 @@ services:
       MAX_FRAME_RATE: ${MAX_FRAME_RATE:-8}
       VISION_SERVICE_URL: ${VISION_SERVICE_URL:-http://vision_service:8001}
       SESSION_TOKEN_TTL_SECONDS: ${SESSION_TOKEN_TTL_SECONDS:-300}
+      MOVENET_MODEL_NAME: ${MOVENET_MODEL_NAME:-movenet-singlepose-lightning}
     volumes:
       - ./backend:/app
     ports:

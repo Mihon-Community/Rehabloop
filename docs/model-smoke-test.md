@@ -1,32 +1,71 @@
-# Model smoke test — Sapiens2 Pose 0.4B (stub)
+﻿# Model smoke test — MoveNet SinglePose Lightning
 
-Owner: Lennox. Blueprint Section 6, Stage A and Section 14.
+Owner: Lennox. This is the default real pose model for CPU inference. The
+[official model card](https://storage.googleapis.com/movenet/MoveNet.SinglePose%20Model%20Card.pdf)
+specifies a 192×192 RGB input, 17 COCO keypoints, and confidence scores. The
+model is licensed under Apache 2.0. See also
+[TensorFlow's MoveNet guide](https://www.tensorflow.org/hub/tutorials/movenet).
 
-**Gate first:** the Sapiens2 licence restricts biometric processing and
-unauthorised medical/health practice. Do not run on identifiable people until a
-qualified legal/licensing review clears the intended movement-analysis use.
+## Fixture path
 
-## Fixture path (default, no GPU/weights)
+The normal local workflow defaults to `VISION_MODE=fixture`; fixture responses
+are always marked `simulated: true`. Use this for UI and pipeline work without
+camera images or model weights.
 
-```bash
-docker compose up --build
-curl localhost:8001/health   # mode=fixture, simulated=true
-curl -X POST localhost:8001/infer -H 'Content-Type: application/json' \
-  -d '{"sequence":1,"timestamp_ms":0,"image_b64":"aGVsbG8="}'
-```
-Every response has `simulated: true` and `model: fixture-simulated`. This is a
-UI/pipeline test, not inference evidence.
+## CPU MoveNet path
 
-## Real path (NVIDIA Container Toolkit required)
+MoveNet SinglePose Lightning is intended for latency-sensitive movement and
+fitness applications. It returns one pose. When multiple people appear, it may
+focus on the person closest to the image center; it does not provide reliable
+multi-person selection or tracking. Treat its keypoints as estimates, not
+validated anatomical measurements.
 
-1. Install the NVIDIA Container Toolkit on the host and verify `nvidia-smi`.
-2. Obtain the licensed Sapiens2 package and the approved 0.4B pose checkpoint +
-   DETR detector. Set `SAPIENS_CHECKPOINT_ROOT` to that directory. Never commit
-   or download weights into the repo.
-3. `docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build`.
-4. Run the official demo against approved frames; record checkpoint hash,
-   model version, detector, image size, driver, GPU and inference time.
-5. Resolve real Sociopticon indices into `vision_service/config/keypoint_mapping.yaml`
-   from the official spec; the service refuses `sapiens` mode while they are null.
-6. Store the evidence in this document; report pose quality separately from
-   movement-engine math accuracy and end-to-end reliability.
+1. Download the official TensorFlow Hub LiteRT/TFLite artifact to a directory
+   outside the repository. The model is Apache-2.0 licensed:
+
+   ```text
+   https://tfhub.dev/google/lite-model/movenet/singlepose/lightning/tflite/float16/4?lite-format=tflite
+   ```
+
+2. Set these values in the gitignored root `.env`:
+
+   | Variable | Meaning |
+   |---|---|
+   | `VISION_MODE=movenet` | Enables real MoveNet inference |
+   | `VISION_DEVICE=cpu` | Uses the CPU runtime |
+   | `MOVENET_MODEL_ROOT` | Host directory containing `movenet_singlepose_lightning.tflite` |
+   | `MOVENET_MODEL_PATH=/models/movenet_singlepose_lightning.tflite` | Read-only container path |
+   | `MOVENET_TARGET_SIDE=left` | Selects `left` or `right` leg |
+
+   The model directory is mounted read-only. The model file must stay outside
+   Git and is never copied into the Docker image.
+
+3. Start the CPU stack:
+
+   ```powershell
+   docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build
+   ```
+
+4. Verify `GET http://localhost:8001/health` reports `mode=movenet`,
+   `model=movenet-singlepose-lightning`, and `simulated=false`. A synthetic
+   640×480 image can exercise the full service; it validates wiring and output
+   shape only, not pose accuracy.
+
+The mapping comes from the official model card's COCO-17 order: left
+hip/knee/ankle = 11/13/15, right = 12/14/16. Output coordinates are mapped
+back from the centered square padding to the original frame. Confidence below
+0.6 marks a landmark invalid. Review synthetic overlays and movement output
+before interpreting any result.
+
+MoveNet's model licence does not replace consent, privacy, data-protection, or
+clinical validation requirements. Obtain explicit consent before any
+patient-facing use. Do not claim diagnosis, recovery, treatment, or clinical
+accuracy based on model output.
+
+## Optional Sapiens2 runner
+
+The legacy Sapiens2 runner remains available in code but is not selected by the
+CPU workflow. Its licence has restrictions that may prohibit biometric
+processing, including rehabilitation movement analysis. Do not enable it unless
+legal review confirms the exact intended use is allowed. See the
+[official Sapiens2 licence](https://github.com/facebookresearch/sapiens2/blob/main/LICENSE.md).

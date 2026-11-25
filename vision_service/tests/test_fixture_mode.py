@@ -1,8 +1,17 @@
+import sys
+from types import SimpleNamespace
+
 import pytest
 from app.config import VisionSettings
 from app.detector import VisionUnavailableError
 from app.inference import InferenceEngine
-from app.keypoint_adapter import KeypointMappingError, load_mapping, map_raw_keypoints
+from app.keypoint_adapter import (
+    MOVENET_MAPPING_PATH,
+    KeypointMappingError,
+    Mapping,
+    load_mapping,
+    map_raw_keypoints,
+)
 from app.schemas import FrameRequest
 from fastapi.testclient import TestClient
 
@@ -30,20 +39,15 @@ def test_every_fixture_inference_is_labelled_simulated():
         result = engine.infer(sequence, sequence * 100, "aGVsbG8=")
         assert result.simulated is True
         assert result.model == "fixture-simulated"
-        assert set(result.landmarks) == {
-            "selected_hip",
-            "selected_knee",
-            "selected_ankle",
-        }
+        assert set(result.landmarks) == {"selected_hip", "selected_knee", "selected_ankle"}
         assert all(landmark.valid for landmark in result.landmarks.values())
 
 
 def test_fixture_sequence_cycles():
     engine = InferenceEngine(fixture_settings())
     first = engine.infer(0, 0, "aGVsbG8=")
-    engine.infer(1, 100, "aGVsbG8=")
-    engine.infer(2, 200, "aGVsbG8=")
-    engine.infer(3, 300, "aGVsbG8=")
+    for i in range(1, 4):
+        engine.infer(i, i * 100, "aGVsbG8=")
     fifth = engine.infer(4, 400, "aGVsbG8=")
     assert first.landmarks == fifth.landmarks
 
@@ -53,11 +57,108 @@ def test_sapiens_mode_without_weights_fails_clearly():
         InferenceEngine(fixture_settings(vision_mode="sapiens"))
 
 
+def test_sapiens_mode_without_source_fails_clearly():
+    settings = fixture_settings(
+        vision_mode="sapiens",
+        sapiens_checkpoint_root="C:/definitely/missing/rehabloop-checkpoints",
+        sapiens_root="",
+    )
+    with pytest.raises(VisionUnavailableError, match="SAPIENS_ROOT"):
+        InferenceEngine(settings)
+
+
 def test_placeholder_mapping_is_refused():
-    mapping = load_mapping()
-    assert mapping.is_placeholder
+    placeholder = Mapping(
+        version="test",
+        status="PLACEHOLDER_INDICES_NOT_RESOLVED",
+        landmarks={
+            name: {"index": None} for name in ("selected_hip", "selected_knee", "selected_ankle")
+        },
+    )
     with pytest.raises(KeypointMappingError, match="placeholders"):
-        map_raw_keypoints([{"x": 0.1, "y": 0.2}], mapping)
+        map_raw_keypoints([{"x": 0.1, "y": 0.2}], placeholder)
+
+
+def test_resolved_sapiens_mapping_maps_left_and_right_from_official_indices():
+    mapping = load_mapping()
+    assert not mapping.is_placeholder
+    raw = [
+        {"x": i / 308, "y": 0.0, "x_px": float(i), "y_px": 0.0, "confidence": 0.9, "valid": True}
+        for i in range(308)
+    ]
+    left = map_raw_keypoints(raw, mapping, "left")
+    right = map_raw_keypoints(raw, mapping, "right")
+    assert [left[n]["x_px"] for n in ("selected_hip", "selected_knee", "selected_ankle")] == [
+        11,
+        13,
+        15,
+    ]
+    assert [right[n]["x_px"] for n in ("selected_hip", "selected_knee", "selected_ankle")] == [
+        12,
+        14,
+        16,
+    ]
+
+
+def test_movenet_mapping_uses_published_coco17_side_indices():
+    mapping = load_mapping(MOVENET_MAPPING_PATH)
+    assert mapping.version == "rehabloop-movenet-knee-map-1.0"
+    assert not mapping.is_placeholder
+    raw = [
+        {"x": i / 17, "y": 0.5, "x_px": float(i), "y_px": 0.0, "confidence": 0.9, "valid": True}
+        for i in range(17)
+    ]
+    left = map_raw_keypoints(raw, mapping, "left")
+    right = map_raw_keypoints(raw, mapping, "right")
+    assert [left[n]["x_px"] for n in ("selected_hip", "selected_knee", "selected_ankle")] == [
+        11,
+        13,
+        15,
+    ]
+    assert [right[n]["x_px"] for n in ("selected_hip", "selected_knee", "selected_ankle")] == [
+        12,
+        14,
+        16,
+    ]
+
+
+def test_movenet_inference_engine_uses_model_specific_runner(monkeypatch):
+    class FakeMoveNetRunner:
+        def __init__(self, _settings):
+            pass
+
+        def infer(self, _image_b64):
+            return [
+                {
+                    "x": i / 17,
+                    "y": 0.5,
+                    "x_px": float(i),
+                    "y_px": 20.0,
+                    "confidence": 0.9,
+                    "valid": True,
+                }
+                for i in range(17)
+            ]
+
+    monkeypatch.setitem(
+        sys.modules,
+        "app.movenet_runner",
+        SimpleNamespace(MoveNetRunner=FakeMoveNetRunner),
+    )
+    engine = InferenceEngine(fixture_settings(vision_mode="movenet", movenet_target_side="right"))
+    result = engine.infer(1, 100, "aGVsbG8=")
+    assert result.model == "movenet-singlepose-lightning"
+    assert result.simulated is False
+    assert result.person_detected is True
+    assert result.quality["source"] == "movenet-singlepose-lightning"
+    assert [
+        result.landmarks[name].x_px for name in ("selected_hip", "selected_knee", "selected_ankle")
+    ] == [12, 14, 16]
+
+
+def test_movenet_mode_without_model_path_fails_clearly():
+    with pytest.raises(VisionUnavailableError, match="MOVENET_MODEL_PATH"):
+        InferenceEngine(fixture_settings(vision_mode="movenet"))
 
 
 def test_invalid_mode_fails_clearly():

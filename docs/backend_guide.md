@@ -46,24 +46,26 @@ Vision starts first, then API, then frontend (Compose `depends_on` health orderi
 ```
 backend/app/
 ├── main.py                 # app, CORS, exception handlers, router
-├── api/v1/router.py        # typed endpoints; health real, others 501 stubs
+├── api/v1/router.py        # auth, protocol, session, progress, summary, and stream handlers
 ├── core/{config,logging,errors}.py   # pydantic-settings, logging, error contract
 ├── schemas/{common,session,protocol,summary}.py  # Pydantic request/response types
 └── services/{session_service,movement_engine,nvidia_summary,supabase_repository}.py
 backend/tests/              # health + Appendix A3 angle tests (passing)
 vision_service/app/{main,inference,detector,keypoint_adapter,schemas,config}.py
-vision_service/config/keypoint_mapping.yaml    # PLACEHOLDER indices
+vision_service/config/keypoint_mapping.yaml    # resolved indices; overlay review pending
 vision_service/tests/
 supabase/migrations/20261124120000_initial_schema.sql
 supabase/seed/001_synthetic_demo.sql
-fixtures/synthetic_keypoint_sequences/ + approved_test_frames/ (README only)
+fixtures/synthetic_keypoint_sequences/ + approved_test_frames/ (labelled synthetic JSON traces)
 ```
 
 Python 3.12, type hints everywhere (`disallow_untyped_defs` in mypy), Ruff
 (`E,F,I,UP,B`, 100 cols) and `ruff format`. All endpoints use Pydantic schemas;
-secrets are `SecretStr` in settings and are never logged. `GET /api/v1/health`
-is real; other endpoints return `{"detail", "code": "NOT_IMPLEMENTED"}` with 501
-and typed response metadata. Implement them one at a time against the contract.
+secrets are `SecretStr` in settings and are never logged. Current routes cover
+health, profile, protocols, sessions, progress, summaries, and streaming.
+Local demo authentication is restricted to `APP_ENV=local`; other environments
+verify Supabase access tokens and load application roles from trusted profile
+rows. Fixture streams are labelled simulated.
 
 ## 4. Running locally
 
@@ -72,8 +74,11 @@ Docker (whole stack, fixture mode, no GPU):
 copy .env.example .env && docker compose up --build
 curl localhost:8000/api/v1/health; curl localhost:8001/health
 ```
-Real model: `docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build`
-after the NVIDIA Container Toolkit and the licensed checkpoints are in place.
+Real model (CPU, slow/offline):
+`docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build`
+after the licensed source and checkpoints are in place. For NVIDIA, use
+`docker-compose.gpu.yml` and install the NVIDIA Container Toolkit. See
+`docs/model-smoke-test.md`; do not use real frames until the licence gate is cleared.
 
 Without Docker (Python 3.12):
 ```bash
@@ -92,17 +97,19 @@ Environment variables — mark the secrets:
 
 | Variable | Use | Secret? |
 |---|---|---|
-| `APP_ENV`, `LOG_LEVEL`, `CORS_ORIGINS` | shared config | no |
+| `APP_ENV`, `AUTH_MODE`, `LOG_LEVEL`, `CORS_ORIGINS` | shared config; dev auth only in local | no |
 | `SUPABASE_URL` | backend server-side URL | no |
+| `SUPABASE_ANON_KEY` | publishable key used to remotely verify legacy HS256 tokens | **public** |
+| `SUPABASE_JWKS_URL` | optional override for the Supabase signing-key endpoint | no |
 | `SUPABASE_SERVICE_ROLE_KEY` | backend DB access; bypasses RLS | **YES** |
 | `NVIDIA_API_KEY` | backend summary calls | **YES** |
 | `NVIDIA_BASE_URL`, `NVIDIA_MODEL_ID` | hosted LLM config | no |
 | `STORE_RAW_VIDEO` | default `false`; must stay false | no |
 | `MAX_FRAME_RATE`, `SESSION_TOKEN_TTL_SECONDS`, `VISION_SERVICE_URL` | backend limits/routing | no |
-| `VISION_MODE` | `fixture` (default) or `sapiens` | no |
-| `VISION_DEVICE` | `cpu` / `cuda` | no |
-| `SAPIENS_CHECKPOINT_ROOT` | local checkpoint directory (mounted read-only) | no |
-| `SAPIENS_POSE_MODEL`, `SAPIENS_DETECTOR_MODEL` | model IDs, env-configured | no |
+| `VISION_MODE` | `fixture` (default), `movenet`, or legacy `sapiens` | no |
+| `VISION_DEVICE` | `cpu` for MoveNet; legacy Sapiens also accepts `cuda` | no |
+| `MOVENET_MODEL_ROOT`, `MOVENET_MODEL_PATH` | host model directory and read-only container path | no |
+| `MOVENET_MODEL_NAME`, `MOVENET_TARGET_SIDE` | model label and selected leg | no |
 
 Never commit `.env` or secrets; CI must pass with no repository secrets.
 
@@ -114,6 +121,12 @@ clinicians see only patients with an active `clinician_patient_links` row; only
 assigned clinicians create/version protocols; WebSocket uses a short-lived
 session token bound to user + session; unauthenticated requests get 401,
 unauthorized 403, invisible resources 404. Enforce in the API and in RLS.
+
+Session start requires an unrevoked consent row for the same patient with
+`purpose=camera_processing` and `consent_version=camera-processing-v1`. These
+are machine-readable scope markers, not consent text. The UI must write them
+only after explicit acceptance of approved camera-consent copy; coordinate
+that integration with Steve.
 
 ## 6. Movement engine (blueprint Section 7, Appendix A3)
 
@@ -137,9 +150,16 @@ Implemented in `backend/app/services/movement_engine.py`:
    measurement quality separate from clinical performance; a low-quality
    session shows "insufficient data", not a red/green judgement.
 
-Unit tests cover known geometry (90°, 180°, degenerate) and scripted rep traces.
-These validate math only, not Sapiens2 accuracy. Next: signal tests with noise,
-missing frames, out-of-order timestamps and occlusions.
+Smoothing uses a causal, per-sample EMA (default alpha 0.4): it is deterministic
+and does not require future frames. Tempo and state durations use timestamps.
+The engine pauses after a 750 ms gap and requires a valid rest pose to re-arm.
+The rest/target angle bands and target repetition count are required clinician
+protocol fields; no default angle range is supplied.
+
+Tests cover known geometry, clean and noisy synthetic repetitions, missing data,
+long gaps, low confidence, partial repetitions, multiple people, model/mapping
+version mismatch, and deterministic fixture generation. These validate engine
+math only, not MoveNet accuracy or clinical performance.
 
 ## 7. Supabase
 
@@ -171,6 +191,18 @@ with synthetic accounts. Never paste an access token or service-role key into
 the repo or chat. If the connection is not authenticated, skip the migration
 and report it — do not work around the login.
 
+### Pending security correction
+
+The read-only Section 12 review identified client-side write paths for
+clinician links, sessions, and in-place protocol changes, broad clinician
+access to audit rows, missing indexes on two session child tables, and no
+database constraint on raw-video metadata. The new
+20261124120300_backend_write_boundaries.sql and
+20261124200048_backend_atomic_session_writes_and_service_grants.sql migrations
+address these issues and add atomic protocol/session writes. Neither has been
+applied; review and apply them through the authorized Supabase workflow, then
+run the synthetic RLS matrix.
+
 ## 8. NVIDIA integration (blueprint Section 9)
 
 - Input is a **minimised, de-identified numeric metrics object only** — never
@@ -186,25 +218,31 @@ and report it — do not work around the login.
   numbers, not LLM-copied values. If the API times out, returns bad JSON or an
   unsupported claim, return `deterministic_summary()`. Store the provider,
   model id and schema version with the summary.
+- HTTPX calls have bounded timeouts and one retry after provider, parsing, or
+  validation failure. Results include source, model_id, and the fixed
+  non-clinical disclaimer. The current client omits response_format because the
+  candidate model does not advertise structured-output support.
 
-## 9. Sapiens2, fixtures and the licence gate
+## 9. MoveNet, fixtures and pose quality
 
-- Sapiens2 Pose 0.4B is the engineering target; Sapiens2 terms restrict
-  biometric processing and unlicensed medical practice. **License review is a
-  go/no-go gate** before identifiable or patient-facing use. No bypass.
-- `vision_service/config/keypoint_mapping.yaml` is a **placeholder**: all
-  Sociopticon indices are `null` on purpose. Do not guess indices. Resolve them
-  from the official keypoint spec, pin and review them, then the adapter will
-  allow `sapiens` mode. Until then `sapiens` fails with
-  `vision service unavailable` (HTTP 503).
+- `VISION_MODE=movenet` runs Google's MoveNet SinglePose Lightning model on CPU
+  through LiteRT. The model is Apache-2.0 licensed and should be mounted from a
+  local directory outside Git.
+- The COCO-17 landmark mapping is `vision_service/config/movenet_keypoint_mapping.yaml`.
+  Left hip/knee/ankle are 11/13/15; right are 12/14/16, as published in Google's
+  model card. The mapping and overlay still require manual review.
+- MoveNet returns a single pose and may focus on a person near the image centre
+  when multiple people are visible. It does not provide reliable multi-person
+  selection or tracking. Outputs remain estimates, not validated biomechanics.
 - `VISION_MODE=fixture` (default) replays labelled synthetic keypoints. Every
   response has `simulated: true` and `model: fixture-simulated`. Never present
   it as real inference. Fixtures live in `fixtures/synthetic_keypoint_sequences/`;
   `fixtures/approved_test_frames/` stays empty in Git.
-- Smoke test: see `docs/model-smoke-test.md` — record model id, checkpoint hash,
-  detector, driver/GPU, image size and inference time; report pose quality
-  separately from engine math accuracy and end-to-end reliability.
-
+- Smoke test: see `docs/model-smoke-test.md`. Record model ID, file hash,
+  runtime, image size and inference time; report pose quality separately from
+  movement-engine math accuracy and end-to-end reliability.
+- The Sapiens2 runner remains legacy and licence-gated. Do not enable it for
+  movement analysis without specific legal clearance.
 ## 10. Privacy, safety and Kenya context (blueprint Section 13)
 
 - `STORE_RAW_VIDEO=false` by default; frames are transient, buffers cleared
@@ -215,8 +253,8 @@ and report it — do not work around the login.
   guidance covers health data, storage limitation, DPIAs and treats biometric
   data as sensitive. Removing names does not make footage anonymous. Obtain
   legal advice on controller/processor roles, complete a DPIA determination,
-  document consent/retention/incident processes, and clear the Sapiens2 licence
-  **before** any real-patient pilot. Competition demos use synthetic or
+  document consent/retention/incident processes, and complete privacy and
+  clinical validation **before** any real-patient pilot. Competition demos use synthetic or
   explicitly approved data only.
 
 ## 11. Testing strategy
@@ -253,28 +291,93 @@ reviewed and merged into `develop`.
 
 ## 14. Known limitations
 
-2D projected angles only; no clinical validation or real-time guarantee;
-Sapiens2 licence unresolved; `sapiens` mode cannot run until weights and real
-keypoint indices are supplied; the geometry tests validate math, not model
-accuracy; most API endpoints are 501 stubs in the scaffold; no real patient data
-is permitted. The blueprint's media folder was absent from the repo, so example
-screenshots are not bundled.
+Angles are 2D projected estimates; clinical accuracy and real-time performance
+are not validated. Sapiens2 licensing is unresolved for this rehabilitation
+use; the source and checkpoints are absent on the current host, and the
+official landmark mapping still needs manual overlay review. Supabase JWT
+verification and PostgREST behavior are covered by mocks only; neither
+corrective migration has been applied. No real patient data was used. The
+blueprint's media folder was absent, so example screenshots are not bundled.
 
-## 15. First tasks for Lennox (blueprint Section 15, 0–16h)
+## 15. Remaining integration steps
 
-0–8 h:
-1. **Sapiens2 smoke test first** — check the licence gate, install the licensed
-   package, download the 0.4B pose checkpoint + DETR detector, run the official
-   demo on approved frames, record load/inference time and model version. If
-   blocked, record the decision to use labelled synthetic keypoints — never
-   fake inference.
-2. FastAPI project, Supabase project/schema draft and environment loader;
-   agree JSON contracts with Steve.
+1. Obtain legal/licensing clearance for the intended Sapiens2 use, then accept
+   any gated model terms and put source/checkpoints outside the repository.
+   Run the CPU smoke test on synthetic or explicitly approved frames and review
+   overlays before relying on landmark outputs.
+2. Have Steve review the proposed API contract and coordinate the camera
+   consent UI with the backend's required purpose/version markers.
+3. Review and apply both pending Supabase migrations through the authorized
+   workflow; test the patient/clinician RLS matrix with synthetic accounts.
+4. Run a live NVIDIA summary check when the service is reachable; pin a model
+   only after its response passes numeric and safety validation.
 
-8–16 h:
-3. Vision service `/infer`, output parser and named lower-body landmark adapter
-   (resolve mapping placeholders from the official spec; reject otherwise).
-4. Reach the first frame → Sapiens2 → named keypoint round trip, then move on to
-   angle calculation and rep state-machine tests.
+## Current local backend workflow
 
-See `docs/ARCHITECTURE.md` for the system boundaries.
+This section describes the no-Docker fixture workflow. The API has in-memory protocol/session handlers and a fixture WebSocket path. Local demo identities work only with `APP_ENV=local`; Supabase JWT verification is implemented but has only been tested with mocks here. Values below are synthetic test configuration, not clinical targets.
+
+Start the vision worker in a PowerShell terminal:
+
+    cd vision_service
+    .\.venv\Scripts\Activate.ps1
+    $env:VISION_MODE = "fixture"
+    uvicorn app.main:app --reload --port 8001
+
+Start the API in a second terminal. Empty Supabase variables force ephemeral
+storage even if a local .env contains other values:
+
+    cd backend
+    .\.venv\Scripts\Activate.ps1
+    $env:APP_ENV = "local"
+    $env:AUTH_MODE = "dev"
+    $env:SUPABASE_URL = ""
+    $env:SUPABASE_SERVICE_ROLE_KEY = ""
+    $env:VISION_MODE = "fixture"
+    $env:VISION_SERVICE_URL = "http://127.0.0.1:8001"
+    $env:STORE_RAW_VIDEO = "false"
+    uvicorn app.main:app --reload --port 8000
+
+Health reports storage_mode=memory. The patient token is Bearer
+demo-patient-token; the clinician token is Bearer demo-clinician-token. Create a
+protocol as the clinician, then create and start a session as the patient:
+
+    $clinicianHeaders = @{ Authorization = "Bearer demo-clinician-token" }
+    $patientHeaders = @{ Authorization = "Bearer demo-patient-token" }
+    $protocolBody = @{ patient_id = "00000000-0000-0000-0000-000000000001"; protocol_name = "Synthetic demo"; parameters = @{ rest_min_deg = 70; rest_max_deg = 80; target_min_deg = 110; target_max_deg = 125; target_reps = 8 } } | ConvertTo-Json -Depth 5
+    $protocol = Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/v1/protocols -Headers $clinicianHeaders -ContentType application/json -Body $protocolBody
+    $sessionBody = @{ protocol_id = $protocol.id } | ConvertTo-Json
+    $session = Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/v1/sessions -Headers $patientHeaders -ContentType application/json -Body $sessionBody
+    $startBody = @{ consent_record_id = "demo-consent-record"; camera_checks_passed = $true } | ConvertTo-Json
+    $started = Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8000/api/v1/sessions/$($session.session_id)/start" -Headers $patientHeaders -ContentType application/json -Body $startBody
+
+The start response contains a short-lived stream_token. Connect to
+/api/v1/sessions/{session_id}/stream?token={stream_token}, send ordered frame
+events, then call complete and summary. Fixture-derived events include
+simulated=true. Memory-backed responses include persisted=false and never claim
+the session was saved.
+
+### NVIDIA live smoke test
+
+From backend, with the local .env containing the NVIDIA credential, run:
+
+    python -m scripts.nvidia_smoke_test
+
+The script lists available models, selects a listed instruct model, sends a
+synthetic numeric metrics object, validates the returned summary, and prints
+the model and observed latency. It never prints the credential or provider
+response. The pytest live check is marked live, skipped by default, and
+disabled when CI is set. Do not pin NVIDIA_MODEL_ID unless a real summary
+passes. This workspace could not reach the endpoint, so no model or latency
+has been selected. NVIDIA's Catalog currently describes
+meta/llama-3.3-70b-instruct as instruction-following capable but says
+structured output is unsupported; the client does not send response_format.
+See https://build.nvidia.com/meta/llama-3_3-70b-instruct.
+
+### Supabase and authentication limits
+
+PostgREST is selected only when both SUPABASE_URL and
+SUPABASE_SERVICE_ROLE_KEY are configured. Supabase repository and JWT behavior
+were tested with mocks only; no live Supabase project was contacted. Both
+20261124120300_backend_write_boundaries.sql and
+20261124200048_backend_atomic_session_writes_and_service_grants.sql remain
+unapplied and require the authorized Supabase workflow.

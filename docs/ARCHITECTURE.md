@@ -9,7 +9,7 @@ Sections 6–13). This file is a map, not a replacement.
 |---|---|---|
 | Patient/clinician UI | React + TypeScript (Vite) | Auth-aware screens, camera permission + sampling, live metrics, charts, Recovery Twin |
 | API service | Python + FastAPI | Session lifecycle, protocol management, authorization, persistence, NVIDIA call, audit |
-| Vision service | Python 3.12+, PyTorch 2.7+, Sapiens2 | Person detection, pose inference, output parsing, inference metadata |
+| Vision service | Python 3.12+, LiteRT, MoveNet SinglePose Lightning | CPU pose inference, output parsing, inference metadata |
 | Movement engine | Python module in API | Landmark validation, smoothing, projected knee angle, rep state machine, aggregates |
 | Database | Hosted Supabase Postgres | Users, roles, links, protocols, sessions, metrics, events, consent, audit; RLS |
 | Language model | NVIDIA hosted API | Structured explanation of approved numeric output only |
@@ -37,12 +37,12 @@ no GPU and no weights are needed for local development.
 
 ## Safety boundaries (binding)
 
-- Sapiens2 Pose is 2D; the angle is a **projected estimate**, not validated 3D
+- MoveNet pose is 2D; the angle is a **projected estimate**, not validated 3D
   biomechanics or an anatomical measurement.
 - No diagnosis, treatment advice, exercise prescription or autonomous plan change.
 - No raw video stored by default (`STORE_RAW_VIDEO=false`); transient frames only.
 - Fixture output is labelled simulated; no fabricated output presented as inference.
-- Sapiens2 licence is a go/no-go gate for identifiable or patient-facing use.
+- MoveNet's Apache-2.0 licence does not replace consent, privacy or clinical validation.
 - Backend authorization is authoritative; UI role is cosmetic. Service-role key
   is server-side only.
 

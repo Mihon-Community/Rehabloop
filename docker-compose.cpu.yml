@@ -1,0 +1,24 @@
+# Real MoveNet SinglePose Lightning inference on CPU.
+# The Apache-2.0 model file stays outside Git and is mounted read-only.
+# Set MOVENET_MODEL_ROOT in the ignored root .env.
+# Use: docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build
+
+services:
+  vision_service:
+    build:
+      context: ./vision_service
+      target: cpu
+    environment:
+      VISION_MODE: movenet
+      VISION_DEVICE: cpu
+      MOVENET_MODEL_PATH: /models/movenet_singlepose_lightning.tflite
+      MOVENET_MODEL_NAME: ${MOVENET_MODEL_NAME:-movenet-singlepose-lightning}
+      MOVENET_TARGET_SIDE: ${MOVENET_TARGET_SIDE:-left}
+      OMP_NUM_THREADS: ${MOVENET_CPU_THREADS:-2}
+      MKL_NUM_THREADS: ${MOVENET_CPU_THREADS:-2}
+    volumes:
+      - ${MOVENET_MODEL_ROOT:?Set MOVENET_MODEL_ROOT to the external model directory}:/models:ro
+
+  backend:
+    environment:
+      VISION_MODE: movenet

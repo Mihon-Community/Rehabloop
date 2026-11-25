@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field
+from typing import Literal
+
+from pydantic import BaseModel
 
 
 class ErrorResponse(BaseModel):
@@ -11,7 +13,10 @@ class HealthResponse(BaseModel):
     service: str
     version: str
     mode: str
+    storage_mode: Literal["memory", "supabase"] = "memory"
 
 
-class NotImplementedResponse(ErrorResponse):
-    code: str = Field(default="NOT_IMPLEMENTED")
+class ProfileResponse(BaseModel):
+    id: str
+    role: Literal["patient", "clinician", "admin"]
+    display_name: str
