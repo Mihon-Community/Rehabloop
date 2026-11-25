@@ -7,11 +7,11 @@ import { mockMeasurements, SIMULATED_LABEL } from './lib/mocks';
 describe('RehabLoop frontend smoke test', () => {
   it('renders the shell and the safety notice', () => {
     render(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <App />
       </MemoryRouter>,
     );
-    expect(screen.getByRole('heading', { name: /rehabloop/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'RehabLoop' })).toBeInTheDocument();
     expect(screen.getAllByText(/prototype, not a medical device/i).length).toBeGreaterThan(0);
     expect(screen.getByRole('navigation', { name: /screens/i })).toBeInTheDocument();
   });

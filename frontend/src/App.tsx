@@ -16,11 +16,10 @@ export default function App() {
       </header>
 
       <nav className="app-nav" aria-label="Screens">
-        <Link to="/">Auth</Link>
+        <Link to="/">Sign in</Link>
         <Link to="/home">Patient home</Link>
         <Link to="/protocols/demo">Protocol</Link>
-        <Link to="/setup">Camera setup</Link>
-        <Link to="/sessions/demo/live">Live session</Link>
+        <Link to="/setup">Start session</Link>
         <Link to="/sessions/demo/result">Result</Link>
         <Link to="/clinician">Clinician</Link>
         <Link to="/twin">Recovery Twin</Link>

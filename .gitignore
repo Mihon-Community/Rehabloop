@@ -11,6 +11,7 @@
 node_modules/
 dist/
 .vite/
+.vite-cache/
 *.tsbuildinfo
 npm-debug.log*
 yarn-error.log*

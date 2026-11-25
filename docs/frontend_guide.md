@@ -12,10 +12,10 @@ disagreement is called out explicitly.
 
 ## 0. Current reality snapshot (read this before planning work)
 
-- `frontend/` is still the original scaffold. All eight required screens are
-  `ScreenPlaceholder` components: they show title, purpose, data source and a
-  list of required states as text. No camera code, charts, 3D scene, auth flow
-  or real state machine exists yet.
+- `frontend/` is partly scaffolded. Authentication, camera setup and live
+  session now use real auth/API/WebSocket flows. Patient home, protocol detail,
+  results, clinician dashboard and Recovery Twin still use placeholders; there
+  are no charts or 3D scene yet.
 - The backend on `feature/lennox` has **implemented** the documented HTTP
   handlers and the session WebSocket flow; no current route returns 501. Do
   not design against "everything is a stub" any more.
@@ -26,12 +26,11 @@ disagreement is called out explicitly.
   SinglePose Lightning via `VISION_MODE=movenet`; Sapiens2 is a legacy,
   licence-gated runner. See `docs/model-smoke-test.md` and
   `docs/BACKEND_STATUS.md`.
-- Backend HTTP routes require `Authorization: Bearer <token>`. The current
-  `src/lib/api.ts` sends only cookies (`credentials: 'include'`), so the app is
-  **not yet authenticated against the real API**. This is the first integration
-  gap to close.
-- `VITE_FRAME_SAMPLE_RATE` is defined in `.env.example` and Compose but no code
-  reads it. `VITE_POLLING` is read by `vite.config.ts` as a Node-side variable.
+- Backend HTTP routes require `Authorization: Bearer <token>`. The API client
+  now obtains the Supabase access token or a development-only synthetic token.
+- `VITE_FRAME_SAMPLE_RATE` is read by the live stream; its rate is capped at
+  the backend default of 8 frames per second. `VITE_POLLING` is read by
+  `vite.config.ts` as a Node-side variable.
 - `docs/mcp_setup.md` and `frontend/playwright-mcp.config.json` exist on branch
   `chore/mcp-setup`, not on `develop`/`feature/lennox` at the time of writing.
   Verify on your branch before relying on the Playwright tooling.
@@ -199,19 +198,18 @@ but no source file reads it yet — sampling is unimplemented.
 
 ## 4. Required screens (blueprint Section 4)
 
-Every screen must ultimately handle **loading**, **empty**, **error**,
-**camera denied** where relevant, and **vision service unavailable** where
-relevant. Today `ScreenPlaceholder` lists these states as text; it does not
-implement them. Replace the placeholder, keep the banner, and use the states
-below as your acceptance checklist.
+Every screen must handle **loading**, **empty**, **error**, **camera denied**
+where relevant, and **vision service unavailable** where relevant. The auth,
+camera setup and live session screens now implement those flows. Other rows
+remain the work list.
 
 | # | Route | File | Purpose | Data source |
 |---|---|---|---|---|
-| 1 | `/` | `features/sessions/AuthScreen.tsx` | Patient/clinician sign-in and role-aware landing; role verified server-side | Supabase Auth + `GET /api/v1/me` |
+| 1 | `/` | `features/sessions/AuthScreen.tsx` | Supabase sign-in or development-only local synthetic patient; role verified server-side | Supabase Auth + `GET /api/v1/me` |
 | 2 | `/home` | `features/sessions/PatientHomeScreen.tsx` | Assigned protocol, next guidance, recent session status; read-only demo if no approved protocol | `GET /api/v1/patients/me/protocols`, patient progress |
 | 3 | `/protocols/:id` | `features/protocols/ProtocolDetailScreen.tsx` | Name, instructions, side, target range, stop instructions, version; confirm understanding | assigned protocol from `/patients/me/protocols` |
-| 4 | `/setup` | `features/sessions/CameraSetupScreen.tsx` | Live preview, framing guide, consent state, lighting/visibility checklist | `getUserMedia` + local consent state |
-| 5 | `/sessions/:id/live` | `features/sessions/LiveSessionScreen.tsx` | Pose overlay, reps, current projected angle, quality, pause/resume/end, hide overlay | `WS /sessions/{id}/stream` or labelled mocks |
+| 4 | `/setup` | `features/sessions/CameraSetupScreen.tsx` | Consent before camera permission, assigned protocol, live preview and framing checklist | `getUserMedia`, consent row, session API |
+| 5 | `/sessions/:id/live` | `features/sessions/LiveSessionScreen.tsx` | Stream frames, reps, projected angle, quality, pause/resume/end | `WS /sessions/{id}/stream` |
 | 6 | `/sessions/:id/result` | `features/sessions/SessionResultScreen.tsx` | Measured summary, quality note, event list, AI explanation | `GET /sessions/{id}`, `POST /sessions/{id}/summary` |
 | 7 | `/clinician` | `features/protocols/ClinicianDashboardScreen.tsx` | Patient list, protocol editor, sessions, trends, review notes | `GET /me`, progress, `PATCH /protocols/{id}` |
 | 8 | `/twin` | `features/recovery-twin/RecoveryTwinScreen.tsx` | 3D avatar, metric selection, scrubber, two-session comparison | session angle trace from `GET /sessions/{id}` |
@@ -285,10 +283,9 @@ let a mock value look like live inference.
 | `api.createSummary(id)` | `POST /api/v1/sessions/{id}/summary` |
 | `sessionStreamUrl(sessionId, token)` | builds `ws(s)://.../api/v1/sessions/{id}/stream?token=...` |
 
-The helper currently sends `credentials: 'include'` and no `Authorization`
-header. The implemented backend requires Bearer authentication on every
-protected route, so you must add the token header (from Supabase Auth in real
-mode, or the documented local demo token) before integration tests will pass.
+The helper sends the current Supabase access token or a session-scoped local
+demo token in `Authorization: Bearer`. The local token is offered only in Vite
+development; backend development auth still requires `APP_ENV=local`.
 
 ### 5.3 WebSocket contract
 
@@ -312,26 +309,14 @@ Session start can return a short-lived `stream_token`; pass that value to
 `sessionStreamUrl()` as the `token` query parameter. It is not a user JWT and
 must not be persisted long-term.
 
-### 5.4 Type drift to resolve with Lennox
+### 5.4 Type alignment still to review
 
-`src/types/index.ts` predates the latest backend schemas. Before wiring real
-data, review and reconcile:
-
-- Backend `HealthResponse` adds `storage_mode: 'memory' | 'supabase'`; frontend
-  `api.health()` types only `{status}`.
-- Backend `ProfileResponse.display_name` is `string`; frontend types `string | null`.
-- Backend `MeasurementQuality.confidence` is `float | null`; frontend `Quality.confidence` is `number`.
-- Backend `QualityWarningEvent` includes `timestamp_ms`, `model_version` and `simulated`; frontend type does not.
-- Backend `MeasurementEvent.state` is `str`; frontend uses a `RepState` union.
-- Backend `SessionSummaryResponse` adds `persisted` and optional `stream_token`;
-  `ProgressResponse` adds `persisted`. Frontend types omit them.
-- Backend `metrics` is `dict[str, Any]`; frontend declares a specific object shape.
-- Backend summary responses add `generated_by`, `source`, `model_id`, a fixed
-  disclaimer and `persisted`; frontend `SummaryPayload` omits these.
-
-Any change to these shapes is a contract change: update `docs/api_contract.md`,
-the Pydantic schemas, `src/types/index.ts`, the mocks and both guides in the
-same PR, with approval from both developers.
+The session flow types now include health storage mode, profile, protocol,
+quality confidence, warning metadata, persistence metadata and the short-lived
+stream token. Remaining broader type work includes progress and summary
+response fields. Keep any wire-shape changes aligned with
+`docs/api_contract.md`, backend schemas, mocks and both developer guides, with
+approval from both developers.
 
 ### 5.5 Contract items pending your review
 
@@ -487,15 +472,15 @@ through a PR into `develop`.
 
 | File | Status |
 |---|---|
-| `features/**/*.tsx` (all 8 screens) | Placeholder via `ScreenPlaceholder`; no real states or interactions |
+| `features/**/*.tsx` | Auth, camera setup, live session and results are implemented; other screens remain placeholders |
 | `components/ScreenPlaceholder.tsx` | Shared placeholder shell, intentionally temporary |
 | `App.tsx` | Working shell; "DEMO BUILD" badge is not a SIMULATED badge |
 | `lib/mocks/events.ts` | Working fixtures; no UI currently renders `SIMULATED_LABEL` |
-| `lib/api.ts` | Working helpers; missing Bearer header; no real WebSocket client |
-| `lib/supabase.ts` | Working client; not used by any screen |
-| `types/index.ts` | Working but drifted from current backend schemas (Section 5.4) |
+| `lib/api.ts` | Bearer-authenticated helpers plus session start/complete and WebSocket URL |
+| `lib/supabase.ts` | Supabase Auth and RLS-scoped consent insert use the public client |
+| `types/index.ts` | Session flow types aligned; progress and summary fields need review |
 | 3D dependencies | Installed, no scene component |
-| Camera code | Absent |
+| Camera code | Camera setup and session streaming implemented |
 | Charts | Absent |
 | Auth guards | Absent |
 
@@ -503,9 +488,10 @@ through a PR into `develop`.
 
 No true 3D biomechanics, no clinical validation, no real-time guarantee, no
 multi-exercise catalogue and no patient-facing diagnosis. Fixture mode is
-synthetic and labelled. The frontend is not authenticated against the API yet.
-`VITE_FRAME_SAMPLE_RATE` is not consumed. The blueprint's `_media` folder was
-absent, so its example screenshots are not bundled. Contract items in Section
+synthetic and labelled. The live API does not send pose landmarks to the
+browser, so a skeleton overlay is unavailable. `VITE_FRAME_SAMPLE_RATE` is
+consumed and capped at 8 fps. The blueprint's `_media` folder was absent, so
+its example screenshots are not bundled. Contract items in Section
 5.5 are implemented on `feature/lennox` but not yet approved by you. The
 Playwright MCP files are on an unmerged branch. The CPU MoveNet path is
 described in `docs/model-smoke-test.md`; Sapiens2 remains licence-gated.
@@ -548,3 +534,18 @@ states, and all screens render safely without camera access.
 - `docs/model-smoke-test.md` — fixture, MoveNet CPU and legacy Sapiens2 paths
 - `docs/GIT_WORKFLOW.md` — branches, PRs and branch protection
 - `docs/RehabLoop_Full_Product_and_Technical_Blueprint.md` — Sections 4, 5, 8, 10, 11, 13, 15
+
+## Current UI implementation note
+
+The scaffold inventory and first-task list above predate the latest frontend
+work. Authentication now supports Supabase sign-in plus a development-only
+synthetic patient. Camera Setup records consent, opens a real browser preview,
+loads assigned protocols, checks the user's framing confirmation, and starts a
+backend session. Live Session samples camera frames, renders stream metrics and
+quality feedback, and supports pause, resume, and end. The result route fetches
+the canonical backend session metrics.
+
+The current stream contract does not send pose landmarks to the browser, so a
+skeleton overlay is not implemented. The consent wording is prototype copy and
+needs Steve's review before production rollout. `docs/camera-setup.md` and
+`frontend/README.md` contain current local testing steps.
