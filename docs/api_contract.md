@@ -11,12 +11,15 @@ protected routes require an authenticated user; the backend verifies role and
 patient-clinician assignment on the server. The UI may hide controls but is
 **never** an authorization control.
 
-## Current implementation status (be honest about this)
+## Current implementation status (feature/lennox; pending Steve review)
 
-The scaffold on `main` implements `GET /api/v1/health` for real. Every other
-HTTP endpoint below is a typed Pydantic stub that returns **501** with the error
-contract, and the WebSocket accepts then closes with `NOT_IMPLEMENTED`. No fake
-data is returned. Implement each stub against this document.
+The `feature/lennox` branch implements the documented HTTP handlers and the
+session WebSocket flow. Fixture-derived measurement and quality events carry
+`simulated: true`, and session summaries identify the fixture model version;
+there is no placeholder success response. The branch also contains additive
+contract details under **PROPOSED** below; Steve must review those shared API
+changes before merge. This status describes branch implementation and does not
+replace that review.
 
 ## HTTP endpoints (blueprint Section 11)
 
@@ -108,7 +111,7 @@ fixture output as real inference. Steve's mock events in
 ### Server → client: error
 
 ```json
-{"type": "error", "code": "NOT_IMPLEMENTED", "message": "..."}
+{"type": "error", "code": "STREAM_ERROR", "message": "..."}
 ```
 
 ## Error contract
@@ -126,7 +129,8 @@ Every non-2xx HTTP response and every error event uses
 | 422 | Frame / inference input not usable | Show camera framing or quality help |
 | 429 | Rate limit / sampler overflow | Reduce capture rate and retry |
 | 502 / 503 | Vision or NVIDIA dependency unavailable | Pause, or use deterministic summary fallback |
-| 501 | Contract stub not implemented yet (scaffold phase) | Show "not available yet"; never fake a result |
+| 500 | Unexpected server error with a sanitized response | Retry later; do not display internal error details |
+| 501 | Reserved for an endpoint not yet implemented; no current route returns it | Show unavailable; never fake a result |
 
 Validation rules: validate every body with Pydantic and explicit size limits;
 log model version, mapping version, duration and quality outcomes — **never**
@@ -243,6 +247,11 @@ and need review before integration:
 - Session start adds an optional stream_token in its response. The token is
   short-lived, bound to the patient and session, and is sent as the stream
   connection token. It is not a long-lived user JWT.
+- Session start accepts only an unrevoked consent record for the patient with
+  the scope metadata `purpose=camera_processing` and
+  `consent_version=camera-processing-v1`. The frontend must write these markers
+  only after acceptance of the approved camera-consent copy; they do not replace
+  the consent text. Steve review is required before frontend integration.
 - Summary responses retain generated_by and add source, model_id, a fixed
   non-clinical disclaimer, and persisted metadata.
 - Measurement and quality_warning events add simulated. Fixture-generated

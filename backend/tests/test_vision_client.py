@@ -6,7 +6,7 @@ import asyncio
 
 import httpx
 import pytest
-from app.schemas.stream import FrameEvent
+from app.schemas.stream import FrameEvent, VisionResponse
 from app.services.vision_client import VisionClient, VisionUnavailableError
 
 VISION_BODY = {
@@ -44,7 +44,14 @@ def test_vision_client_posts_frame_without_session_metadata() -> None:
         timestamp_ms=125,
         image_b64="c3ludGhldGlj",
     )
-    result = asyncio.run(client.infer(frame))
+
+    async def run() -> VisionResponse:
+        try:
+            return await client.infer(frame)
+        finally:
+            await client.aclose()
+
+    result = asyncio.run(run())
     assert client.state == "available"
     assert result.simulated is True
     assert seen[0].url.path == "/infer"
@@ -57,6 +64,13 @@ def test_vision_client_exposes_unavailable_state_on_dependency_failure() -> None
         transport=httpx.MockTransport(lambda _request: httpx.Response(503)),
     )
     frame = FrameEvent(session_id="session-id", sequence=1, timestamp_ms=125, image_b64="aGVsbG8=")
-    with pytest.raises(VisionUnavailableError, match="vision service unavailable"):
-        asyncio.run(client.infer(frame))
+
+    async def run() -> None:
+        try:
+            with pytest.raises(VisionUnavailableError, match="vision service unavailable"):
+                await client.infer(frame)
+        finally:
+            await client.aclose()
+
+    asyncio.run(run())
     assert client.state == "unavailable"

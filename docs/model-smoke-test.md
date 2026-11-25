@@ -32,7 +32,14 @@ the official `POSE.md` publishes `facebook/detr-resnet-101-dc5` as the detector
 and the demo script uses it. This repo follows `POSE.md`; verify before a real
 run and set `SAPIENS_DETECTOR_MODEL` accordingly.
 
-1. Install the NVIDIA driver + Container Toolkit and confirm a GPU is visible.
+1. Choose a runtime:
+
+   - **CPU only:** no NVIDIA setup is needed. Inference is expected to be slow
+     and is intended for single-frame/offline checks, not live sessions. The
+     `cpu` image uses CPU-only PyTorch wheels and limits PyTorch to two threads
+     by default (`SAPIENS_CPU_THREADS` can change this).
+   - **NVIDIA GPU:** install the NVIDIA driver + Container Toolkit and confirm
+     a GPU is visible before using the GPU override.
 2. Download approved checkpoints outside the repo (example layout from
    `POSE.md`):
 
@@ -52,7 +59,7 @@ run and set `SAPIENS_DETECTOR_MODEL` accordingly.
    | Variable | Meaning |
    |---|---|
    | `VISION_MODE=sapiens` | Enables real inference |
-   | `VISION_DEVICE=cuda` | Device passed to `vis_pose.py --device` |
+   | `VISION_DEVICE=cpu` or `cuda` | Device passed to `vis_pose.py --device`; the Compose override selects this |
    | `SAPIENS_CHECKPOINT_ROOT` | Host checkpoint directory, mounted read-only at `/checkpoints` |
    | `SAPIENS_SOURCE_ROOT` | Host Sapiens2 source root, mounted read-only at `/sapiens` |
    | `SAPIENS_POSE_MODEL` | Default `facebook/sapiens2-pose-0.4b` |
@@ -67,24 +74,32 @@ run and set `SAPIENS_DETECTOR_MODEL` accordingly.
    Status remains `...PENDING_MANUAL_REVIEW`: manually review overlays before
    trusting measurements. The service refuses to start in `sapiens` mode if
    the source, checkpoint, detector or config is missing.
-6. Start with the GPU override (the `gpu` target installs
-   `vision_service/requirements-gpu.txt`: pinned torch/torchvision,
-   transformers, OpenCV, Pillow, numpy, tqdm):
+6. Start with one override. The CPU target installs CPU-only PyTorch and the
+   Sapiens2 runtime dependencies; the GPU target uses
+   `vision_service/requirements-gpu.txt`:
 
    ```bash
+   # CPU-only host
+   docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build
+
+   # NVIDIA host
    docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build
    ```
 
-   If the licensed Sapiens2 package needs extra dependencies (for example
-   mmengine/mmcv), install them into a derived image — this is **unverified**
-   in this repository and depends on the exact released source.
+   The CPU override requires `SAPIENS_CHECKPOINT_ROOT` and
+   `SAPIENS_SOURCE_ROOT` in `.env`; it fails Compose interpolation if either is
+   blank. It does not request an NVIDIA device. The source and weights remain
+   read-only mounts outside the repo. If your licensed source revision needs
+   additional packages, report the exact import error before changing the
+   dependency list.
 7. Verify: `curl localhost:8001/health` should report `mode=sapiens` and
    `simulated=false`; `POST /infer` should return `selected_hip`,
    `selected_knee` and `selected_ankle` with confidence and `valid` flags.
    A low-confidence landmark is marked invalid; low quality is never
    interpolated into a plausible-looking measurement. Multiple people or a
    missing predictions JSON produce HTTP 503 with `VISION_UNAVAILABLE`.
-8. Record checkpoint hash, model version, detector, image size, driver, GPU
+8. Record checkpoint hash, model version, detector, image size, CPU/GPU model,
+   driver when applicable,
    and latency here. Report pose quality separately from movement-engine
    math accuracy and end-to-end reliability (blueprint Section 14).
 
@@ -99,7 +114,15 @@ cd "$SAPIENS_ROOT/sapiens/pose"
 ## Verification status
 
 The fixture path and mapping logic are covered by `vision_service/tests`.
-The GPU path has **not** been executed here: no GPU, weights or licensed
-source are present in this environment. Its commands and paths come from the
-official `POSE.md` and the code above; treat the first real run as the smoke
-test that confirms them.
+The CPU and GPU paths have **not** been executed here: this host has no
+available GPU or Docker daemon, and the Sapiens2 source and checkpoints are
+absent. The ignored `.env` is prepared for the requested CPU setup, but no real
+model health or inference result is available. Treat the first real run as the
+smoke test that confirms dependencies, paths, performance, and output quality.
+
+The Sapiens2 licence restricts biometric processing and places conditions on
+health-data use and medical/health practice. Rehabilitation pose inference may
+fall within those restrictions; legal/licensing clearance and acceptance of any
+gated model terms are still required. Until then, keep to synthetic fixtures or
+explicitly approved frames. See the
+[official Sapiens2 licence](https://github.com/facebookresearch/sapiens2/blob/main/LICENSE.md).

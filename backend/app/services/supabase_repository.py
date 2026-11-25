@@ -8,6 +8,9 @@ import httpx
 
 from ..core.config import Settings
 
+CAMERA_CONSENT_VERSION = "camera-processing-v1"
+CAMERA_CONSENT_PURPOSE = "camera_processing"
+
 
 class SupabaseRepository:
     def __init__(
@@ -80,6 +83,18 @@ class SupabaseRepository:
         )
         return bool(rows)
 
+    async def get_profile(self, user_id: str) -> dict[str, Any] | None:
+        rows = await self._request(
+            "GET",
+            "profiles",
+            params={
+                "select": "id,role,display_name",
+                "id": f"eq.{user_id}",
+                "limit": "1",
+            },
+        )
+        return rows[0] if rows else None
+
     async def consent_is_valid(self, consent_id: str, patient_id: str) -> bool:
         rows = await self._request(
             "GET",
@@ -88,6 +103,8 @@ class SupabaseRepository:
                 "select": "id",
                 "id": f"eq.{consent_id}",
                 "patient_id": f"eq.{patient_id}",
+                "consent_version": f"eq.{CAMERA_CONSENT_VERSION}",
+                "purpose": f"eq.{CAMERA_CONSENT_PURPOSE}",
                 "revoked_at": "is.null",
                 "limit": "1",
             },
@@ -140,6 +157,25 @@ class SupabaseRepository:
             body={"active": False},
             prefer="return=minimal",
         )
+
+    async def update_protocol_version(
+        self, protocol_id: str, protocol: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        result = await self._request(
+            "POST",
+            "rpc/backend_update_protocol_version",
+            body={
+                "p_protocol_id": protocol_id,
+                "p_new_id": protocol["id"],
+                "p_expected_version": protocol["version"] - 1,
+                "p_parameters": protocol["parameters"],
+                "p_active": protocol["active"],
+                "p_approved_at": protocol.get("approved_at"),
+            },
+        )
+        if not isinstance(result, list) or not result:
+            return None
+        return self._protocol_response(result[0])
 
     async def create_session(self, session: dict[str, Any]) -> dict[str, Any]:
         row = {
@@ -210,6 +246,10 @@ class SupabaseRepository:
         }
         if "raw_video_stored" in updates and updates["raw_video_stored"] is not False:
             raise ValueError("raw video storage must remain disabled")
+        if "metrics" in updates:
+            await self._save_metrics(session_id, updates["metrics"])
+        if "quality_flags" in updates:
+            await self._save_flags(session_id, updates["quality_flags"])
         if db_updates:
             await self._request(
                 "PATCH",
@@ -218,11 +258,47 @@ class SupabaseRepository:
                 body=db_updates,
                 prefer="return=minimal",
             )
-        if "metrics" in updates:
-            await self._save_metrics(session_id, updates["metrics"])
-        if "quality_flags" in updates:
-            await self._save_flags(session_id, updates["quality_flags"])
         return await self.get_session(session_id)
+
+    async def complete_session(
+        self,
+        session_id: str,
+        ended_at: str,
+        metrics: dict[str, Any],
+        quality_flags: list[str],
+    ) -> dict[str, Any] | None:
+        session = await self.get_session(session_id)
+        if session is None:
+            return None
+        result = await self._request(
+            "POST",
+            "rpc/backend_complete_session",
+            body={
+                "p_session_id": session_id,
+                "p_ended_at": ended_at,
+                "p_metrics": metrics,
+                "p_flags": quality_flags,
+            },
+        )
+        if not isinstance(result, list) or not result:
+            return None
+        row = result[0] if isinstance(result[0], dict) else {}
+        numeric_metrics = {
+            key: value
+            for key, value in metrics.items()
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+        }
+        session.update(
+            {
+                "status": row.get("status", "completed"),
+                "ended_at": row.get("ended_at", ended_at),
+                "metrics": {**session["metrics"], **numeric_metrics},
+                "quality_flags": sorted(set(session["quality_flags"]) | set(quality_flags)),
+                "raw_video_stored": False,
+                "persisted": True,
+            }
+        )
+        return session
 
     async def list_sessions(self, patient_id: str) -> list[dict[str, Any]]:
         rows = await self._request(
@@ -244,6 +320,22 @@ class SupabaseRepository:
         }
         await self._request("POST", "ai_summaries", body=row, prefer="return=minimal")
         return True
+
+    async def get_summary(self, session_id: str) -> dict[str, Any] | None:
+        rows = await self._request(
+            "GET",
+            "ai_summaries",
+            params={
+                "select": "body",
+                "session_id": f"eq.{session_id}",
+                "order": "created_at.desc",
+                "limit": "1",
+            },
+        )
+        if not rows:
+            return None
+        body = rows[0].get("body")
+        return body if isinstance(body, dict) else None
 
     async def _save_metrics(self, session_id: str, metrics: dict[str, Any]) -> None:
         rows = [
@@ -269,7 +361,12 @@ class SupabaseRepository:
     async def _save_flags(self, session_id: str, flags: list[str]) -> None:
         rows = [{"session_id": session_id, "flag_code": flag, "severity": "info"} for flag in flags]
         if rows:
-            await self._request("POST", "session_flags", body=rows, prefer="return=minimal")
+            await self._request(
+                "POST",
+                "session_flags",
+                body=rows,
+                prefer="return=minimal",
+            )
 
     @staticmethod
     def _protocol_response(row: dict[str, Any]) -> dict[str, Any]:

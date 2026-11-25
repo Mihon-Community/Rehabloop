@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 import re
 import subprocess
 import sys
@@ -132,10 +133,16 @@ class SapiensRunner:
                 "--device",
                 self.settings.vision_device,
             ]
+            child_env = os.environ.copy()
+            existing_pythonpath = child_env.get("PYTHONPATH")
+            child_env["PYTHONPATH"] = os.pathsep.join(
+                path for path in (str(self.root), existing_pythonpath) if path
+            )
             try:
                 result = subprocess.run(
                     command,
                     cwd=str(self.root),
+                    env=child_env,
                     capture_output=True,
                     text=True,
                     timeout=self.settings.sapiens_inference_timeout,

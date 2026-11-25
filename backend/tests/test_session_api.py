@@ -9,7 +9,11 @@ from app.core.auth import DEV_CLINICIAN_ID, DEV_PATIENT_ID
 from app.core.config import Settings
 from app.main import create_app
 from app.services.in_memory_repository import DEMO_CONSENT_ID, InMemoryRepository
-from app.services.supabase_repository import SupabaseRepository
+from app.services.supabase_repository import (
+    CAMERA_CONSENT_PURPOSE,
+    CAMERA_CONSENT_VERSION,
+    SupabaseRepository,
+)
 from fastapi.testclient import TestClient
 
 PATIENT = {"Authorization": "Bearer demo-patient-token"}
@@ -131,6 +135,9 @@ def test_in_memory_session_lifecycle_and_safe_summary() -> None:
         assert summary.json()["model_id"] is None
         assert summary.json()["persisted"] is False
         assert "non-clinical" in summary.json()["disclaimer"]
+        cached_summary = client.post(f"/api/v1/sessions/{session_id}/summary", headers=PATIENT)
+        assert cached_summary.status_code == 200
+        assert cached_summary.json() == summary.json()
 
 
 def test_consent_is_required_before_start_and_demo_auth_is_local_only() -> None:
@@ -217,3 +224,101 @@ def test_supabase_repository_uses_mocked_postgrest_calls() -> None:
     assert len(calls) == 2
     assert calls[0].url.path.endswith("/rest/v1/exercise_protocols")
     assert calls[0].headers["Authorization"].startswith("Bearer ")
+
+
+def test_supabase_consent_requires_camera_scope_and_version() -> None:
+    settings = _settings(
+        app_env="staging",
+        auth_mode="supabase",
+        supabase_url="https://supabase.test",
+        supabase_service_role_key="unit-test-key",
+    )
+    calls: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        return httpx.Response(200, json=[{"id": "33333333-3333-4333-8333-333333333333"}])
+
+    repo = SupabaseRepository(settings, transport=httpx.MockTransport(handler))
+    consent_id = "33333333-3333-4333-8333-333333333333"
+    valid = asyncio.run(repo.consent_is_valid(consent_id, DEV_PATIENT_ID))
+
+    assert valid is True
+    assert len(calls) == 1
+    params = dict(calls[0].url.params)
+    assert params["purpose"] == f"eq.{CAMERA_CONSENT_PURPOSE}"
+    assert params["consent_version"] == f"eq.{CAMERA_CONSENT_VERSION}"
+    assert params["revoked_at"] == "is.null"
+
+
+def test_supabase_repository_uses_atomic_backend_write_functions() -> None:
+    settings = _settings(
+        app_env="staging",
+        auth_mode="supabase",
+        supabase_url="https://supabase.test",
+        supabase_service_role_key="unit-test-key",
+    )
+    protocol = {
+        "id": "11111111-1111-4111-8111-111111111112",
+        "patient_id": DEV_PATIENT_ID,
+        "clinician_id": DEV_CLINICIAN_ID,
+        "protocol_name": "test",
+        "version": 2,
+        "parameters": PROTOCOL_PARAMETERS,
+        "approved_at": None,
+        "active": True,
+    }
+    session = {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "patient_id": DEV_PATIENT_ID,
+        "protocol_id": protocol["id"],
+        "status": "completed",
+        "model_version": "fixture-simulated",
+        "mapping_version": "rehabloop-knee-map-1.0",
+        "analytics_version": "knee-extension-engine-0.1.0",
+        "raw_video_stored": False,
+    }
+    calls: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        if request.url.path.endswith("/rpc/backend_update_protocol_version"):
+            return httpx.Response(200, json=[protocol])
+        if request.url.path.endswith("/rpc/backend_complete_session"):
+            return httpx.Response(200, json=[session])
+        if request.url.path.endswith("/sessions"):
+            return httpx.Response(200, json=[session])
+        if request.url.path.endswith("/exercise_protocols"):
+            return httpx.Response(200, json=[protocol])
+        if request.url.path.endswith("/session_metrics"):
+            return httpx.Response(200, json=[])
+        if request.url.path.endswith("/session_flags"):
+            return httpx.Response(200, json=[])
+        raise AssertionError(f"Unexpected PostgREST path: {request.url.path}")
+
+    repo = SupabaseRepository(settings, transport=httpx.MockTransport(handler))
+
+    async def run() -> tuple[dict[str, object] | None, dict[str, object] | None]:
+        updated_protocol = await repo.update_protocol_version(
+            "11111111-1111-4111-8111-111111111111",
+            {**protocol, "version": 2, "id": protocol["id"]},
+        )
+        completed_session = await repo.complete_session(
+            session["id"],
+            "2026-11-24T10:00:00+00:00",
+            {"completed_reps": 4, "usable_frame_pct": 80.0},
+            ["SYNTHETIC_INPUT"],
+        )
+        return updated_protocol, completed_session
+
+    updated_protocol, completed_session = asyncio.run(run())
+    assert updated_protocol is not None and updated_protocol["version"] == 2
+    assert completed_session is not None and completed_session["status"] == "completed"
+    assert completed_session["metrics"]["completed_reps"] == 4
+    assert "SYNTHETIC_INPUT" in completed_session["quality_flags"]
+    assert calls[-1].url.path.endswith("/rpc/backend_complete_session")
+    rpc_paths = [call.url.path for call in calls if "/rpc/" in call.url.path]
+    assert rpc_paths == [
+        "/rest/v1/rpc/backend_update_protocol_version",
+        "/rest/v1/rpc/backend_complete_session",
+    ]

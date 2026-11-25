@@ -20,7 +20,7 @@ from ..schemas.session import (
     StartSessionRequest,
 )
 from ..schemas.stream import FrameEvent, VisionResponse
-from ..schemas.summary import SummaryResult
+from ..schemas.summary import SummaryRequest, SummaryResult
 from .movement_engine import MovementEngine, ProjectedPoint, RepConfig
 from .nvidia_summary import generate_summary
 from .schemas_metrics import SessionMetrics
@@ -43,13 +43,14 @@ class SessionService:
     async def create_protocol(self, user: AuthUser, body: CreateProtocolRequest) -> dict[str, Any]:
         if user.role != "clinician":
             raise HTTPException(status_code=403, detail="Clinician role required")
-        if not await self.repository.clinician_has_patient(user.user_id, body.patient_id):
+        patient_id = str(body.patient_id)
+        if not await self.repository.clinician_has_patient(user.user_id, patient_id):
             raise HTTPException(status_code=403, detail="Patient assignment required")
         self._protocol_configuration(body.parameters)
         now = datetime.now(UTC).isoformat()
         protocol = {
             "id": str(uuid4()),
-            "patient_id": body.patient_id,
+            "patient_id": patient_id,
             "clinician_id": user.user_id,
             "protocol_name": body.protocol_name,
             "version": 1,
@@ -76,7 +77,6 @@ class SessionService:
             raise HTTPException(status_code=404, detail="Protocol not found")
         parameters = body.parameters if body.parameters is not None else current["parameters"]
         self._protocol_configuration(parameters)
-        await self.repository.deactivate_protocol(protocol_id)
         updated = {
             **current,
             "id": str(uuid4()),
@@ -86,7 +86,12 @@ class SessionService:
             "approved_at": datetime.now(UTC).isoformat(),
             "persisted": False,
         }
-        return await self.repository.create_protocol(updated)
+        version = await self.repository.update_protocol_version(protocol_id, updated)
+        if version is None:
+            raise HTTPException(
+                status_code=409, detail="Protocol changed; reload it before updating"
+            )
+        return version
 
     async def my_protocols(self, user: AuthUser) -> list[dict[str, Any]]:
         if user.role != "patient":
@@ -94,7 +99,7 @@ class SessionService:
         return await self.repository.list_protocols(user.user_id)
 
     async def create_session(self, user: AuthUser, body: CreateSessionRequest) -> dict[str, Any]:
-        protocol = await self.repository.get_protocol(body.protocol_id)
+        protocol = await self.repository.get_protocol(str(body.protocol_id))
         if protocol is None or not protocol["active"]:
             raise HTTPException(status_code=404, detail="Protocol not found")
         if user.role == "patient":
@@ -184,18 +189,16 @@ class SessionService:
             quality_flags.extend(engine.quality_flags)
         if not engine or engine.metrics().get("usable_frame_pct") == 0:
             quality_flags.append("NO_VALID_FRAMES")
-        updated = await self.repository.update_session(
+        updated = await self.repository.complete_session(
             session_id,
-            {
-                "status": "completed",
-                "ended_at": datetime.now(UTC).isoformat(),
-                "metrics": metrics,
-                "quality_flags": sorted(set(quality_flags)),
-                "raw_video_stored": False,
-            },
+            datetime.now(UTC).isoformat(),
+            metrics,
+            sorted(set(quality_flags)),
         )
         if updated is None:
-            raise HTTPException(status_code=404, detail="Session not found")
+            raise HTTPException(
+                status_code=409, detail="Session changed; reload it before completing"
+            )
         self.token_store.revoke_session(session_id)
         self._engines.pop(session_id, None)
         return self._response(updated)
@@ -299,12 +302,23 @@ class SessionService:
             persisted=self.repository.storage_mode == "supabase",
         )
 
-    async def generate_session_summary(self, user: AuthUser, session_id: str) -> SummaryResult:
+    async def generate_session_summary(
+        self,
+        user: AuthUser,
+        session_id: str,
+        request: SummaryRequest,
+    ) -> SummaryResult:
         session = await self._get_authorized_session(user, session_id)
         if session["status"] != "completed":
             raise HTTPException(
                 status_code=409, detail="Complete the session before requesting a summary"
             )
+        if not request.regenerate:
+            cached = await self.repository.get_summary(session_id)
+            if cached is not None:
+                return SummaryResult.model_validate(cached).model_copy(
+                    update={"persisted": self.repository.storage_mode == "supabase"}
+                )
         metrics = SessionMetrics.model_validate(session["metrics"])
         result = await generate_summary(metrics, self.settings)
         stored_copy = result.model_copy(

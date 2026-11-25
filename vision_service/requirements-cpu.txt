@@ -1,0 +1,21 @@
+# CPU-only Sapiens2 inference dependencies.
+# Keep the torch versions aligned with requirements-gpu.txt, using PyTorch's
+# CPU wheel index so this image never needs CUDA libraries or an NVIDIA device.
+--extra-index-url https://download.pytorch.org/whl/cpu
+-r requirements.txt
+torch==2.7.1+cpu
+torchvision==0.22.1+cpu
+transformers>=4.49,<5
+opencv-python-headless>=4.10,<5
+pillow>=10.4,<12
+numpy>=1.26,<3
+tqdm>=4.66,<5
+safetensors
+scipy
+matplotlib
+iopath
+prettytable
+termcolor
+accelerate
+rich
+timm

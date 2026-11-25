@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class ErrorResponse(BaseModel):
@@ -20,7 +20,3 @@ class ProfileResponse(BaseModel):
     id: str
     role: Literal["patient", "clinician", "admin"]
     display_name: str
-
-
-class NotImplementedResponse(ErrorResponse):
-    code: str = Field(default="NOT_IMPLEMENTED")

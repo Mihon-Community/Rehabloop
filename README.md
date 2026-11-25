@@ -49,9 +49,15 @@ docker compose up --build     # whole stack in fixture mode, no GPU/weights
 Health endpoints: `http://localhost:8000/api/v1/health`,
 `http://localhost:8001/health`, `http://localhost:5173/`.
 
-Real Sapiens2 inference:
+Real Sapiens2 inference can use the CPU-only or NVIDIA setup; both require the
+licensed source and checkpoints outside the repo. See `docs/model-smoke-test.md`
+for setup and the licence gate.
+
+CPU-only (slow, not for live sessions):
+`docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build`
+
+NVIDIA GPU:
 `docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build`
-(see `docs/model-smoke-test.md` for the NVIDIA Container Toolkit prerequisites).
 
 ## Team and ownership
 

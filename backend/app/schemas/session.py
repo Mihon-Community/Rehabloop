@@ -1,4 +1,5 @@
 from typing import Any, Literal
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
@@ -8,7 +9,7 @@ SessionStatus = Literal[
 
 
 class CreateSessionRequest(BaseModel):
-    protocol_id: str = Field(description="UUID of the clinician-approved protocol")
+    protocol_id: UUID = Field(description="UUID of the clinician-approved protocol")
 
 
 class StartSessionRequest(BaseModel):

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import time
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Request, WebSocket, WebSocketDisconnect
 from pydantic import ValidationError
@@ -80,12 +81,12 @@ async def create_protocol(
     tags=["protocols"],
 )
 async def update_protocol(
-    protocol_id: str,
+    protocol_id: UUID,
     body: UpdateProtocolRequest,
     request: Request,
     user: Annotated[AuthUser, Depends(current_user)],
 ) -> dict:
-    return await _service(request).update_protocol(user, protocol_id, body)
+    return await _service(request).update_protocol(user, str(protocol_id), body)
 
 
 @router.post(
@@ -110,12 +111,12 @@ async def create_session(
     tags=["sessions"],
 )
 async def start_session(
-    session_id: str,
+    session_id: UUID,
     body: StartSessionRequest,
     request: Request,
     user: Annotated[AuthUser, Depends(current_user)],
 ) -> SessionSummaryResponse:
-    return await _service(request).start_session(user, session_id, body)
+    return await _service(request).start_session(user, str(session_id), body)
 
 
 @router.post(
@@ -125,12 +126,12 @@ async def start_session(
     tags=["sessions"],
 )
 async def complete_session(
-    session_id: str,
+    session_id: UUID,
     body: CompleteSessionRequest,
     request: Request,
     user: Annotated[AuthUser, Depends(current_user)],
 ) -> SessionSummaryResponse:
-    return await _service(request).complete_session(user, session_id, body)
+    return await _service(request).complete_session(user, str(session_id), body)
 
 
 @router.get(
@@ -140,11 +141,11 @@ async def complete_session(
     tags=["sessions"],
 )
 async def get_session(
-    session_id: str,
+    session_id: UUID,
     request: Request,
     user: Annotated[AuthUser, Depends(current_user)],
 ) -> SessionSummaryResponse:
-    return await _service(request).get_session(user, session_id)
+    return await _service(request).get_session(user, str(session_id))
 
 
 @router.get(
@@ -154,11 +155,11 @@ async def get_session(
     tags=["sessions"],
 )
 async def progress(
-    patient_id: str,
+    patient_id: UUID,
     request: Request,
     user: Annotated[AuthUser, Depends(current_user)],
 ) -> ProgressResponse:
-    return await _service(request).progress(user, patient_id)
+    return await _service(request).progress(user, str(patient_id))
 
 
 @router.post(
@@ -168,22 +169,26 @@ async def progress(
     tags=["summary"],
 )
 async def summary(
-    session_id: str,
-    _body: SummaryRequest,
+    session_id: UUID,
     request: Request,
     user: Annotated[AuthUser, Depends(current_user)],
+    body: SummaryRequest | None = None,
 ) -> SummaryResponse:
-    result = await _service(request).generate_session_summary(user, session_id)
+    summary_request = body if body is not None else SummaryRequest()
+    result = await _service(request).generate_session_summary(
+        user, str(session_id), summary_request
+    )
     return SummaryResponse(**result.model_dump())
 
 
 @router.websocket("/sessions/{session_id}/stream")
-async def stream(websocket: WebSocket, session_id: str) -> None:
+async def stream(websocket: WebSocket, session_id: UUID) -> None:
     """Bounded sequential frame processing with a short-lived per-session token."""
+    session_key = str(session_id)
     await websocket.accept()
     token = websocket.query_params.get("token", "")
     token_store = websocket.app.state.token_store
-    grant: StreamGrant | None = token_store.resolve(token, session_id)
+    grant: StreamGrant | None = token_store.resolve(token, session_key)
     if grant is None:
         await websocket.send_json(
             StreamErrorEvent(
@@ -195,7 +200,7 @@ async def stream(websocket: WebSocket, session_id: str) -> None:
 
     service: SessionService = websocket.app.state.session_service
     vision_client = websocket.app.state.vision_client
-    session = await websocket.app.state.repository.get_session(session_id)
+    session = await websocket.app.state.repository.get_session(session_key)
     if session is None or session["patient_id"] != grant.user_id or session["status"] != "active":
         await websocket.send_json(
             StreamErrorEvent(
@@ -247,7 +252,7 @@ async def stream(websocket: WebSocket, session_id: str) -> None:
                 continue
             last_server_receive = now
 
-            if frame.session_id != session_id:
+            if frame.session_id != session_key:
                 await websocket.send_json(
                     StreamErrorEvent(
                         code="UNPROCESSABLE",
@@ -256,7 +261,7 @@ async def stream(websocket: WebSocket, session_id: str) -> None:
                 )
                 continue
             try:
-                event = await service.process_frame(user, session_id, frame, vision_client)
+                event = await service.process_frame(user, session_key, frame, vision_client)
             except HTTPException as exc:
                 code = {
                     409: "INVALID_STATE",
@@ -276,5 +281,5 @@ async def stream(websocket: WebSocket, session_id: str) -> None:
     except (ValueError, TypeError):
         await websocket.close(code=1003)
     finally:
-        await service.pause_stream(session_id)
+        await service.pause_stream(session_key)
         token_store.revoke(token)

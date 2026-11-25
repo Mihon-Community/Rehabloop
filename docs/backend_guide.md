@@ -52,7 +52,7 @@ backend/app/
 └── services/{session_service,movement_engine,nvidia_summary,supabase_repository}.py
 backend/tests/              # health + Appendix A3 angle tests (passing)
 vision_service/app/{main,inference,detector,keypoint_adapter,schemas,config}.py
-vision_service/config/keypoint_mapping.yaml    # PLACEHOLDER indices
+vision_service/config/keypoint_mapping.yaml    # resolved indices; overlay review pending
 vision_service/tests/
 supabase/migrations/20261124120000_initial_schema.sql
 supabase/seed/001_synthetic_demo.sql
@@ -61,8 +61,11 @@ fixtures/synthetic_keypoint_sequences/ + approved_test_frames/ (labelled synthet
 
 Python 3.12, type hints everywhere (`disallow_untyped_defs` in mypy), Ruff
 (`E,F,I,UP,B`, 100 cols) and `ruff format`. All endpoints use Pydantic schemas;
-secrets are `SecretStr` in settings and are never logged. `GET /api/v1/health`
-Current routes cover auth, protocols, sessions, progress, and summary. The WebSocket processes fixture-backed streams; protected non-local requests fail closed until Supabase JWT verification is implemented.
+secrets are `SecretStr` in settings and are never logged. Current routes cover
+health, profile, protocols, sessions, progress, summaries, and streaming.
+Local demo authentication is restricted to `APP_ENV=local`; other environments
+verify Supabase access tokens and load application roles from trusted profile
+rows. Fixture streams are labelled simulated.
 
 ## 4. Running locally
 
@@ -71,8 +74,11 @@ Docker (whole stack, fixture mode, no GPU):
 copy .env.example .env && docker compose up --build
 curl localhost:8000/api/v1/health; curl localhost:8001/health
 ```
-Real model: `docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build`
-after the NVIDIA Container Toolkit and the licensed checkpoints are in place.
+Real model (CPU, slow/offline):
+`docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build`
+after the licensed source and checkpoints are in place. For NVIDIA, use
+`docker-compose.gpu.yml` and install the NVIDIA Container Toolkit. See
+`docs/model-smoke-test.md`; do not use real frames until the licence gate is cleared.
 
 Without Docker (Python 3.12):
 ```bash
@@ -93,6 +99,8 @@ Environment variables — mark the secrets:
 |---|---|---|
 | `APP_ENV`, `AUTH_MODE`, `LOG_LEVEL`, `CORS_ORIGINS` | shared config; dev auth only in local | no |
 | `SUPABASE_URL` | backend server-side URL | no |
+| `SUPABASE_ANON_KEY` | publishable key used to remotely verify legacy HS256 tokens | **public** |
+| `SUPABASE_JWKS_URL` | optional override for the Supabase signing-key endpoint | no |
 | `SUPABASE_SERVICE_ROLE_KEY` | backend DB access; bypasses RLS | **YES** |
 | `NVIDIA_API_KEY` | backend summary calls | **YES** |
 | `NVIDIA_BASE_URL`, `NVIDIA_MODEL_ID` | hosted LLM config | no |
@@ -113,6 +121,12 @@ clinicians see only patients with an active `clinician_patient_links` row; only
 assigned clinicians create/version protocols; WebSocket uses a short-lived
 session token bound to user + session; unauthenticated requests get 401,
 unauthorized 403, invisible resources 404. Enforce in the API and in RLS.
+
+Session start requires an unrevoked consent row for the same patient with
+`purpose=camera_processing` and `consent_version=camera-processing-v1`. These
+are machine-readable scope markers, not consent text. The UI must write them
+only after explicit acceptance of approved camera-consent copy; coordinate
+that integration with Steve.
 
 ## 6. Movement engine (blueprint Section 7, Appendix A3)
 
@@ -183,9 +197,11 @@ The read-only Section 12 review identified client-side write paths for
 clinician links, sessions, and in-place protocol changes, broad clinician
 access to audit rows, missing indexes on two session child tables, and no
 database constraint on raw-video metadata. The new
-20261124120300_backend_write_boundaries.sql migration addresses these issues.
-It has not been applied; review and apply it through the authorized Supabase
-workflow and then run the synthetic RLS matrix.
+20261124120300_backend_write_boundaries.sql and
+20261124200048_backend_atomic_session_writes_and_service_grants.sql migrations
+address these issues and add atomic protocol/session writes. Neither has been
+applied; review and apply them through the authorized Supabase workflow, then
+run the synthetic RLS matrix.
 
 ## 8. NVIDIA integration (blueprint Section 9)
 
@@ -212,11 +228,10 @@ workflow and then run the synthetic RLS matrix.
 - Sapiens2 Pose 0.4B is the engineering target; Sapiens2 terms restrict
   biometric processing and unlicensed medical practice. **License review is a
   go/no-go gate** before identifiable or patient-facing use. No bypass.
-- `vision_service/config/keypoint_mapping.yaml` is a **placeholder**: all
-  Sociopticon indices are `null` on purpose. Do not guess indices. Resolve them
-  from the official keypoint spec, pin and review them, then the adapter will
-  allow `sapiens` mode. Until then `sapiens` fails with
-  `vision service unavailable` (HTTP 503).
+- `vision_service/config/keypoint_mapping.yaml` resolves the selected
+  hip/knee/ankle indices from the official 308-keypoint specification. The
+  mapping still needs manual overlay review; do not use it for patient-facing
+  measurements until that review and the Sapiens2 licence gate are cleared.
 - `VISION_MODE=fixture` (default) replays labelled synthetic keypoints. Every
   response has `simulated: true` and `model: fixture-simulated`. Never present
   it as real inference. Fixtures live in `fixtures/synthetic_keypoint_sequences/`;
@@ -273,38 +288,30 @@ reviewed and merged into `develop`.
 
 ## 14. Known limitations
 
-2D projected angles only; no clinical validation or real-time guarantee;
-Sapiens2 licence unresolved; `sapiens` mode cannot run until weights and real
-keypoint indices are supplied; the geometry tests validate math, not model
-accuracy; Supabase JWT verification remains unimplemented and protected non-local routes fail closed; no real patient data
-is permitted. The blueprint's media folder was absent from the repo, so example
-screenshots are not bundled.
+Angles are 2D projected estimates; clinical accuracy and real-time performance
+are not validated. Sapiens2 licensing is unresolved for this rehabilitation
+use; the source and checkpoints are absent on the current host, and the
+official landmark mapping still needs manual overlay review. Supabase JWT
+verification and PostgREST behavior are covered by mocks only; neither
+corrective migration has been applied. No real patient data was used. The
+blueprint's media folder was absent, so example screenshots are not bundled.
 
-## 15. First tasks for Lennox (blueprint Section 15, 0–16h)
+## 15. Remaining integration steps
 
-0–8 h:
-1. **Sapiens2 smoke test first** — check the licence gate, install the licensed
-   package, download the 0.4B pose checkpoint + DETR detector, run the official
-   demo on approved frames, record load/inference time and model version. If
-   blocked, record the decision to use labelled synthetic keypoints — never
-   fake inference.
-2. FastAPI project, Supabase project/schema draft and environment loader;
-   agree JSON contracts with Steve.
-
-8–16 h:
-3. Vision service `/infer`, output parser and named lower-body landmark adapter
-   (resolve mapping placeholders from the official spec; reject otherwise).
-4. Reach the first frame → Sapiens2 → named keypoint round trip, then move on to
-   angle calculation and rep state-machine tests.
-
-See `docs/ARCHITECTURE.md` for the system boundaries.
+1. Obtain legal/licensing clearance for the intended Sapiens2 use, then accept
+   any gated model terms and put source/checkpoints outside the repository.
+   Run the CPU smoke test on synthetic or explicitly approved frames and review
+   overlays before relying on landmark outputs.
+2. Have Steve review the proposed API contract and coordinate the camera
+   consent UI with the backend's required purpose/version markers.
+3. Review and apply both pending Supabase migrations through the authorized
+   workflow; test the patient/clinician RLS matrix with synthetic accounts.
+4. Run a live NVIDIA summary check when the service is reachable; pin a model
+   only after its response passes numeric and safety validation.
 
 ## Current local backend workflow
 
-This section supersedes the scaffold status above. The API now has in-memory
-protocol/session handlers and a fixture WebSocket path. Supabase JWT verification
-remains fail-closed; use the local-only demo identities for this workflow.
-Values below are synthetic test configuration, not clinical targets.
+This section describes the no-Docker fixture workflow. The API has in-memory protocol/session handlers and a fixture WebSocket path. Local demo identities work only with `APP_ENV=local`; Supabase JWT verification is implemented but has only been tested with mocks here. Values below are synthetic test configuration, not clinical targets.
 
 Start the vision worker in a PowerShell terminal:
 
@@ -366,8 +373,8 @@ See https://build.nvidia.com/meta/llama-3_3-70b-instruct.
 ### Supabase and authentication limits
 
 PostgREST is selected only when both SUPABASE_URL and
-SUPABASE_SERVICE_ROLE_KEY are configured. Supabase access was mock-tested only.
-Supabase JWT verification is not implemented yet, so protected non-local
-requests fail closed with 401. The new
-20261124120300_backend_write_boundaries.sql migration is a proposed security
-correction and was not applied.
+SUPABASE_SERVICE_ROLE_KEY are configured. Supabase repository and JWT behavior
+were tested with mocks only; no live Supabase project was contacted. Both
+20261124120300_backend_write_boundaries.sql and
+20261124200048_backend_atomic_session_writes_and_service_grants.sql remain
+unapplied and require the authorized Supabase workflow.

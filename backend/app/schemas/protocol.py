@@ -1,10 +1,10 @@
-from datetime import datetime  # noqa: F401  (kept for schema versioning)
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
 
 class CreateProtocolRequest(BaseModel):
-    patient_id: str
+    patient_id: UUID
     protocol_name: str
     parameters: dict = Field(description="Clinician-configured side, reps, target range, etc.")
 

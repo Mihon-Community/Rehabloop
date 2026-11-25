@@ -27,19 +27,30 @@ class VisionClient:
         self.base_url = base_url.rstrip("/")
         self.transport = transport
         self.state: Literal["unknown", "available", "unavailable"] = "unknown"
+        self._client: httpx.AsyncClient | None = None
 
     async def infer(self, frame: FrameEvent) -> VisionResponse:
-        timeout = httpx.Timeout(connect=3.0, read=10.0, write=5.0, pool=3.0)
+        if self._client is None:
+            timeout = httpx.Timeout(connect=3.0, read=10.0, write=5.0, pool=3.0)
+            self._client = httpx.AsyncClient(
+                base_url=self.base_url,
+                timeout=timeout,
+                transport=self.transport,
+            )
         try:
-            async with httpx.AsyncClient(timeout=timeout, transport=self.transport) as client:
-                response = await client.post(
-                    f"{self.base_url}/infer",
-                    json=frame.model_dump(exclude={"type", "session_id"}),
-                )
-                response.raise_for_status()
-                result = VisionResponse.model_validate(response.json())
+            response = await self._client.post(
+                "/infer",
+                json=frame.model_dump(exclude={"type", "session_id"}),
+            )
+            response.raise_for_status()
+            result = VisionResponse.model_validate(response.json())
         except (httpx.HTTPError, ValueError, TypeError) as exc:
             self.state = "unavailable"
             raise VisionUnavailableError("vision service unavailable") from exc
         self.state = "available"
         return result
+
+    async def aclose(self) -> None:
+        if self._client is not None:
+            await self._client.aclose()
+            self._client = None

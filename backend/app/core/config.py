@@ -19,6 +19,7 @@ class Settings(BaseSettings):
 
     supabase_url: str = ""
     supabase_jwks_url: str = ""
+    supabase_anon_key: SecretStr = Field(default_factory=lambda: SecretStr(""))
     supabase_service_role_key: SecretStr = Field(default_factory=lambda: SecretStr(""))
     nvidia_api_key: SecretStr = Field(default_factory=lambda: SecretStr(""))
     nvidia_base_url: str = "https://integrate.api.nvidia.com/v1"

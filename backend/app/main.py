@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -25,10 +28,31 @@ def create_app(
         raise RuntimeError("AUTH_MODE=dev is allowed only when APP_ENV=local")
     configure_logging(config)
 
+    storage = repository or (
+        SupabaseRepository(config) if config.storage_mode == "supabase" else InMemoryRepository()
+    )
+    auth_verifier = (
+        DevAuthVerifier(config.app_env)
+        if config.auth_mode == "dev"
+        else SupabaseJWTAuthVerifier(config, storage.get_profile)
+    )
+    vision = vision_client or VisionClient(config.vision_service_url)
+
+    @asynccontextmanager
+    async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+        try:
+            yield
+        finally:
+            for resource in (auth_verifier, vision):
+                close = getattr(resource, "aclose", None)
+                if close is not None:
+                    await close()
+
     app = FastAPI(
         title="RehabLoop API",
         version="0.1.0",
         description="Prototype API. Not a medical device. See docs/api_contract.md.",
+        lifespan=lifespan,
     )
     app.add_middleware(
         CORSMiddleware,
@@ -38,17 +62,12 @@ def create_app(
         allow_headers=["Authorization", "Content-Type"],
     )
     install_exception_handlers(app)
-    storage = repository or (
-        SupabaseRepository(config) if config.storage_mode == "supabase" else InMemoryRepository()
-    )
     app.state.settings = config
     app.state.repository = storage
-    app.state.auth_verifier = (
-        DevAuthVerifier(config.app_env) if config.auth_mode == "dev" else SupabaseJWTAuthVerifier()
-    )
+    app.state.auth_verifier = auth_verifier
     app.state.token_store = SessionTokenStore()
     app.state.session_service = SessionService(config, storage, app.state.token_store)
-    app.state.vision_client = vision_client or VisionClient(config.vision_service_url)
+    app.state.vision_client = vision
     app.include_router(v1_router)
 
     @app.get("/", include_in_schema=False)

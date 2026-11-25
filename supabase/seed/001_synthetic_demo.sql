@@ -40,7 +40,8 @@ values (
 ) on conflict do nothing;
 
 -- Consent record for the synthetic patient.
-insert into public.consent_records (patient_id, consent_version, purpose)
-values ('00000000-0000-0000-0000-000000000001', 'demo-consent-1.0',
-        'Synthetic demo: camera-based projected movement measurement')
+insert into public.consent_records (id, patient_id, consent_version, purpose)
+values ('44444444-4444-4444-8444-444444444444',
+        '00000000-0000-0000-0000-000000000001',
+        'camera-processing-v1', 'camera_processing')
 on conflict do nothing;
