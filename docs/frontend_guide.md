@@ -1,546 +1,583 @@
-# Frontend developer guide — Steve
+# Frontend guide
 
-Owner: **Steve** · branch: `feature/steve` · area: `frontend/`
-Read first: `docs/api_contract.md` and `docs/ARCHITECTURE.md`.
-Backend integration details: `docs/backend_guide.md`. Workflow:
-`docs/GIT_WORKFLOW.md`.
+Owner: **Steve** (`frontend/`). This guide describes the frontend in the current
+`feature/lennox` checkout and the intended direction for unfinished screens.
+It was checked after the merge from `develop` at `d0391d3`. That merge did not
+change the feature branch's file tree; this guide therefore treats the current
+frontend and backend code as the source of truth.
 
-Verified against the repository on branch `feature/lennox`, commit `f96fd28`.
-Every command, file and variable below was read from this checkout. Where the
-spec and the code disagree, the code wins for someone building today; the
-disagreement is called out explicitly.
+For a visual reference, open the [frontend screen reference](frontend_visual_reference.pdf)
+or its [HTML source](frontend_visual_reference.html). The PDF labels implemented
+screens separately from planned mockups and uses synthetic example values.
 
-## 0. Current reality snapshot (read this before planning work)
+Read alongside [the API contract](api_contract.md),
+[the architecture overview](ARCHITECTURE.md),
+[the backend guide](backend_guide.md), and [the repository instructions](../AGENTS.md).
 
-- `frontend/` is partly scaffolded. Authentication, camera setup and live
-  session now use real auth/API/WebSocket flows. Patient home, protocol detail,
-  results, clinician dashboard and Recovery Twin still use placeholders; there
-  are no charts or 3D scene yet.
-- The backend on `feature/lennox` has **implemented** the documented HTTP
-  handlers and the session WebSocket flow; no current route returns 501. Do
-  not design against "everything is a stub" any more.
-- `docs/api_contract.md` has a **PROPOSED** section with additive v1 fields and
-  events implemented on `feature/lennox` but **pending Steve's review** before
-  merge. Section 6.5 lists them. Do not silently treat them as agreed.
-- Vision is CPU-first now: default `VISION_MODE=fixture`, real path is MoveNet
-  SinglePose Lightning via `VISION_MODE=movenet`. See `docs/model-smoke-test.md` and
-  `docs/BACKEND_STATUS.md`.
-- Backend HTTP routes require `Authorization: Bearer <token>`. The API client
-  now obtains the Supabase access token or a development-only synthetic token.
-- `VITE_FRAME_SAMPLE_RATE` is read by the live stream; its rate is capped at
-  the backend default of 8 frames per second. `VITE_POLLING` is read by
-  `vite.config.ts` as a Node-side variable.
-- `docs/mcp_setup.md` and `frontend/playwright-mcp.config.json` exist on branch
-  `chore/mcp-setup`, not on `develop`/`feature/lennox` at the time of writing.
-  Verify on your branch before relying on the Playwright tooling.
+## 1. Product and implementation status
 
-## 1. Your role, scope and ownership
+RehabLoop is a prototype for capturing and displaying projected movement
+measurements from one camera view. It does not diagnose, prescribe treatment,
+or decide whether a patient should continue an exercise. A clinician owns the
+protocol and interprets the measurements.
 
-You build the patient and clinician experience: auth screens, protocol view,
-consent, camera setup and frame sampling, live session, results, progress
-charts and the Recovery Twin. RehabLoop is a measurement tool with a clinician
-in control — not a chatbot, coach or diagnostic app.
+Status labels used below:
 
-**In scope:** everything under `frontend/` — routes, components, feature
-folders, `lib/` clients and mocks, `types/`, tests, build config, styling and
-accessibility. CODEOWNERS maps `/frontend/` to `@Pinyotimo`.
+- **Implemented** means the current source contains the working screen or flow.
+- **Placeholder** means a route renders descriptive scaffold content rather
+  than the intended product experience.
+- **Planned** means a recommended future design or behavior, not a feature in
+  the current app.
+- **Backend available** means the current API has an endpoint; the frontend may
+  not call it yet.
 
-**Out of scope:** API behaviour, movement math, vision models, Supabase schema
-and RLS, NVIDIA summaries. Those are Lennox's (`backend/`, `vision_service/`,
-`supabase/`, `fixtures/`, mapped to `@Le-n-n-ox`).
-
-**Shared, needing both reviews:** `docs/`, `docker-compose*.yml`,
-`.env.example`, `.github/`, `README.md`, `CONTRIBUTING.md`, `SECURITY.md` and
-all root config (default CODEOWNERS entry lists both owners). Any change to the
-HTTP or WebSocket contract needs a PR explicitly approved by both developers,
-with `docs/api_contract.md` updated in the same PR. UI role display is never an
-authorization control; the backend verifies identity, role and patient
-assignment.
-
-## 2. Tech stack and exact configuration
-
-From `frontend/package.json` (versions are caret ranges; the committed lockfile
-is authoritative for `npm ci`):
-
-| Area | Package / setting |
+| Area | Current state |
 |---|---|
-| Build | Vite `^5.4.10`, `@vitejs/plugin-react` `^4.3.3` |
-| UI | React `^18.3.1`, ReactDOM `^18.3.1`, React Router DOM `^6.28.0` |
-| Data | `@supabase/supabase-js` `^2.46.1` |
-| 3D (installed, unused) | `three` `^0.169.0`, `@react-three/fiber` `^8.17.10`, `@react-three/drei` `^9.114.3` |
-| Tests | Vitest `^2.1.4`, jsdom `^25.0.1`, `@testing-library/react` `^16.0.1`, `@testing-library/jest-dom` `^6.6.3` |
-| Lint/format | ESLint `^9.13.0`, `typescript-eslint` `^8.11.0`, `eslint-config-prettier` `^9.1.0`, Prettier `^3.3.3` |
-| TypeScript | `typescript` `^5.6.3`, strict, `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`, `jsx: react-jsx`, `moduleResolution: Bundler` |
+| App shell and navigation | Implemented; navigation links are always visible. |
+| Sign in | Implemented with Supabase password sign-in and a development-only synthetic account. |
+| Patient home | Placeholder. |
+| Protocol detail | Placeholder. |
+| Camera setup and consent prompt | Implemented; consent wording remains prototype copy. |
+| Live camera session | Implemented; sends sampled JPEG frames and renders measurements and quality feedback. |
+| Session result | Implemented; fetches the canonical session summary. |
+| Clinician dashboard | Placeholder. |
+| Recovery Twin | Placeholder; no 3D scene or landmark trace is supplied by the current stream API. |
+| Route protection and sign out | Not implemented in the UI. Backend authorization remains authoritative. |
+| Progress charts and summary narrative | Backend endpoints exist; current screens do not render these features. |
 
-`tsconfig.json` is a solution file referencing `tsconfig.app.json` (source)
-and `tsconfig.node.json` (`vite.config.ts`). Both use `noEmit`.
+The purple **DEMO BUILD** badge appears unconditionally in the shell. It does
+not identify the inference mode. Fixture output has a separate **SIMULATED**
+label in the live screen. Check backend health/configuration to determine the
+active vision and storage modes; do not infer them from the shell badge.
 
-Exact npm scripts:
+The app renders a safety notice inside each screen and another in the shell
+footer, so it currently appears twice on most routes. This is a known UI
+cleanup item, not a requirement to duplicate it in new components.
 
-| Command | Runs |
-|---|---|
-| `npm run dev` | `vite` |
-| `npm run build` | `tsc -p tsconfig.app.json --noEmit && vite build` |
-| `npm run preview` | `vite preview` |
-| `npm run lint` | `eslint .` |
-| `npm run lint:fix` | `eslint . --fix` |
-| `npm run format` | `prettier --write .` |
-| `npm run format:check` | `prettier --check .` |
-| `npm run typecheck` | `tsc -p tsconfig.app.json --noEmit` |
-| `npm test` | `vitest run` |
-| `npm test:watch` | `vitest` |
+## 2. Routes and source map
 
-Prettier: single quotes, trailing commas, semicolons, 100 columns
-(`.prettierrc.json`). ESLint uses a flat config with `js.configs.recommended`,
-`tseslint.configs.recommended`, `react-hooks` recommended rules,
-`react-refresh/only-export-components` as a warning, and Prettier compatibility.
+The route definitions live in `frontend/src/app/routes.tsx`. The shell and
+seven navigation links are in `frontend/src/App.tsx`.
 
-### File tree and real status
+| Path | Component | State | Current behavior / source |
+|---|---|---|---|
+| `/` | `features/sessions/AuthScreen.tsx` | Implemented | Sign in, local synthetic sign in in development, or continue link to patient home. |
+| `/home` | `features/sessions/PatientHomeScreen.tsx` | Placeholder | Describes assigned protocols and recent-session intent; does not fetch data. |
+| `/protocols/:id` | `features/protocols/ProtocolDetailScreen.tsx` | Placeholder | Describes the planned protocol view; does not fetch a protocol. |
+| `/setup` | `features/sessions/CameraSetupScreen.tsx` | Implemented | Loads the signed-in profile and assigned protocols; consent, camera preview, framing checks, and session start. |
+| `/sessions/:id/live` | `features/sessions/LiveSessionScreen.tsx` | Implemented | Requires stream token and consent context passed in route state by setup; sends camera frames to the WebSocket. |
+| `/sessions/:id/result` | `features/sessions/SessionResultScreen.tsx` | Implemented | Fetches and displays the canonical session summary. |
+| `/clinician` | `features/protocols/ClinicianDashboardScreen.tsx` | Placeholder | Describes intended patient, protocol, session, and trend views. |
+| `/twin` | `features/recovery-twin/RecoveryTwinScreen.tsx` | Placeholder | Describes a possible projected-motion visualization; no scene is implemented. |
+| `*` | `AuthScreen` | Implemented fallback | Unknown paths display sign in. |
 
-```
-frontend/
-├── index.html                    # root div + /src/main.tsx; title "RehabLoop — movement measurement (prototype)"
-├── vite.config.ts                # host 0.0.0.0, port 5173, polling watch, Vitest jsdom
-├── package.json / package-lock.json
-├── tsconfig*.json
-├── eslint.config.js / .prettierrc.json / .prettierignore
-├── Dockerfile                    # targets: deps, dev (default CMD), build (preview)
-├── .dockerignore / README.md
-└── src/
-    ├── main.tsx                  # StrictMode + BrowserRouter + App (WORKING)
-    ├── App.tsx                   # header, DEMO BUILD badge, nav with 8 links, AppRoutes, footer SafetyBanner (WORKING)
-    ├── index.css                 # all styling; no CSS modules yet (WORKING)
-    ├── app/routes.tsx            # 8 routes + wildcard -> AuthScreen (WORKING, no guards)
-    ├── components/
-    │   ├── SafetyBanner.tsx      # exact safety copy (WORKING)
-    │   └── ScreenPlaceholder.tsx # shared placeholder shell (WORKING; not final UI)
-    ├── features/
-    │   ├── sessions/AuthScreen.tsx, PatientHomeScreen.tsx, CameraSetupScreen.tsx,
-    │   │   LiveSessionScreen.tsx, SessionResultScreen.tsx   # PLACEHOLDERS
-    │   ├── protocols/ProtocolDetailScreen.tsx, ClinicianDashboardScreen.tsx  # PLACEHOLDERS
-    │   └── recovery-twin/RecoveryTwinScreen.tsx            # PLACEHOLDER
-    ├── lib/
-    │   ├── api.ts                # BASE_URL, ApiError, api.* helpers, sessionStreamUrl() (WORKING, no auth header)
-    │   ├── supabase.ts           # configured/null client (WORKING, unused by screens)
-    │   ├── mocks/events.ts       # 4 measurements + 2 warnings, all simulated (WORKING)
-    │   └── mocks/index.ts        # re-export
-    ├── types/index.ts            # wire types (WORKING; see type drift in 6.4)
-    ├── test/setup.ts             # jest-dom/vitest matchers
-    └── App.test.tsx              # 2 passing smoke tests
+The shell's navigation includes `/protocols/demo` and `/sessions/demo/result`
+as example links. These do not refer to seeded records and can display an API
+error or missing-session state. The app currently has no role-based navigation,
+protected-route wrapper, session refresh redirect, or sign-out control. A link
+on the sign-in screen also navigates directly to `/home`; this is not an
+authorization boundary. Every protected request must continue to be authorized
+by the backend.
+
+Useful source files:
+
+```text
+frontend/src/
+  main.tsx                             React entry point and BrowserRouter
+  App.tsx                              shell, navigation, DEMO BUILD badge, footer
+  app/routes.tsx                       route table
+  index.css                            shared visual styling and responsive rule
+  components/SafetyBanner.tsx          current prototype/safety copy
+  components/ScreenPlaceholder.tsx     scaffold for unfinished pages
+  features/sessions/AuthScreen.tsx
+  features/sessions/PatientHomeScreen.tsx
+  features/sessions/CameraSetupScreen.tsx
+  features/sessions/LiveSessionScreen.tsx
+  features/sessions/SessionResultScreen.tsx
+  features/protocols/ProtocolDetailScreen.tsx
+  features/protocols/ClinicianDashboardScreen.tsx
+  features/recovery-twin/RecoveryTwinScreen.tsx
+  lib/api.ts                           HTTP client and WebSocket URL builder
+  lib/auth.ts                          development-only synthetic token storage
+  lib/camera.ts                        consent record and active camera stream helpers
+  lib/supabase.ts                      public-key browser Supabase client
+  lib/mocks/events.ts                  explicitly simulated fixture events
+  types/index.ts                       frontend wire types
 ```
 
-Conventions: PascalCase component files and exports, camelCase helpers,
-kebab-case folders, one component per file, tests colocated as `Name.test.tsx`
-(not yet present beyond `App.test.tsx`). Import shared wire types from
-`src/types`; do not redefine them in feature folders. No `any` in new code.
-Keep the safety banner visible. Note that `SafetyBanner` currently renders
-twice per screen (inside `ScreenPlaceholder` and in the `App` footer), which is
-why the smoke test uses `getAllByText`.
+## 3. Visual direction
 
-## 3. Running it
+The [PDF reference](frontend_visual_reference.pdf) shows the current shared
+shell, then the four implemented screens, then clearly marked planned screens.
+It is an illustrative product direction, not a screenshot of a running browser
+or a promise that the planned features exist.
 
-### Whole stack (recommended for integration)
+### Current visual system
 
-```bash
-copy .env.example .env        # PowerShell; from repo root; fill values locally
+Values below are read from `frontend/src/index.css` and describe the current
+prototype. Extend these shared styles before adding one-off visual systems.
+
+| Element | Current value / behavior |
+|---|---|
+| Font | System UI, then platform sans-serif fallbacks. |
+| Page background | `#f5f7fa`; main text `#10243a`. |
+| Main content | Centered shell, max width `1060px`, `1.5rem` padding. |
+| Screen card | White, `#d7dee8` border, `10px` radius, `1.25rem` padding. |
+| Main action | Deep teal `#155e75`, white label. |
+| Safety notice | Pale amber `#fff8e1`, dark amber left rule `#b45309`. |
+| Fixture badge | Purple `#4c1d95`; use only when data is simulated. |
+| Status pills | Green for connected/ready and amber for waiting/paused states. Always show text as well as color. |
+| Live layout | Camera preview and metric panel in a 1.6:0.8 two-column grid; one column at widths up to `720px`. |
+| Results | Auto-fit metric cards with a minimum width of `13rem`. |
+
+### Intended screen composition
+
+- Keep the brand and prototype status in the app header, followed by a compact
+  navigation row. On small screens the nav wraps; keep controls reachable and
+  avoid making the page wider than the viewport.
+- Use one clear page heading, a short task-specific introduction, and a
+  persistent safety notice. Avoid repeating the global notice inside a page if
+  the shell already provides it.
+- Use one primary action per step. Use secondary buttons for pause, return,
+  decline, or cancel actions; distinguish destructive session-ending actions.
+- Keep camera preview and camera controls together. Put the protocol name,
+  stream status, repetition count, movement state, projected angle estimate,
+  quality status, and session controls in a stable, readable order.
+- Use empty, loading, error, disabled, paused, and unavailable states as
+  deliberate layouts. Do not leave an empty card or display stale measurements
+  after a quality failure.
+- On smaller screens, stack preview and metrics, keep controls full-width when
+  needed, let cards wrap, and make the live status visible without scrolling
+  past the camera controls.
+
+The current CSS provides base layout and a mobile breakpoint, but not a
+complete design system, dedicated focus-ring treatment, or tested accessibility
+standard. Treat those as implementation work, not assumed capabilities.
+
+## 4. Screen behavior and design requirements
+
+### 4.1 Sign in (`/`) — implemented
+
+**Current layout:** a sign-in card with email and password fields when both
+public Supabase settings are configured; a setup notice when they are not; a
+development-only synthetic sign-in option; an error area; and a link to patient
+home. The safety notice is shown in the card and the global footer.
+
+**Current behavior:** Supabase `signInWithPassword()` runs first, then the
+frontend calls `GET /api/v1/me`. Patient profiles navigate to `/home`; other
+roles navigate to `/clinician`. The local synthetic button sets a token in
+`sessionStorage`, calls the same profile endpoint, and is only rendered by a
+Vite development build. Local backend auth also requires `APP_ENV=local` and
+`AUTH_MODE=dev`.
+
+**Still needed:** protected-route handling for presentation, a sign-out action,
+and clear handling for expired sessions and role changes. The server remains
+the source of authorization. Do not put the service-role key in browser code or
+in any `VITE_*` variable.
+
+### 4.2 Patient home (`/home`) — placeholder
+
+The current page only describes its purpose. The intended view should summarize
+assigned clinician-approved protocol(s), the next available patient action,
+and recent session status. It should link to protocol detail, camera setup, and
+previous results when those records exist.
+
+The API has `GET /api/v1/patients/me/protocols` and
+`GET /api/v1/patients/{id}/progress`; the screen currently calls neither. Show
+an explicit empty state if no active approved protocol is assigned. In that
+state, do not suggest or start an exercise. Distinguish unavailable data from
+an empty protocol list and from an in-memory record that was not saved.
+
+### 4.3 Protocol detail (`/protocols/:id`) — placeholder
+
+The current page is scaffold text. The planned read-only patient view should
+show the protocol name and version, assigned side, clinician-authored
+instructions, configured repetitions or ranges when present, approval/status,
+and clinician-provided stop instructions. Only render fields actually present
+in the validated protocol response. The patient view must not edit approved
+parameters. A confirmation step can acknowledge that the patient read the
+protocol before opening camera setup; it is not medical consent.
+
+The current patient protocol endpoint returns the assigned list. If the screen
+needs a different lookup or a new field, align it with `docs/api_contract.md`
+and get the required shared review before changing the API.
+
+### 4.4 Camera setup (`/setup`) — implemented
+
+**Current layout:** assigned-protocol selector and summary; camera-processing
+notice with acceptance checkbox; an explicit button to enable the camera; live
+preview; manual checks for selected-side hip, knee, and ankle visibility and a
+steady, approximately side-on view with one person; and buttons to start or
+turn off the camera.
+
+**Current sequence:**
+
+1. Load `GET /api/v1/me` and `GET /api/v1/patients/me/protocols`.
+2. Require a patient profile and at least one returned assigned protocol.
+3. Require the consent checkbox before enabling the camera.
+4. Check secure context and browser camera support.
+5. Create the consent record, then request `getUserMedia()` with video only
+   (ideal user-facing camera, `640x480`); audio is disabled.
+6. Ask the patient to manually confirm the framing checklist. The browser does
+   not automatically verify camera position or which body parts are visible.
+7. Create a draft session if needed, call the session start endpoint, and
+   require a returned short-lived `stream_token` before navigating to live.
+
+Camera access requires HTTPS or a local address such as `http://localhost`.
+Permission denial is displayed as an error and the preview is not opened. The
+currently stored consent row is not automatically revoked if camera permission
+is denied or the patient leaves setup; add a reviewed revocation flow before
+production use.
+
+The consent wording explicitly says it is prototype copy and needs legal,
+privacy, and product review before patient-facing deployment. The boolean
+acceptance and database `purpose` / `consent_version` fields are machine-readable
+markers; they are not a substitute for reviewed terms.
+
+### 4.5 Live session (`/sessions/:id/live`) — implemented
+
+**Current layout:** session title and protocol name; connection status; live
+preview or paused-camera message; repetition count; movement state; projected
+2D knee-angle estimate; quality status and confidence; simulated label when
+the server marks the event simulated; and pause/resume/end controls.
+
+**Frame capture:** the browser samples the live preview at the configured
+interval, caps the longest image dimension at `640px`, encodes JPEG at quality
+`0.65`, and sends JSON frame events over the session WebSocket. Audio is not
+requested. `VITE_FRAME_SAMPLE_RATE` is parsed and clamped by the frontend to
+`5–8` frames per second, default `8`; the current backend default cap is also
+`8`. Keep timestamps and sequence numbers increasing. Raw video storage remains
+disabled (`STORE_RAW_VIDEO=false`); frames are transient input for processing.
+
+**Events rendered:**
+
+- A usable `measurement` updates repetitions, movement state, rounded angle,
+  quality feedback, and a simulated label if `simulated=true`.
+- A `quality_warning` shows its message and clears the latest measurement so a
+  stale angle is not left on screen.
+- An `error` event is shown to the user. Connection failure/closure pauses the
+  screen and stops the camera stream.
+- The browser does not receive pose landmarks from this API, so there is no
+  skeleton overlay in the current UI.
+
+**Controls:** Pause closes the socket and stops the camera tracks. On the
+backend, the stream handler finalizes the pause when the socket closes. Resume
+requests camera access again and starts a fresh stream token, with retries for
+the expected session-state race. End calls the session completion endpoint,
+stops the camera, and opens the result route. A direct visit without the route
+state token displays a link back to camera setup; the token is intentionally not
+persisted as a long-lived credential.
+
+The UI currently rounds displayed live angles to whole degrees, although the
+backend contract rounds the transmitted estimate to one decimal place. Keep the
+label explicit: **projected 2D knee-angle estimate**. The PDF uses invented,
+clearly illustrative display values, not model validation evidence.
+
+### 4.6 Session result (`/sessions/:id/result`) — implemented
+
+The result screen fetches `GET /api/v1/sessions/{id}` and shows loading/error
+states, session status, completed repetitions, target repetitions, projected
+knee-angle range, the percentage of frames passing quality checks, quality
+flags, and the raw-video-stored statement. It checks `persisted=false` to say
+that an in-memory session was not saved for later.
+
+The current screen does **not** show a frame-by-frame event list, a trend chart,
+or an AI/NVIDIA explanation, and does not call the summary endpoint. Do not
+write copy suggesting those features are active. If a summary is added, render
+canonical numbers from the session record; treat generated text only as a
+validated explanation of those values. Never display invented or text-only
+clinical claims.
+
+The current result screen also does not show a fixture/simulated badge. The
+session response includes a model version, but the current UI does not use it
+to label fixture-derived results. Close this labeling gap before showing
+fixture results as patient measurements.
+
+### 4.7 Clinician dashboard (`/clinician`) — placeholder
+
+The current page is descriptive scaffold content. The intended dashboard can
+include clinician-assigned patients, protocol creation/versioning, session
+review, and patient progress. The API has clinician protocol write and patient
+progress endpoints, but the frontend does not yet call them. Every patient,
+protocol, and session query must remain scoped by backend authorization and
+clinician assignment. Protocol edits create a new version; do not imply that
+the app automatically updates a treatment plan.
+
+### 4.8 Recovery Twin (`/twin`) — placeholder
+
+The current page has no avatar or timeline; Three.js and related dependencies
+are installed but unused. The current stream API sends measurements, not a
+landmark trace, so a faithful skeleton replay cannot be built from the present
+payload alone. Any future view should be described as a visualization of
+projected movement in the measured plane, not true 3D biomechanics. Show gaps
+for missing/low-quality frames and provide text labels alongside color.
+Confirm data availability, API contract, model/art asset licensing, and
+clinical wording before building a scene.
+
+## 5. Frontend/backend integration
+
+The browser talks to the API through `src/lib/api.ts`. `VITE_API_BASE_URL`
+defaults to `http://localhost:8000`; HTTP calls include JSON headers,
+credentials, and the current Supabase access token or the development-only
+synthetic token when available. API errors are wrapped as `ApiError` with HTTP
+status and response body.
+
+| Frontend helper | API path | Current UI usage |
+|---|---|---|
+| `api.health()` | `GET /api/v1/health` | Synthetic consent helper checks storage mode. |
+| `api.me()` | `GET /api/v1/me` | Sign in and camera setup. |
+| `api.myProtocols()` | `GET /api/v1/patients/me/protocols` | Camera setup. |
+| `api.createSession(protocolId)` | `POST /api/v1/sessions` | Camera setup. |
+| `api.startSession(id, consentId)` | `POST /api/v1/sessions/{id}/start` | Camera setup and resume. |
+| `api.completeSession(id)` | `POST /api/v1/sessions/{id}/complete` | Live session end. |
+| `api.getSession(id)` | `GET /api/v1/sessions/{id}` | Result screen. |
+| `api.progress(patientId)` | `GET /api/v1/patients/{id}/progress` | Helper exists; no screen uses it. |
+| `api.createSummary(id)` | `POST /api/v1/sessions/{id}/summary` | Helper exists; no screen uses it. |
+| `sessionStreamUrl(id, token)` | `WS /api/v1/sessions/{id}/stream?token=...` | Live session. Token is short-lived and session-scoped. |
+
+All business routes require authenticated identity and backend authorization;
+health is public. The server validates roles, patient assignment, session
+ownership, UUIDs, and consent. Hiding a button in React is not security.
+
+### Supabase and consent
+
+The browser client in `src/lib/supabase.ts` is initialized only when
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set. The anon key is public
+and relies on Row Level Security. The service-role key, NVIDIA key, and other
+server credentials must never be referenced by the frontend or bundled in
+`VITE_*` values.
+
+For Supabase-backed sign-in, the user's session supplies the bearer token. The
+camera flow inserts a consent record through the signed-in Supabase client so
+RLS applies. In the current backend contract, start requires an unrevoked
+consent row for the patient with `purpose=camera_processing` and
+`consent_version=camera-processing-v1`. Local synthetic mode selects the
+repository's seeded/memory consent ID based on API `storage_mode` instead of
+inserting through Supabase.
+
+The current `api_contract.md` still marks several additive fields and consent
+requirements **PROPOSED / needs Steve's review**, even though this frontend
+checkout already uses them and the backend implements them. Keep that review
+status visible for shared integration; do not silently rewrite the contract's
+approval state.
+
+### Stream payload and events
+
+Client frame JSON fields are `type: "frame"`, `session_id`, increasing
+`sequence`, monotonic `timestamp_ms`, and base64 JPEG `image_b64`. The current
+backend limits encoded frame length to 2,000,000 characters and enforces rate
+and ordering. Server events are `measurement`, `quality_warning`, or `error`;
+measurement and quality-warning events may carry `simulated`. When the backend
+is in fixture mode, the UI must show the simulated label. A synthetic camera
+pattern or generated image verifies wiring only; it does not establish pose
+accuracy or clinical suitability.
+
+Before changing endpoints, payload fields, states, or errors, read
+`docs/api_contract.md`, update frontend types and fixtures with the backend
+schemas, and follow the shared review process in `AGENTS.md`.
+
+## 6. Backend changes the UI must account for
+
+The backend work in this checkout adds important behavior beyond a simple
+in-memory demo. Keep these distinctions visible in user-facing states:
+
+- **Authentication and authorization:** Supabase access tokens are validated by
+  the API; application roles come from trusted profile records. Synthetic
+  development auth is accepted only when `APP_ENV=local` and `AUTH_MODE=dev`.
+  The API authorizes protocol, session, progress, and summary operations.
+- **Storage:** API health reports a storage mode; protocol/session/progress/
+  summary responses may include `persisted`. Never say data is saved when
+  `persisted=false`. A page refresh or later session may not recover
+  memory-backed data.
+- **Database boundaries:** Supabase RLS limits user reads; session writes and
+  versioned/atomic changes are performed through reviewed backend paths. The
+  browser must not write session metrics directly to the database.
+- **Camera and privacy:** `STORE_RAW_VIDEO` must stay false. Frames are
+  transient and are not sent to the NVIDIA summary provider. The UI should say
+  what is being processed, ask for consent before camera access, and stop
+  tracks on pause/end/unmount.
+- **Vision:** the supported real model path is CPU MoveNet SinglePose Lightning
+  with the repository's named COCO-17 mapping. Fixture mode is synthetic and
+  must be labeled. The frontend receives estimates and quality events, not the
+  keypoint array; there is no browser skeleton overlay.
+- **Summaries:** the API has a controlled summary endpoint. Only validated
+  numeric metrics may be sent to the provider; the backend validates output and
+  can use a deterministic fallback. The current result page does not request
+  or display this summary.
+- **Operational state:** `.env.example` defaults to fixture mode; a local
+  `.env` or deployment may select another supported mode. Read health and
+  current environment configuration through approved channels rather than
+  assuming the mode from the `DEMO BUILD` badge.
+- **Supabase migrations:** follow `docs/backend_guide.md` and the authorized
+  Supabase workflow. Local and remote migration ledgers can have different
+  versions; do not run `supabase db push` until they are reconciled.
+
+Backend validation and remaining readiness work are tracked in
+[`docs/BACKEND_STATUS.md`](BACKEND_STATUS.md). It records passing synthetic
+integration checks separately from pending clinical, privacy/legal, and
+patient-readiness reviews.
+
+## 7. Local setup and public configuration
+
+### Whole stack
+
+From the repository root:
+
+```powershell
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 docker compose up --build
-# frontend http://localhost:5173
-# API health http://localhost:8000/api/v1/health
-# vision health http://localhost:8001/health
 ```
 
-The Compose `frontend` service builds target `dev` from `node:20.18.1-bookworm-slim`,
-runs as user `node`, bind-mounts `./frontend:/app` with an anonymous volume for
-`/app/node_modules`, and starts `npm run dev -- --host 0.0.0.0`. `vite.config.ts`
-sets `server.watch.usePolling` to true unless `VITE_POLLING=false`, which is
-needed for reliable hot reload with Docker Desktop/Windows bind mounts.
+Open `http://localhost:5173`. API health is at
+`http://localhost:8000/api/v1/health`; vision health is at
+`http://localhost:8001/health`. The example environment defaults to fixture
+vision mode; check the active service health for the mode selected by your
+local configuration. See `docs/camera-setup.md` and `frontend/README.md` for
+the current local camera test flow. Do not overwrite an existing `.env`; never
+paste or print its values into docs or chat.
 
-If port 5173, 8000 or 8001 is already allocated, stop the other stack first
-(`docker compose ps` / `docker compose down` in that project). This machine has
-previously had a different project holding 8000 and 5173.
+### Frontend alone
 
-There is also `docker-compose.cpu.yml` on this branch for the CPU MoveNet path;
-it is a Lennox-owned file and does not change the frontend command.
-
-### Frontend only
-
-```bash
-cd frontend
+```powershell
+Set-Location frontend
 npm ci
-npm run dev                  # http://localhost:5173
+npm run dev
+```
+
+The Vite app is normally available at `http://localhost:5173`. For integration
+work, run the API and vision services as described in `docs/backend_guide.md`.
+
+### Browser-visible variables
+
+Every `VITE_*` variable becomes public browser configuration. Never place
+secrets in these values.
+
+| Variable | Read by | Meaning |
+|---|---|---|
+| `VITE_SUPABASE_URL` | `lib/supabase.ts` | Public Supabase project URL. |
+| `VITE_SUPABASE_ANON_KEY` | `lib/supabase.ts` | Public anon/publishable key; access remains subject to RLS. |
+| `VITE_API_BASE_URL` | `lib/api.ts` | API base URL; defaults to `http://localhost:8000`. |
+| `VITE_FRAME_SAMPLE_RATE` | `LiveSessionScreen.tsx` | Desired live sampling rate; frontend clamps to 5–8 fps. |
+| `VITE_POLLING` | `vite.config.ts` | Node-side Vite file-watcher setting for Docker/Windows bind mounts. |
+
+`APP_ENV`, `AUTH_MODE`, `VISION_MODE`, `STORE_RAW_VIDEO`, model paths, and
+provider credentials are server/container configuration. Do not copy their
+secrets or actual values into this guide.
+
+## 8. Current tests and verification
+
+The frontend currently has four Vitest tests in three files:
+
+| File | Coverage in the current test |
+|---|---|
+| `src/App.test.tsx` | Shell and safety notice; mock data declares simulation. |
+| `src/features/sessions/CameraSetupScreen.test.tsx` | Consent before camera access; framing confirmations before session start. |
+| `src/features/sessions/LiveSessionScreen.test.tsx` | WebSocket frame/measurement flow, simulated label, and camera stop/resume. |
+
+There is no current `SessionResultScreen` test. Existing tests do not provide
+end-to-end, real-camera, clinical-accuracy, or production-readiness evidence.
+
+Available commands from `frontend/`:
+
+```powershell
+npm test
 npm run lint
 npm run typecheck
-npm test
 npm run build
+npm run format:check
 ```
 
-`npm ci` uses the committed `package-lock.json`; if dependencies change, run
-`npm install` and commit both `package.json` and `package-lock.json`.
-
-### Environment variables
-
-All `VITE_*` values are **public** build-time config. Secrets never go here.
-CI supplies dummy values; no repository secrets are needed.
-
-| Variable | Read by | Meaning | Default |
-|---|---|---|---|
-| `VITE_SUPABASE_URL` | `src/lib/supabase.ts` | Public Supabase project URL | empty |
-| `VITE_SUPABASE_ANON_KEY` | `src/lib/supabase.ts` | Public anon/publishable key, RLS-scoped; never an auth bypass | empty |
-| `VITE_API_BASE_URL` | `src/lib/api.ts` | FastAPI base URL | `http://localhost:8000` |
-| `VITE_FRAME_SAMPLE_RATE` | `.env.example` and Compose only | Intended camera sampling target, 5–10 fps | `8` |
-| `VITE_POLLING` | `vite.config.ts` via `process.env` | Set `false` to stop polling watch locally | unset (polling on) |
-
-When both Supabase values are empty, `supabaseConfigured` is false and
-`supabase` is `null`; the app still renders but there is no signed-in session.
-Do not fake one. Composing passes `VITE_FRAME_SAMPLE_RATE` into the container,
-but no source file reads it yet — sampling is unimplemented.
-
-## 4. Required screens
-
-Every screen must handle **loading**, **empty**, **error**, **camera denied**
-where relevant, and **vision service unavailable** where relevant. The auth,
-camera setup and live session screens now implement those flows. Other rows
-remain the work list.
-
-| # | Route | File | Purpose | Data source |
-|---|---|---|---|---|
-| 1 | `/` | `features/sessions/AuthScreen.tsx` | Supabase sign-in or development-only local synthetic patient; role verified server-side | Supabase Auth + `GET /api/v1/me` |
-| 2 | `/home` | `features/sessions/PatientHomeScreen.tsx` | Assigned protocol, next guidance, recent session status; read-only demo if no approved protocol | `GET /api/v1/patients/me/protocols`, patient progress |
-| 3 | `/protocols/:id` | `features/protocols/ProtocolDetailScreen.tsx` | Name, instructions, side, target range, stop instructions, version; confirm understanding | assigned protocol from `/patients/me/protocols` |
-| 4 | `/setup` | `features/sessions/CameraSetupScreen.tsx` | Consent before camera permission, assigned protocol, live preview and framing checklist | `getUserMedia`, consent row, session API |
-| 5 | `/sessions/:id/live` | `features/sessions/LiveSessionScreen.tsx` | Stream frames, reps, projected angle, quality, pause/resume/end | `WS /sessions/{id}/stream` |
-| 6 | `/sessions/:id/result` | `features/sessions/SessionResultScreen.tsx` | Measured summary, quality note, event list, AI explanation | `GET /sessions/{id}`, `POST /sessions/{id}/summary` |
-| 7 | `/clinician` | `features/protocols/ClinicianDashboardScreen.tsx` | Patient list, protocol editor, sessions, trends, review notes | `GET /me`, progress, `PATCH /protocols/{id}` |
-| 8 | `/twin` | `features/recovery-twin/RecoveryTwinScreen.tsx` | 3D avatar, metric selection, scrubber, two-session comparison | session angle trace from `GET /sessions/{id}` |
-
-`src/app/routes.tsx` also maps `*` to `AuthScreen`. There are no route guards;
-an unauthenticated user currently reaches every screen. Adding a UI guard is
-fine for presentation, but backend authorization remains authoritative.
-
-### Per-screen build notes
-
-1. **Authentication** — obtain a Supabase access token, store it for the API
-   client's `Authorization: Bearer` header, then call `GET /api/v1/me` to learn
-   the role. For local backend demo only, `backend/app/core/auth.py` accepts
-   `demo-patient-token` and `demo-clinician-token` when `APP_ENV=local`; these
-   are not real credentials and must never be baked into a release build.
-   States: signed out, loading profile, error, patient landing, clinician
-   landing, camera-declined/non-camera review.
-2. **Patient home** — list assigned protocols; if none is clinician-approved,
-   show read-only demo mode and suggest no exercise. Link to protocol detail
-   and prior sessions. States: loading, empty, error, demo mode.
-3. **Protocol detail** — render name, instructions, side, target range, stop
-   instructions and version from the assigned protocol. Confirm understanding
-   before allowing setup. Never let the patient edit approved parameters.
-   States: loading, missing protocol, error, confirmation gate.
-4. **Camera setup** — secure-context check, consent copy acceptance **before**
-   `getUserMedia`, live preview, framing illustration, checklist (side view,
-   hip/knee/ankle visible, stable mount, even light, one person), retry and
-   cancel. Start only when checks pass. States: camera denied, framing failure,
-   consent required, vision unavailable, loading, error.
-5. **Live session** — send `FrameEvent`s over the session WebSocket, render
-   only events that pass quality gates, show projected angle estimate, reps and
-   state, and provide pause/resume/end/hide-overlay. Stop tracks and close the
-   socket on pause, end, route change or disconnect. States: camera denied,
-   vision unavailable (`VISION_UNAVAILABLE`), paused, low quality,
-   `RATE_LIMITED`, `BAD_FRAME_ORDER`, reconnecting.
-6. **Session result** — fetch canonical metrics, render data-quality note and
-   event list. Render numbers from the stored session record, never from LLM
-   text. Label AI copy "AI-generated explanation of recorded measurements" and
-   show a deterministic fallback when the summary provider fails. States:
-   loading, saved, unsaved/retry, error, summary fallback.
-7. **Clinician dashboard** — patient list, protocol editor that creates a new
-   version, session review, trend charts and notes. No automatic treatment-plan
-   updates. States: no assigned patients, loading, error, access revoked.
-8. **Recovery Twin** — see Section 8.
-
-## 5. Running the UI against the API and mocks
-
-### 5.1 Mocks first
-
-`src/lib/mocks/events.ts` provides `SIMULATED_LABEL`, `mockMeasurements` (four
-events: `REST`, `EXTENDING`, `TARGET_HOLD`, `RETURNING`), `mockQualityWarnings`
-(two: low-confidence ankle, multiple persons), and `mockEventStream()` which
-yields all six. Every event has `simulated: true` and model
-`fixture-simulated`. When you use them, show a visible SIMULATED badge —
-`SIMULATED_LABEL` exists as a constant but no component renders it yet. Never
-let a mock value look like live inference.
-
-### 5.2 API client
-
-`src/lib/api.ts` exposes:
-
-| Export | Behaviour |
-|---|---|
-| `BASE_URL` | `import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000'` |
-| `ApiError` | carries `status` and the `{detail, code}` body |
-| `api.health()` | `GET /api/v1/health` |
-| `api.me()` | `GET /api/v1/me` |
-| `api.myProtocols()` | `GET /api/v1/patients/me/protocols` |
-| `api.getSession(id)` | `GET /api/v1/sessions/{id}` |
-| `api.progress(patientId)` | `GET /api/v1/patients/{id}/progress` |
-| `api.createSummary(id)` | `POST /api/v1/sessions/{id}/summary` |
-| `sessionStreamUrl(sessionId, token)` | builds `ws(s)://.../api/v1/sessions/{id}/stream?token=...` |
-
-The helper sends the current Supabase access token or a session-scoped local
-demo token in `Authorization: Bearer`. The local token is offered only in Vite
-development; backend development auth still requires `APP_ENV=local`.
-
-### 5.3 WebSocket contract
-
-Client frame (`backend/app/schemas/stream.py`): `type: "frame"`, `session_id`,
-`sequence >= 0`, `timestamp_ms >= 0`, `image_b64` with maximum encoded length
-2,000,000 characters, and no extra fields. The server rejects non-increasing
-sequence/timestamps with `BAD_FRAME_ORDER`, skips frames over the configured
-rate with `RATE_LIMITED`, and returns `UNPROCESSABLE` for invalid payloads or
-session mismatch. A missing/short-lived token produces `UNAUTHENTICATED` and
-close code 4401.
-
-Server events: `measurement` (`sequence`, `timestamp_ms`,
-`projected_knee_angle_deg`, `rep_count`, `state`, `quality`, `model_version`,
-`simulated`), `quality_warning` (`reason`, `message`, `rep_count`,
-`timestamp_ms`, `model_version`, `simulated`), and `error` (`code`, `message`).
-Angles are rounded to one decimal place. On a 503 the server closes with code
-1013; pause the UI and show "vision service unavailable" rather than inventing
-data.
-
-Session start can return a short-lived `stream_token`; pass that value to
-`sessionStreamUrl()` as the `token` query parameter. It is not a user JWT and
-must not be persisted long-term.
-
-### 5.4 Type alignment still to review
-
-The session flow types now include health storage mode, profile, protocol,
-quality confidence, warning metadata, persistence metadata and the short-lived
-stream token. Remaining broader type work includes progress and summary
-response fields. Keep any wire-shape changes aligned with
-`docs/api_contract.md`, backend schemas, mocks and both developer guides, with
-approval from both developers.
-
-### 5.5 Contract items pending your review
-
-`docs/api_contract.md` marks these as PROPOSED on `feature/lennox`:
-
-- health `storage_mode`; `persisted` on protocol/session/progress/summary;
-- `stream_token` from session start;
-- consent record requirements (`purpose=camera_processing`,
-  `consent_version=camera-processing-v1`) and an unrevoked consent record;
-- summary fields `generated_by`, `source`, `model_id`, disclaimer, `persisted`;
-- `simulated` on measurement and quality_warning events;
-- JSON frame size limit, rate/order rejection and error codes;
-- one-decimal angle rounding and `persisted=false` in memory mode.
-
-Review them explicitly in the PR. Your approval is required before merge into
-`develop`.
-
-## 6. Camera, consent and framing
-
-- `getUserMedia` needs a secure context (HTTPS or localhost). If unavailable,
-  explain in plain language and offer non-camera review of saved data.
-- Ask for consent before calling `getUserMedia`; only after acceptance should
-  you write the consent markers with the exact `purpose` and
-  `consent_version` values listed in the contract's PROPOSED section, then send
-  the consent id with `POST /sessions/{id}/start`.
-- `VITE_FRAME_SAMPLE_RATE` is the intended 5–10 fps target; the backend enforces
-  `MAX_FRAME_RATE` and rejects non-increasing timestamps. Use timestamps, not
-  frame counts, for tempo.
-- Use a side view, stable mount, hip/knee/ankle visible, even lighting and one
-  person in frame. Errors are instructions ("Move back until your full leg is
-  visible"), not codes.
-- A failed quality gate means "measurement unavailable": no angle, no rep,
-  no invented interpolation. Stop tracks and close the socket on
-  pause/end/route-change/disconnect.
-- Playwright's fake camera is a test pattern, not a person. It verifies UI and
-  plumbing only, never pose quality.
-
-## 7. Recovery Twin (3D)
-
-`three`, `@react-three/fiber` and `@react-three/drei` are installed but no 3D
-component exists; `RecoveryTwinScreen.tsx` is a placeholder with explanatory
-text. When implementing it: use a neutral, non-identifiable rigged GLB with a
-checked redistribution licence; drive the joint rotation from the same
-measured projected angle trace shown in the metrics; provide a timeline scrubber
-that syncs labels, session dates, protocol version, quality and model/mapping
-version; compare two sessions with accessible labels as well as colour; show a
-visible gap on missing/low-quality frames instead of interpolating. It
-visualises the measured movement plane only — never claim true 3D
-biomechanics, anatomical accuracy or clinical meaning.
-
-## 8. UX, safety copy and accessibility
-
-`SafetyBanner.tsx` currently says: "Prototype, not a medical device. RehabLoop
-measures estimated movement from one camera view. It does not diagnose, treat
-or advise. Angles are projected estimates, not clinical measurements. A
-clinician owns the exercise protocol and interprets the results." Keep this
-visible on all screens.
-
-- Label every angle "projected knee angle estimate"; round to one decimal
-  (the backend already rounds). No false precision.
-- No diagnosis, prescription, "recovery", "safe to continue" or treatment
-  language. AI text is an explanation of recorded measurements and sits beside
-  the exact stored numbers.
-- Do not rely on colour alone: pair status colour with icons and text. Provide
-  large, distinct camera/pause/end controls, readable contrast, keyboard
-  operation and reduced-width layouts.
-- Provide the non-camera review path and plain-language errors.
-- **Clinical gate:** with no clinician-approved protocol, stay in read-only
-  demo mode and never suggest or start an exercise.
-- Auth/RLS: UI role only chooses what to display. The Supabase anon key is
-  public and RLS-scoped; the service-role key must never appear in frontend
-  code, `VITE_*` variables, the bundle or chat. CI greps `frontend/` for
-  `SUPABASE_SERVICE_ROLE_KEY` and fails the build if found.
-
-## 9. Testing
-
-Current state: `src/App.test.tsx` has two Vitest tests (shell/safety notice and
-mock `simulated` flags); both pass. `vite.config.ts` sets `environment: 'jsdom'`,
-`globals: true`, and `setupFiles: ['./src/test/setup.ts']` (jest-dom matchers).
-
-Run locally:
-
-```bash
-npm test              # one-shot
-npm test:watch        # watch mode
-npm run lint && npm run typecheck && npm run build
-```
-
-CI `.github/workflows/ci.yml` frontend job: `actions/setup-node@v4` with Node
-22 and npm caching on `frontend/package-lock.json`, then `npm ci`, `npm run
-lint`, `npm run typecheck`, `npm test`, `npm run build`. `npm ci` and `build`
-receive dummy `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` and
-`VITE_API_BASE_URL`; no secrets are configured.
-
-Tests to add as you implement:
-
-- Per-screen loading, empty, error, camera-denied and vision-unavailable states.
-- Event handling: valid measurement, quality warning, simulated badge, duplicate
-  and out-of-order sequence, socket close, 1013 and 4401 close codes.
-- Camera: mocked `getUserMedia` success/denial, secure-context failure, tracks
-  stopped on unmount, frame sampling at the configured rate.
-- Auth: Bearer header attached, 401/403 rendering, role-aware landing.
-- Copy safety: no diagnosis language, projected-estimate label present.
-- Responsive and keyboard-only checks.
-
-Playwright MCP is assigned to Steve in `docs/mcp_setup.md` on the
-`chore/mcp-setup` branch. Its smoke test starts the frontend, navigates to the
-home page and takes a snapshot with a fake media stream; that tests plumbing,
-not pose quality. Check your branch for the config before using it.
-
-## 10. Git, PRs and definition of done
-
-From `docs/GIT_WORKFLOW.md`: work on `feature/steve`, PR into `develop`; nobody
-pushes directly to `main` or `develop`; `develop` merges to `main` only for a
-release/demo. Steve reviews frontend; Lennox reviews his areas; shared files
-and contract changes need both. CODEOWNERS currently resolves Steve to
-`@Pinyotimo` and Lennox to `@Le-n-n-ox`. Branch protection on `main` and
-`develop` requires a PR, the passing `ci` check, up-to-date branches, and blocks
-force pushes and deletions.
-
-Before committing:
-
-```bash
-git status
-git ls-files | grep -E '(^|/)\.env($|\.)'   # must print nothing
-git diff --cached | grep -i 'service_role\|api_key'   # must print nothing
-```
-
-PR checklist: checks green; docs and contract updated if behaviour changed;
-both owners approved for shared/contract changes; no secrets, `.env`, weights
-or patient data; safety review complete; "does this change the API contract?"
-answered in the description.
-
-Definition of done: it runs from a clean checkout, checks pass, behaviour is
-documented, safety rules hold, the right owner(s) reviewed it, and it is merged
-through a PR into `develop`.
-
-## 11. Glossary
-
-- **Projected angle** — 2D hip/knee/ankle angle from one camera; an estimate.
-- **Landmark / keypoint** — named point (`selected_hip`, `selected_knee`, `selected_ankle`).
-- **Rep** — one valid state-machine cycle; never counted on unreliable frames.
-- **Quality gate** — rule that rejects unusable frames before measurement.
-- **Fixture** — labelled synthetic input; output must be marked `simulated`.
-- **MoveNet** — CPU pose model used by the current real-vision path.
-- **Stream token** — short-lived token from session start used only for the WebSocket.
-- **`persisted` / `storage_mode`** — proposed response flags showing whether data is durable.
-- **Recovery Twin** — rigged avatar driven by measured projected motion.
-- **RLS** — Supabase Row Level Security; the real authorization boundary.
-
-## 12. Placeholder and TODO inventory
-
-| File | Status |
-|---|---|
-| `features/**/*.tsx` | Auth, camera setup, live session and results are implemented; other screens remain placeholders |
-| `components/ScreenPlaceholder.tsx` | Shared placeholder shell, intentionally temporary |
-| `App.tsx` | Working shell; "DEMO BUILD" badge is not a SIMULATED badge |
-| `lib/mocks/events.ts` | Working fixtures; no UI currently renders `SIMULATED_LABEL` |
-| `lib/api.ts` | Bearer-authenticated helpers plus session start/complete and WebSocket URL |
-| `lib/supabase.ts` | Supabase Auth and RLS-scoped consent insert use the public client |
-| `types/index.ts` | Session flow types aligned; progress and summary fields need review |
-| 3D dependencies | Installed, no scene component |
-| Camera code | Camera setup and session streaming implemented |
-| Charts | Absent |
-| Auth guards | Absent |
-
-## 13. Known limitations and unverified areas
-
-No true 3D biomechanics, no clinical validation, no real-time guarantee, no
-multi-exercise catalogue and no patient-facing diagnosis. Fixture mode is
-synthetic and labelled. The live API does not send pose landmarks to the
-browser, so a skeleton overlay is unavailable. `VITE_FRAME_SAMPLE_RATE` is
-consumed and capped at 8 fps. Contract items in Section
-5.5 are implemented on `feature/lennox` but not yet approved by you. The
-Playwright MCP files are on an unmerged branch. The CPU MoveNet path is
-described in `docs/model-smoke-test.md`.
-
-## 14. First tasks for Steve
-
-These implementation tasks reflect the current repository state:
-
-0–4 h (foundation already scaffolded; finish the integration plumbing):
-1. Wire `Authorization: Bearer <token>` into `src/lib/api.ts` and add a real
-   WebSocket client using `sessionStreamUrl(sessionId, stream_token)`. Review
-   `docs/api_contract.md` PROPOSED items and the type drift in Section 5.4 with
-   Lennox.
-2. Replace `AuthScreen` with Supabase sign-in and `GET /api/v1/me` role landing;
-   add a presentation-only guard so unauthenticated users cannot reach
-   protected routes.
-
-4–8 h (read-only flows):
-3. Implement patient home and protocol detail against the assigned-protocol
-   endpoint, including the clinician-approved gate and read-only demo mode.
-4. Implement camera setup: consent copy first, secure-context check, framing
-   guide and non-camera review path. Do not call `getUserMedia` before consent.
-
-8–16 h (live loop):
-5. Implement frame sampling at 5–10 fps, the WebSocket client, metric cards,
-   quality warnings and pause/resume/end, starting with labelled mock events.
-6. Prove the camera-denied and vision-unavailable states with no fabricated
-   data, and keep the non-camera review path working.
-
-Acceptance for this slice: a clinician-approved protocol can be viewed, a
-session can be started with consent, mock measurement events drive real UI
-states, and all screens render safely without camera access.
-
-## 15. Further reading
-
-- `docs/ARCHITECTURE.md` — boundaries and data flow
-- `docs/api_contract.md` — HTTP/WebSocket/error/state contracts and PROPOSED items
-- `docs/BACKEND_STATUS.md` — what the backend currently implements and its limits
-- `docs/model-smoke-test.md` — fixture and MoveNet CPU paths
-- `docs/GIT_WORKFLOW.md` — branches, PRs and branch protection
-
-## Current UI implementation note
-
-The scaffold inventory and first-task list above predate the latest frontend
-work. Authentication now supports Supabase sign-in plus a development-only
-synthetic patient. Camera Setup records consent, opens a real browser preview,
-loads assigned protocols, checks the user's framing confirmation, and starts a
-backend session. Live Session samples camera frames, renders stream metrics and
-quality feedback, and supports pause, resume, and end. The result route fetches
-the canonical backend session metrics.
-
-The current stream contract does not send pose landmarks to the browser, so a
-skeleton overlay is not implemented. The consent wording is prototype copy and
-needs Steve's review before production rollout. `docs/camera-setup.md` and
-`frontend/README.md` contain current local testing steps.
+The CI frontend job uses Node 22, installs with `npm ci`, then runs lint,
+typecheck, tests, and build. For future behavior work, add focused tests for:
+
+- sign-in success/failure, 401/403 responses, expired session, role landing,
+  and route access;
+- loading, empty, error, and `persisted=false` result states;
+- camera unavailable/denied, unmount cleanup, consent write failure, and
+  consent revocation behavior;
+- low-quality events clearing stale values; `simulated=true` labels; socket
+  closure and unavailable vision behavior;
+- keyboard use, focus visibility, narrow layouts, and readable status messages.
+
+This guide change is documentation; the test commands above document the
+existing workflow rather than claiming those checks were run here.
+
+## 9. Prioritized frontend work
+
+### P0 — before patient-facing use
+
+1. Have product/legal/privacy reviewers approve camera consent wording and
+   terms. Build consent withdrawal/revocation behavior and handle the existing
+   consent row when camera permission is denied or setup is abandoned.
+2. Add a sign-out path and presentation route guards. Keep server checks as the
+   actual security boundary; cover role changes and expired sessions.
+3. Review accessibility and usability on keyboard, mobile widths, and screen
+   readers; reduce the duplicated safety banner and clarify the global DEMO
+   BUILD versus per-event SIMULATED indicators.
+4. Clearly represent fixture mode, memory storage, unavailable vision, and
+   invalid measurement states, including a simulated label on results. Never
+   show stale angle values after a quality failure.
+
+### P1 — complete the main patient journey
+
+1. Implement patient home from assigned protocols and session history with
+   explicit loading, empty, error, and not-persisted states.
+2. Implement read-only protocol detail using only fields present in the
+   approved protocol response.
+3. Add result screen tests and decide, with the API contract owners, whether
+   the patient result should request the existing summary endpoint or link to
+   clinician review.
+4. Add clear navigation from sign-in to the actual patient/clinician landing
+   pages, rather than relying on demo links.
+
+### P2 — clinician workflow
+
+1. Implement assigned-patient list and session review with server-enforced
+   clinician/patient assignment.
+2. Add protocol creation/version review only after mapping the current API
+   request and response fields and handling validation and revoked access.
+3. Add progress charts only from canonical progress responses; label estimates
+   and missing data clearly. Do not add automated treatment changes.
+
+### P3 — optional movement visualization
+
+Confirm that an approved, sufficiently detailed movement trace can be exposed
+before building a Recovery Twin. The current API does not provide the landmarks
+needed for a skeleton overlay. Any new data shape requires shared contract
+review. Keep the visualization limited to the measured projection and use
+visible gaps instead of interpolation for missing frames.
+
+## 10. UX, safety, and accessibility checklist
+
+- Keep the `SafetyBanner` meaning visible: prototype, not a medical device;
+  projected estimates, not clinical measurements; clinician owns protocol and
+  interpretation.
+- Label the angle **projected 2D knee-angle estimate**. Use the precision that
+  the screen actually displays and do not imply clinical measurement accuracy.
+- Pair color with readable text and, where helpful, an icon. Announce connection
+  and measurement updates without causing noisy screen-reader output.
+- Associate every input with a label; preserve visible keyboard focus; ensure
+  all controls work by keyboard and have adequate touch size.
+- Keep camera consent separate from protocol acknowledgement. Explain camera
+  use before the browser permission prompt. Do not claim frames are stored.
+- On denial, loss of stream, pause, route exit, or completion, stop every media
+  track. Do not transmit frames to NVIDIA or retain raw video.
+- Show no angle for unusable frames and do not invent/interpolate a measurement.
+- Mark all fixtures and generated sample values as simulated. A passing wiring
+  test is not evidence of pose accuracy, clinical safety, or patient readiness.
+- Do not use generated summaries for diagnosis, treatment, progression,
+  medication, or recovery claims. Show canonical numbers from the API alongside
+  any approved explanatory text.
+- Keep service-role, NVIDIA, and other backend credentials out of frontend
+  code, Vite variables, browser storage, logs, screenshots, and commits.
+
+## 11. Further reading
+
+- [API contract](api_contract.md) — endpoints, states, errors, and pending shared review.
+- [Architecture](ARCHITECTURE.md) — system boundaries and data flow.
+- [Backend guide](backend_guide.md) — local services, Supabase, vision, and summaries.
+- [Backend status](BACKEND_STATUS.md) — current integration checks and remaining limits.
+- [Camera setup guide](camera-setup.md) — local camera test steps and limitations.
+- [Model smoke test](model-smoke-test.md) — fixture and CPU MoveNet wiring checks.
+- [Git workflow](GIT_WORKFLOW.md) — PR and shared review practices.
+- [Visual screen reference (PDF)](frontend_visual_reference.pdf) — implemented views plus planned mockups.

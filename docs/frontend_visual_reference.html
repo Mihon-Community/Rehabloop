@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RehabLoop Frontend Visual Reference</title>
+    <style>
+      @page { size: A4 landscape; margin: 0; }
+      :root {
+        --ink: #10243a;
+        --muted: #526579;
+        --line: #d7dee8;
+        --paper: #f5f7fa;
+        --white: #fff;
+        --teal: #155e75;
+        --teal-soft: #e6f2f4;
+        --amber: #fff8e1;
+        --amber-line: #b45309;
+        --purple: #4c1d95;
+        --green: #166534;
+        --green-soft: #dcfce7;
+        --blue-soft: #eff6ff;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; background: #d8dee7; }
+      body { counter-reset: sheet; }
+      .page {
+        counter-increment: sheet;
+        width: 297mm;
+        height: 209mm;
+        overflow: hidden;
+        padding: 12mm 15mm 10mm;
+        margin: 10px auto;
+        position: relative;
+        background: var(--paper);
+        page-break-after: auto;
+        break-after: auto;
+      }
+      .page::after {
+        content: "REHABLOOP  /  FRONTEND REFERENCE                                     " counter(sheet, decimal-leading-zero);
+        position: absolute; left: 15mm; right: 15mm; bottom: 5mm;
+        border-top: 1px solid var(--line); padding-top: 2.2mm;
+        font-size: 8pt; font-weight: 700; letter-spacing: .11em; color: #718096;
+      }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 { font-size: 27pt; line-height: 1.05; margin-bottom: 3mm; letter-spacing: -.035em; }
+      h2 { font-size: 18pt; line-height: 1.12; margin-bottom: 2.5mm; letter-spacing: -.02em; }
+      h3 { font-size: 11pt; margin: 0 0 2mm; }
+      p { font-size: 9.3pt; line-height: 1.45; margin-bottom: 2.4mm; }
+      small, .small { font-size: 8pt; color: var(--muted); line-height: 1.4; }
+      .eyebrow { color: var(--teal); font-size: 8pt; font-weight: 800; text-transform: uppercase; letter-spacing: .16em; margin-bottom: 2mm; }
+      .lead { max-width: 185mm; color: var(--muted); font-size: 11pt; }
+      .tag { display: inline-flex; align-items: center; border-radius: 99px; padding: 1.3mm 3mm; font-size: 7.5pt; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; white-space: nowrap; }
+      .tag.done { color: var(--green); background: var(--green-soft); }
+      .tag.plan { color: #80510b; background: #fff0c2; }
+      .tag.sim { color: white; background: var(--purple); }
+      .tag.teal { color: var(--teal); background: var(--teal-soft); }
+      .row { display: flex; gap: 5mm; align-items: stretch; }
+      .col { flex: 1; min-width: 0; }
+      .card { background: var(--white); border: 1px solid var(--line); border-radius: 3mm; padding: 5mm; box-shadow: 0 1mm 3mm rgba(16,36,58,.035); }
+      .subcard { border: 1px solid var(--line); background: #fff; border-radius: 2.5mm; padding: 3.5mm; }
+      .muted { color: var(--muted); }
+      .topline { display: flex; justify-content: space-between; align-items: center; gap: 4mm; }
+      .shell { background: #fff; border: 1px solid var(--line); border-radius: 3mm; overflow: hidden; box-shadow: 0 3mm 8mm rgba(16,36,58,.08); }
+      .shell-head { padding: 3.2mm 4mm; display: flex; justify-content: space-between; align-items: center; gap: 4mm; border-bottom: 1px solid var(--line); }
+      .brand { font-weight: 800; font-size: 14pt; letter-spacing: -.03em; }
+      .brand-note { display: block; color: var(--muted); font-size: 7pt; font-weight: 400; letter-spacing: 0; margin-top: .6mm; }
+      .nav { background: #fbfcfe; padding: 2.5mm 4mm; display: flex; gap: 4mm; border-bottom: 1px solid var(--line); color: var(--teal); font-size: 7.5pt; font-weight: 700; }
+      .nav span:first-child { text-decoration: underline; text-underline-offset: 1mm; }
+      .screen { padding: 4.2mm; }
+      .screen-title { font-size: 14pt; font-weight: 800; margin: 0 0 1.5mm; }
+      .safety { background: var(--amber); border-left: 1.5mm solid var(--amber-line); border-radius: 1.5mm; padding: 2.3mm 3mm; margin: 2.6mm 0; font-size: 7.5pt; line-height: 1.35; }
+      .btn { display: inline-block; border: 1px solid #94a3b8; border-radius: 1.6mm; padding: 2mm 3mm; color: var(--ink); background: #fff; font-weight: 700; font-size: 7.5pt; }
+      .btn.primary { color: #fff; background: var(--teal); border-color: var(--teal); }
+      .btn.danger { border-color: #cbd5e1; color: #7f1d1d; }
+      .field { border: 1px solid #94a3b8; border-radius: 1.5mm; padding: 2mm 2.5mm; color: #68798a; font-size: 7.5pt; background: #fff; }
+      .field-label { font-size: 7pt; font-weight: 700; margin: 1mm 0; }
+      .stack { display: grid; gap: 2mm; }
+      .notice { background: var(--blue-soft); color: #1e3a5f; padding: 2.5mm 3mm; border-radius: 1.5mm; font-size: 7.5pt; line-height: 1.4; }
+      .preview { background: #15283a; min-height: 56mm; border-radius: 2mm; position: relative; overflow: hidden; display: grid; place-items: center; }
+      .preview.tall { min-height: 74mm; }
+      .preview-label { position: absolute; left: 2.5mm; bottom: 2mm; color: #fff; font-size: 6.5pt; background: rgba(5,15,25,.55); padding: 1mm 2mm; border-radius: 1mm; }
+      .person { width: 38mm; height: 48mm; position: relative; opacity: .82; }
+      .person .head { position: absolute; width: 11mm; height: 11mm; border-radius: 50%; background: #7fa6af; top: 1mm; left: 13mm; }
+      .person .torso { position: absolute; width: 12mm; height: 22mm; border-radius: 7mm; background: #4f7886; top: 13mm; left: 12.5mm; transform: rotate(5deg); }
+      .person .leg { position: absolute; height: 20mm; width: 5mm; border-radius: 4mm; background: #9ab7bb; top: 31mm; left: 16mm; transform: rotate(7deg); transform-origin: top; }
+      .person .leg.lower { top: 48mm; left: 18mm; height: 18mm; transform: rotate(-12deg); background: #bad0cf; }
+      .person .arm { position: absolute; height: 21mm; width: 4mm; border-radius: 4mm; background: #628b95; top: 15mm; left: 10mm; transform: rotate(22deg); }
+      .person .arm.right { left: 22mm; transform: rotate(-27deg); }
+      .metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2mm; }
+      .metric { border: 1px solid var(--line); border-radius: 2mm; padding: 2.7mm; background: #fff; }
+      .metric span { display: block; color: var(--muted); font-size: 6.8pt; margin-bottom: 1.1mm; }
+      .metric strong { font-size: 18pt; line-height: 1; }
+      .metric strong.sm { font-size: 11pt; }
+      .status { display: inline-flex; gap: 1.4mm; align-items: center; border-radius: 99px; padding: 1.2mm 2.3mm; font-size: 7pt; font-weight: 800; color: var(--green); background: var(--green-soft); }
+      .status.wait { color: #854d0e; background: #fef9c3; }
+      .check { display: flex; gap: 2mm; align-items: flex-start; font-size: 7.3pt; line-height: 1.35; margin: 2mm 0; }
+      .box { width: 3.2mm; height: 3.2mm; border: 1px solid #648193; border-radius: .7mm; flex: none; margin-top: .2mm; }
+      .box.checked { background: var(--teal); border-color: var(--teal); box-shadow: inset 0 0 0 1mm white; }
+      .callout { border: 1px dashed #8293a4; background: #f9fbfd; border-radius: 2mm; padding: 3mm; color: var(--muted); font-size: 7.5pt; line-height: 1.4; }
+      .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5mm; margin-top: 4mm; }
+      .tile { background: white; border: 1px solid var(--line); border-radius: 2mm; padding: 3mm; min-height: 24mm; }
+      .tile b { display: block; font-size: 9pt; margin-bottom: 1mm; }
+      .tile span { color: var(--muted); font-size: 7pt; line-height: 1.35; }
+      .swatch { height: 8mm; border-radius: 1.4mm; border: 1px solid rgba(16,36,58,.12); margin-bottom: 1.3mm; }
+      .mini-list { margin: 0; padding-left: 4mm; color: var(--muted); font-size: 8pt; line-height: 1.55; }
+      .step { display: flex; gap: 3mm; margin: 2.5mm 0; align-items: flex-start; }
+      .num { width: 7mm; height: 7mm; display: grid; place-items: center; border-radius: 50%; background: var(--teal-soft); color: var(--teal); font-size: 8pt; font-weight: 800; flex: none; }
+      .step p { margin: 0; font-size: 8pt; }
+      .big-note { font-size: 12pt; line-height: 1.4; color: var(--muted); }
+      .rule { height: 1px; background: var(--line); margin: 3mm 0; }
+      .phone { width: 54mm; border: 2px solid #273d52; border-radius: 5mm; padding: 2mm; background: #203448; margin: 0 auto; }
+      .phone-screen { background: var(--paper); border-radius: 3mm; height: 91mm; overflow: hidden; padding: 3mm; }
+      .phone .brand { font-size: 9pt; }
+      .phone .nav { display: none; }
+      .phone .screen { padding: 3mm 0; }
+      .phone .screen-title { font-size: 10pt; }
+      .phone .safety { font-size: 6pt; }
+      .phone .preview { min-height: 29mm; }
+      .phone .metric strong { font-size: 12pt; }
+      .phone .metric span { font-size: 5pt; }
+      .phone .btn { display: block; text-align: center; margin-top: 2mm; }
+      .fake-chart { height: 32mm; position: relative; border-left: 1px solid #9aabba; border-bottom: 1px solid #9aabba; background: repeating-linear-gradient(to bottom, transparent 0 7mm, #e7edf2 7.1mm 7.4mm); }
+      .fake-chart svg { width: 100%; height: 100%; }
+      .plannotice { border: 1px solid #ead69c; color: #715319; background: #fff9e9; border-radius: 2mm; padding: 2.5mm 3mm; font-size: 7pt; line-height: 1.35; }
+      #page3 { padding-top: 9mm; }
+      #page6 { padding-top: 6mm; padding-bottom: 10mm; }
+      #page6 h2 { font-size: 16pt; margin-bottom: 1.5mm; }
+      #page6 p { font-size: 8pt; margin-bottom: 1mm; }
+      #page6 .shell-head { padding: 2mm 3mm; }
+      #page6 .nav { padding: 1.5mm 3mm; }
+      #page6 .screen { padding: 2.5mm; }
+      #page6 .subcard, #page6 .callout { padding: 2mm; }
+      #page6 .plannotice { padding: 1.5mm 2mm; font-size: 6pt; }
+      #page3 .preview { min-height: 23mm; }
+      #page3 .preview .person { width: 17mm; height: 20mm; transform: scale(.5); }
+      #page6 .preview[style*="41mm"] { min-height: 19mm !important; }
+      #page6 .preview .person { width: 17mm; height: 20mm; transform: scale(.5); }
+      #page6 .shell .screen > .callout { display: none; }
+      #page6 .row[style*="margin-top:4mm"] { margin-top: 1mm !important; }
+      #page7 .phone-screen { height: 43mm !important; }
+      #page7 .phone .screen { padding: 1mm 0; }
+      #page7 .phone .screen-title { font-size: 7pt; margin-bottom: .5mm; }
+      #page7 .phone .safety { padding: .8mm 1mm; margin: 1mm 0; font-size: 4.5pt; }
+      #page7 .phone .preview { min-height: 10mm; }
+      #page7 .phone .preview .person { width: 10mm; height: 9mm; transform: scale(.28); }
+      #page7 .phone .metric { padding: 1mm; }
+      #page7 .phone .metric strong { font-size: 8pt; }
+      #page7 .phone .btn { display: none; }
+      @media screen { .page { transform-origin: top center; } .preview-hidden { display: none !important; } }
+      @media print {
+        html, body { background: #fff; }
+        .page { margin: 0; box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page" id="page1">
+      <div class="eyebrow">Product UI reference · 25 November 2026</div>
+      <div class="row" style="align-items:center; margin-top:5mm">
+        <div class="col" style="flex:1.1">
+          <h1 style="font-size:39pt; max-width:140mm">A calm, clear view of movement sessions.</h1>
+          <p class="lead">RehabLoop frontend screens and implementation status. This is a visual design reference, not a browser screenshot or clinical product specification.</p>
+          <div style="display:flex; gap:2mm; margin:5mm 0 7mm">
+            <span class="tag done">Implemented flow</span>
+            <span class="tag plan">Planned concept</span>
+            <span class="tag sim">Simulated data</span>
+          </div>
+          <div class="card" style="max-width:142mm">
+            <div class="eyebrow">Current application shell</div>
+            <div class="topline" style="margin-bottom:2.5mm">
+              <div><span class="brand">RehabLoop</span><span class="brand-note">AI-assisted movement intelligence · prototype</span></div>
+              <span class="tag sim">Demo build</span>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:2mm; color:var(--teal); font-size:7.5pt; font-weight:700">
+              <span>Sign in</span><span>Patient home</span><span>Protocol</span><span>Start session</span><span>Result</span><span>Clinician</span><span>Recovery Twin</span>
+            </div>
+            <div class="safety" style="margin-bottom:0"><b>Prototype, not a medical device.</b> Movement and angles are estimates from one camera view. A clinician owns the protocol and interprets results.</div>
+          </div>
+        </div>
+        <div class="col" style="flex:.9">
+          <div class="shell" style="transform:rotate(1deg)">
+            <div class="shell-head"><div><span class="brand">RehabLoop</span><span class="brand-note">Movement session prototype</span></div><span class="tag sim">DEMO BUILD</span></div>
+            <div class="nav"><span>Patient home</span><span>Protocol</span><span>Start session</span><span>Result</span></div>
+            <div class="screen">
+              <div class="topline"><div><div class="screen-title">Live session</div><div class="small">Seated movement protocol</div></div><span class="status">Streaming</span></div>
+              <div class="safety"><b>Prototype, not a medical device.</b> Angles are projected estimates, not clinical measurements.</div>
+              <div class="row">
+                <div class="col"><div class="preview"><div class="person"><i class="head"></i><i class="torso"></i><i class="leg"></i><i class="leg lower"></i><i class="arm"></i><i class="arm right"></i></div><span class="preview-label">Live preview · camera frames are transient</span></div></div>
+                <div class="col" style="flex:.75"><div class="metric-grid"><div class="metric"><span>Repetitions</span><strong>4</strong></div><div class="metric"><span>Projected 2D angle</span><strong>86°</strong></div><div class="metric"><span>Movement state</span><strong class="sm">EXTENDING</strong></div><div class="metric"><span>Quality</span><strong class="sm">Usable</strong></div></div><div style="margin-top:2mm"><span class="tag sim">SIMULATED fixture</span></div></div>
+              </div>
+              <div style="display:flex; gap:2mm; margin-top:3mm"><span class="btn">Pause session</span><span class="btn">End session</span></div>
+            </div>
+          </div>
+          <p class="small" style="text-align:center; margin-top:5mm">Illustrative screen values are synthetic. The unconditional shell badge does not indicate which vision mode is active.</p>
+        </div>
+      </div>
+      <div class="tiles">
+        <div class="tile"><b>4 screens implemented</b><span>Sign in, camera setup, live session, and canonical session result.</span></div>
+        <div class="tile"><b>4 routes are placeholders</b><span>Patient home, protocol detail, clinician dashboard, Recovery Twin.</span></div>
+        <div class="tile"><b>Patient safety first</b><span>Consent before camera prompt; raw video stays off; unusable frames show no angle.</span></div>
+        <div class="tile"><b>Current visual system</b><span>Light gray canvas, white cards, teal actions, amber safety note.</span></div>
+      </div>
+    </section>
+
+    <section class="page" id="page2">
+      <div class="eyebrow">01 · Entry and orientation</div>
+      <h2>Sign in is implemented; the home dashboard is still a concept.</h2>
+      <p class="muted">Use a simple route into the product. Keep account access and a patient’s next available action easy to find.</p>
+      <div class="row" style="margin-top:5mm">
+        <div class="col">
+          <div class="topline" style="margin-bottom:2mm"><h3>Sign in · current implementation</h3><span class="tag done">Implemented</span></div>
+          <div class="shell">
+            <div class="shell-head"><div><span class="brand">RehabLoop</span><span class="brand-note">Movement measurement · prototype</span></div><span class="tag sim">DEMO BUILD</span></div>
+            <div class="nav"><span>Sign in</span><span>Patient home</span><span>Protocol</span><span>Start session</span><span>Result</span><span>Clinician</span></div>
+            <div class="screen" style="max-width:115mm; margin:auto">
+              <div class="screen-title">Sign in to RehabLoop</div>
+              <div class="safety"><b>Prototype, not a medical device.</b> RehabLoop shows estimated movement from one camera view. A clinician interprets results.</div>
+              <p class="small">Use your RehabLoop account to view assigned protocols and run a camera session.</p>
+              <div class="stack" style="max-width:75mm">
+                <div><div class="field-label">Email</div><div class="field">patient@example.test</div></div>
+                <div><div class="field-label">Password</div><div class="field">••••••••••</div></div>
+                <span class="btn primary" style="text-align:center">Sign in</span>
+              </div>
+              <div class="rule"></div>
+              <div class="subcard"><b style="font-size:8pt">Local synthetic test account</b><p class="small" style="margin:1mm 0 2mm">Development build only. Backend must use local development auth.</p><span class="btn">Continue as synthetic patient</span></div>
+              <p class="small" style="margin-top:2mm">Camera access is optional. Review assigned information without starting a camera session.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="topline" style="margin-bottom:2mm"><h3>Patient home · proposed layout</h3><span class="tag plan">Planned</span></div>
+          <div class="shell">
+            <div class="shell-head"><div><span class="brand">RehabLoop</span><span class="brand-note">Patient overview</span></div><span class="tag teal">Patient</span></div>
+            <div class="nav"><span>Home</span><span>Protocol</span><span>Sessions</span><span>Account</span></div>
+            <div class="screen">
+              <div class="topline"><div><div class="screen-title">Your movement plan</div><div class="small">Assigned by your clinician</div></div><span class="tag plan">Concept only</span></div>
+              <div class="safety"><b>Prototype, not a medical device.</b> Follow the instructions from your clinician.</div>
+              <div class="subcard" style="margin-bottom:2.5mm"><div class="topline"><div><b style="font-size:9pt">Seated knee movement</b><div class="small">Protocol v2 · Right side</div></div><span class="status">Assigned</span></div><div class="rule"></div><p class="small">Your clinician's instructions and configured target appear here.</p><span class="btn primary">Review protocol</span></div>
+              <div class="row">
+                <div class="col subcard"><b style="font-size:8pt">Recent sessions</b><p class="small" style="margin-top:2mm">Show saved status, date, and link to canonical results.</p></div>
+                <div class="col subcard"><b style="font-size:8pt">Next step</b><p class="small" style="margin-top:2mm">Start setup only when an active clinician-approved protocol is assigned.</p><span class="btn">Start setup</span></div>
+              </div>
+              <div class="plannotice" style="margin-top:2.5mm">Illustrative planned layout. The current `/home` page is a scaffold and does not fetch these data.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page3">
+      <div class="eyebrow">02 · Consent and camera setup</div>
+      <div class="topline"><h2>Explain camera use before asking for access.</h2><span class="tag done">Current screen implemented</span></div>
+      <p class="muted">Camera setup reads the patient profile and assigned protocols, saves the consent marker, then requests video only after the patient accepts.</p>
+      <div class="row" style="margin-top:4mm">
+        <div class="col" style="flex:1.12">
+          <div class="shell">
+            <div class="shell-head"><div><span class="brand">RehabLoop</span><span class="brand-note">Movement session prototype</span></div><span class="tag sim">DEMO BUILD</span></div>
+            <div class="nav"><span>Patient home</span><span>Protocol</span><span>Start session</span><span>Result</span><span>Clinician</span></div>
+            <div class="screen">
+              <div class="screen-title">Camera setup</div>
+              <div class="safety"><b>Prototype, not a medical device.</b> One camera view provides projected movement estimates only.</div>
+              <div class="subcard" style="margin:2.5mm 0"><div class="field-label">Assigned protocol</div><div class="field">Seated knee movement · version 2</div><div class="small" style="margin-top:1.5mm">Selected side: right · Target repetitions: as assigned</div></div>
+              <div class="subcard" style="background:#fffdf8">
+                <h3>Camera-processing consent</h3>
+                <p class="small">If you continue, camera frames are sent live for movement estimates. Frames are processed transiently and are not stored as video. Numeric session results may be saved according to the configured service. This prototype does not diagnose or provide medical advice. Camera use is optional; stop at any time.</p>
+                <div class="check"><i class="box checked"></i><span>I have read this notice and agree to camera processing for this session.</span></div>
+                <span class="btn primary">Accept and enable camera</span> <span class="btn">Decline and return</span>
+              </div>
+              <div class="row" style="margin-top:2.5mm; align-items:center">
+                <div class="col"><div class="preview"><div class="person"><i class="head"></i><i class="torso"></i><i class="leg"></i><i class="leg lower"></i><i class="arm"></i><i class="arm right"></i></div><span class="preview-label">Illustrative camera preview</span></div></div>
+                <div class="col">
+                  <div class="check"><i class="box checked"></i><span>Hip, knee, and ankle on selected side are visible.</span></div>
+                  <div class="check"><i class="box checked"></i><span>Camera is steady and approximately side-on; one person in view.</span></div>
+                  <p class="small">Framing checks are patient-confirmed, not automatically verified.</p>
+                  <span class="btn primary">Start live session</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col" style="flex:.72">
+          <div class="card">
+            <div class="eyebrow">Sequence</div>
+            <div class="step"><span class="num">1</span><p><b>Select protocol.</b><br />Only protocols returned for this patient can be selected.</p></div>
+            <div class="step"><span class="num">2</span><p><b>Read the notice.</b><br />The camera prompt remains unavailable until the checkbox is accepted.</p></div>
+            <div class="step"><span class="num">3</span><p><b>Enable video.</b><br />HTTPS or localhost is required. Audio is not requested.</p></div>
+            <div class="step"><span class="num">4</span><p><b>Check framing.</b><br />Show the full selected leg, stable side view, one person.</p></div>
+            <div class="step"><span class="num">5</span><p><b>Start session.</b><br />The API checks consent and returns a short-lived stream token.</p></div>
+            <div class="rule"></div>
+            <div class="plannotice"><b>Prototype limitation:</b> consent copy needs product, privacy, and legal review. If camera permission is denied or setup is abandoned, the created consent record is not automatically revoked in the current UI.</div>
+          </div>
+          <div class="callout" style="margin-top:3mm"><b>Privacy boundary</b><br />`STORE_RAW_VIDEO` stays false. The live frames are transient processing input; the NVIDIA summary provider receives validated numbers only.</div>
+          <div class="callout" style="margin-top:3mm"><b>Unavailable state</b><br />If there is no assigned active protocol, show the reason and return path. Never present the camera button as a way around clinician assignment.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page4">
+      <div class="eyebrow">03 · Live session</div>
+      <div class="topline"><h2>Keep the camera and measurements in one stable view.</h2><span class="tag done">Current screen implemented</span></div>
+      <p class="muted">The browser samples JPEG frames and opens a session-specific WebSocket. Unusable frames clear the measurement instead of leaving stale numbers visible.</p>
+      <div class="row" style="margin-top:4mm">
+        <div class="col" style="flex:1.45">
+          <div class="shell">
+            <div class="shell-head"><div><span class="brand">RehabLoop</span><span class="brand-note">Movement session prototype</span></div><span class="tag sim">DEMO BUILD</span></div>
+            <div class="nav"><span>Patient home</span><span>Protocol</span><span>Start session</span><span>Result</span><span>Clinician</span></div>
+            <div class="screen">
+              <div class="topline"><div><div class="screen-title">Live session</div><div class="small">Seated knee movement · version 2</div></div><span class="status">● Streaming</span></div>
+              <div class="safety"><b>Prototype, not a medical device.</b> Estimated movement from one camera view. A clinician interprets the result.</div>
+              <div class="row">
+                <div class="col" style="flex:1.4"><div class="preview tall"><div class="person"><i class="head"></i><i class="torso"></i><i class="leg"></i><i class="leg lower"></i><i class="arm"></i><i class="arm right"></i></div><span class="preview-label">Live preview · no skeleton overlay is available</span></div><p class="small" style="margin-top:1.5mm">Camera frames are sent for processing. Raw video is not stored.</p></div>
+                <div class="col" style="flex:.8"><div class="metric-grid"><div class="metric"><span>Repetitions</span><strong>4</strong></div><div class="metric"><span>Movement state</span><strong class="sm">EXTENDING</strong></div><div class="metric" style="grid-column:span 2"><span>Projected 2D knee-angle estimate</span><strong>86°</strong></div></div><div class="notice" style="margin-top:2mm"><b>Movement quality</b><br />Landmarks usable · confidence 94%</div><div style="margin-top:2mm"><span class="tag sim">SIMULATED fixture inference</span></div><div style="display:flex; gap:2mm; margin-top:3mm"><span class="btn">Pause session</span><span class="btn danger">End session</span></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="plannotice" style="margin-top:2mm">All displayed measurement values and the camera illustration on this page are invented examples. Fixture events must be visibly marked as simulated.</div>
+        </div>
+        <div class="col" style="flex:.72">
+          <div class="card">
+            <div class="eyebrow">What the UI receives</div>
+            <div class="subcard"><b style="font-size:8pt">measurement</b><p class="small" style="margin:1mm 0">Sequence, time, projected angle, rep count, state, quality, model version, optional simulated flag.</p></div>
+            <div class="subcard" style="margin-top:2mm"><b style="font-size:8pt">quality_warning</b><p class="small" style="margin:1mm 0">Reason and plain-language guidance. Clear the displayed angle until a usable measurement arrives.</p></div>
+            <div class="subcard" style="margin-top:2mm"><b style="font-size:8pt">error / socket close</b><p class="small" style="margin:1mm 0">Show a recoverable message, pause, and stop camera tracks. Resume requests camera access and a fresh stream token.</p></div>
+            <div class="rule"></div>
+            <ul class="mini-list"><li>5–8 fps in frontend; backend default cap 8 fps</li><li>JPEG, max image width 640 px, quality 0.65</li><li>Short-lived stream token, not user JWT</li><li>No audio capture or browser landmark overlay</li></ul>
+          </div>
+          <div class="callout" style="margin-top:3mm"><b>Pause and end</b><br />Pause closes the stream and camera. End completes the session, stops camera tracks, and opens canonical results.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page5">
+      <div class="eyebrow">04 · Session result</div>
+      <div class="topline"><h2>Show canonical measurements and how durable they are.</h2><span class="tag done">Current screen implemented</span></div>
+      <p class="muted">The result page fetches the session summary. It shows the API values and quality flags; it does not currently request an AI explanation or show a trend chart.</p>
+      <div class="row" style="margin-top:4mm">
+        <div class="col" style="flex:1.1">
+          <div class="shell">
+            <div class="shell-head"><div><span class="brand">RehabLoop</span><span class="brand-note">Movement session prototype</span></div><span class="tag sim">DEMO BUILD</span></div>
+            <div class="nav"><span>Patient home</span><span>Protocol</span><span>Start session</span><span>Result</span><span>Clinician</span></div>
+            <div class="screen">
+              <div class="screen-title">Session result</div>
+              <div class="safety"><b>Prototype, not a medical device.</b> Projected movement estimates are not clinical measurements.</div>
+              <p style="font-size:8pt">Status: <b>completed</b> &nbsp; · &nbsp; <b>In-memory session; not saved for later.</b></p>
+              <div class="metric-grid" style="grid-template-columns:repeat(2,1fr)">
+                <div class="metric"><span>Completed repetitions</span><strong>6</strong></div>
+                <div class="metric"><span>Protocol target repetitions</span><strong>8</strong></div>
+                <div class="metric"><span>Projected knee-angle range</span><strong class="sm">71°–118°</strong></div>
+                <div class="metric"><span>Frames passing quality checks</span><strong>90%</strong></div>
+              </div>
+              <div class="notice"><b>Session quality notes</b><br />Camera side view assumed</div>
+              <p class="small">These are projected movement estimates from one camera view, not clinical measurements. Raw video stored: no.</p>
+              <span class="btn primary">Return to patient home</span>
+            </div>
+          </div>
+          <div class="plannotice" style="margin-top:2.5mm">Invented example values. The current result UI does not display a simulated badge, event list, AI summary, or chart. Add clear fixture labeling before presenting fixture results as user data.</div>
+        </div>
+        <div class="col" style="flex:.9">
+          <div class="card">
+            <div class="eyebrow">Result screen mapping</div>
+            <div class="step"><span class="num">A</span><p><b>Fetch canonical record</b><br />`GET /api/v1/sessions/{id}` returns session status, metrics, quality flags, and persistence metadata.</p></div>
+            <div class="step"><span class="num">B</span><p><b>Be precise about storage</b><br />When `persisted=false`, say it is in memory and not saved for later.</p></div>
+            <div class="step"><span class="num">C</span><p><b>Explain quality</b><br />Render returned flags. Do not fabricate missing measurements or interpolate gaps.</p></div>
+            <div class="step"><span class="num">D</span><p><b>Separate explanation from data</b><br />If the API summary is later added, keep canonical numbers sourced from the session record.</p></div>
+            <div class="rule"></div>
+            <div class="plannotice"><b>Backend available, UI not wired:</b> the API provides progress and controlled summary endpoints. Current result code calls only the session GET.</div>
+          </div>
+          <div class="callout" style="margin-top:3mm"><b>Never imply durable save</b><br />Storage mode can be memory or Supabase. A result visible in the current session may not be available after refresh when it is memory-backed.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page6">
+      <div class="eyebrow">05 · Planned clinician and detail views</div>
+      <div class="topline"><h2>Keep unfinished screens read-only until their workflows are connected.</h2><span class="tag plan">Concept mockups</span></div>
+      <p class="muted">These layouts illustrate where current backend capabilities could appear. They are not implemented pages or real patient data.</p>
+      <div class="row" style="margin-top:4mm">
+        <div class="col">
+          <h3>Protocol detail · planned</h3>
+          <div class="shell">
+            <div class="shell-head"><div><span class="brand">RehabLoop</span><span class="brand-note">Patient view · assigned protocol</span></div><span class="tag plan">Not implemented</span></div>
+            <div class="nav"><span>Home</span><span>Protocol</span><span>Sessions</span></div>
+            <div class="screen">
+              <div class="screen-title">Seated knee movement</div>
+              <div class="subcard"><div class="topline"><b style="font-size:9pt">Version 2</b><span class="status">Clinician approved</span></div><div class="rule"></div><div class="row"><div class="col"><span class="small">Selected side</span><br /><b style="font-size:9pt">Right</b></div><div class="col"><span class="small">Target reps</span><br /><b style="font-size:9pt">As assigned</b></div><div class="col"><span class="small">Status</span><br /><b style="font-size:9pt">Active</b></div></div></div>
+              <div class="subcard" style="margin-top:2.5mm"><b style="font-size:8pt">Your clinician's instructions</b><p class="small" style="margin-top:1.5mm">Display only instructions supplied in the approved protocol. Do not create guidance when fields are missing.</p></div>
+              <div class="check"><i class="box"></i><span>I have read this protocol.</span></div><span class="btn primary">Continue to camera setup</span>
+              <div class="plannotice" style="margin-top:2.5mm">Protocol acknowledgement is not camera consent. Patient controls remain read-only.</div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <h3>Clinician dashboard · planned</h3>
+          <div class="shell">
+            <div class="shell-head"><div><span class="brand">RehabLoop</span><span class="brand-note">Clinician workspace concept</span></div><span class="tag plan">Not implemented</span></div>
+            <div class="nav"><span>Patients</span><span>Protocols</span><span>Sessions</span></div>
+            <div class="screen">
+              <div class="topline"><div class="screen-title">Assigned patients</div><span class="btn">Create protocol</span></div>
+              <div class="subcard" style="margin-top:2mm"><div class="topline"><b style="font-size:8pt">Patient record · synthetic example</b><span class="small">Assigned to you</span></div><div class="small">Active protocol v2 · 2 sessions to review</div></div>
+              <div class="subcard" style="margin-top:2mm"><div class="topline"><b style="font-size:8pt">Session review</b><span class="tag teal">Canonical values</span></div><p class="small" style="margin:1mm 0">Show completion, quality, persistence, protocol version, and model/mapping versions.</p><span class="btn">Open session</span></div>
+              <div class="plannotice" style="margin-top:2.5mm">Every query and action must be scoped by server-verified clinician assignment. Protocol edits create a new version.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:4mm">
+        <div class="col">
+          <h3>Recovery Twin · optional future concept</h3>
+          <div class="shell">
+            <div class="shell-head"><div><span class="brand">RehabLoop</span><span class="brand-note">Projected movement view</span></div><span class="tag plan">Not implemented</span></div>
+            <div class="screen"><div class="row"><div class="col"><div class="preview" style="min-height:41mm"><div class="person"><i class="head"></i><i class="torso"></i><i class="leg"></i><i class="leg lower"></i><i class="arm"></i><i class="arm right"></i></div><span class="preview-label">Projected-plane illustration only</span></div></div><div class="col"><div class="metric"><span>Projected angle estimate</span><strong>—</strong></div><p class="small" style="margin-top:2mm">No landmark trace is available in the current API, so a skeleton replay is not possible yet.</p></div></div><div class="callout" style="margin-top:2mm">Missing or low-quality frames must remain visible gaps. Do not claim true 3D biomechanics.</div></div>
+          </div>
+        </div>
+        <div class="col callout" style="align-self:center"><b>Concept rules</b><br /><br />Use server-approved records only.<br /><br />Keep patient data scoped to clinician assignments.<br /><br />Show labels in addition to color.<br /><br />No automatic treatment changes, diagnosis, or progression claims.</div>
+      </div>
+    </section>
+
+    <section class="page" id="page7">
+      <div class="eyebrow">06 · States, layout, and design tokens</div>
+      <h2>Make the safe state visible when the data or camera are unavailable.</h2>
+      <p class="muted">These patterns apply across implemented and future screens. The current app has only a subset; the rest are part of the implementation checklist.</p>
+      <div class="row" style="margin-top:4mm; align-items:flex-start">
+        <div class="col" style="flex:1.15">
+          <div class="card">
+            <h3>Core screen states</h3>
+            <div class="row" style="flex-wrap:wrap; gap:2mm">
+              <div class="tile" style="flex:1 1 42%"><span class="status wait">Connecting</span><p class="small" style="margin:2mm 0 0">Say what is loading and keep controls predictable.</p></div>
+              <div class="tile" style="flex:1 1 42%"><span class="status">Streaming</span><p class="small" style="margin:2mm 0 0">Show connection state with text and color.</p></div>
+              <div class="tile" style="flex:1 1 42%"><span class="tag teal">Measurement unavailable</span><p class="small" style="margin:2mm 0 0">Clear the stale angle and give plain framing guidance.</p></div>
+              <div class="tile" style="flex:1 1 42%"><span class="tag plan">Not saved for later</span><p class="small" style="margin:2mm 0 0">Use when the API says `persisted=false`.</p></div>
+            </div>
+            <div class="subcard" style="margin-top:3mm"><b style="font-size:8pt">Error message pattern</b><p class="small" style="margin:1mm 0">“The camera stream stopped. Your camera is off. Resume to reconnect.” Give one clear next step; never display raw server stack traces.</p></div>
+          </div>
+          <div class="card" style="margin-top:3mm">
+            <h3>Responsive behavior</h3>
+            <div class="row" style="align-items:center">
+              <div class="col"><p class="small">Desktop: live preview beside metric cards. At 720px and below, stack preview and metrics in one column. Keep nav wrapping and maintain action visibility.</p><p class="small">The current app has this live grid breakpoint; keyboard focus and assistive-technology behavior still need dedicated review.</p></div>
+              <div class="col" style="max-width:58mm"><div class="phone"><div class="phone-screen"><div class="topline"><span class="brand">RehabLoop</span><span class="tag sim">DEMO</span></div><div class="screen"><div class="screen-title">Live session</div><div class="safety">Estimated movement from one camera view.</div><div class="preview"><div class="person"><i class="head"></i><i class="torso"></i><i class="leg"></i><i class="leg lower"></i><i class="arm"></i><i class="arm right"></i></div></div><div class="metric-grid" style="margin-top:2mm"><div class="metric"><span>Reps</span><strong>4</strong></div><div class="metric"><span>Angle</span><strong>86°</strong></div></div><span class="btn primary">Pause session</span></div></div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="col" style="flex:.85">
+          <div class="card">
+            <h3>Current style tokens</h3>
+            <div class="row" style="gap:3mm">
+              <div class="col"><div class="swatch" style="background:#f5f7fa"></div><div class="small"><b>Canvas</b><br />#f5f7fa</div></div>
+              <div class="col"><div class="swatch" style="background:#155e75"></div><div class="small"><b>Action</b><br />#155e75</div></div>
+              <div class="col"><div class="swatch" style="background:#fff8e1"></div><div class="small"><b>Safety</b><br />#fff8e1</div></div>
+              <div class="col"><div class="swatch" style="background:#4c1d95"></div><div class="small"><b>Simulated</b><br />#4c1d95</div></div>
+            </div>
+            <div class="rule"></div>
+            <div class="small"><b>Typography</b><br />System UI · dark text #10243a · muted text #475569</div>
+            <div class="small" style="margin-top:2mm"><b>Surfaces</b><br />White cards · #d7dee8 borders · 8–10px corner radius</div>
+            <div class="small" style="margin-top:2mm"><b>Container</b><br />1060px max width · 1.5rem page padding</div>
+          </div>
+          <div class="card" style="margin-top:3mm">
+            <h3>Safety rules to preserve</h3>
+            <ul class="mini-list"><li>Keep all media tracks stopped on pause, end, and route exit.</li><li>No raw video storage; don't send frames or keypoints to summary provider.</li><li>Only a usable measurement gets an angle.</li><li>Fixture-generated events need a visible SIMULATED label.</li><li>Use the API's canonical numbers; never trust generated numbers.</li><li>Clinician owns protocol and interpretation.</li></ul>
+          </div>
+          <div class="plannotice" style="margin-top:3mm"><b>Current source:</b> `frontend/src/index.css` · route status: `frontend/src/app/routes.tsx` · backend status: `docs/BACKEND_STATUS.md`.</div>
+        </div>
+      </div>
+    </section>
+    <script>
+      const previewPage = Number(location.hash.replace('#page', ''));
+      if (previewPage >= 1 && previewPage <= 7) {
+        document.querySelectorAll('.page').forEach((page) => {
+          if (page.id !== `page${previewPage}`) page.classList.add('preview-hidden');
+        });
+      }
+    </script>
+  </body>
+</html>
