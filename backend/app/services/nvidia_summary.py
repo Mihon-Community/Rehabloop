@@ -17,6 +17,14 @@ NON_CLINICAL_DISCLAIMER = (
     "RehabLoop provides non-clinical measurements; "
     "a qualified clinician interprets this information."
 )
+# Fixed, never model-generated: DISALLOWED_CLAIMS blocks explicit diagnosis/
+# recovery words, but a provider can still phrase this field as dismissing
+# clinician review (e.g. "no review required") without tripping that regex.
+# Treat it the same as the disclaimer — a constant safety contract, not prose
+# the provider gets to choose.
+CLINICIAN_REVIEW_NOTE = (
+    "The assigned physiotherapist can review this session alongside the care plan."
+)
 
 # Match concepts, including common inflections, while allowing ordinary phrases such as
 # "a clinician can review this session".
@@ -157,9 +165,7 @@ def deterministic_summary(metrics: SessionMetrics) -> SummaryResult:
             f"{metrics.usable_frame_pct:g}% of sampled frames met the configured landmark "
             "quality checks."
         ),
-        clinician_review_note=(
-            "The assigned physiotherapist can review this session alongside the care plan."
-        ),
+        clinician_review_note=CLINICIAN_REVIEW_NOTE,
         source="deterministic_fallback",
         model_id=None,
         disclaimer=NON_CLINICAL_DISCLAIMER,
@@ -205,10 +211,11 @@ async def generate_summary(
                 if validated is None:
                     continue
             return SummaryResult(
-                **validated.model_dump(),
+                **validated.model_dump(exclude={"clinician_review_note"}),
                 source="nvidia",
                 model_id=settings.nvidia_model_id,
                 disclaimer=NON_CLINICAL_DISCLAIMER,
+                clinician_review_note=CLINICIAN_REVIEW_NOTE,
                 generated_by="nvidia",
             )
         except Exception:  # noqa: BLE001 - every provider, parsing, or client failure retries once

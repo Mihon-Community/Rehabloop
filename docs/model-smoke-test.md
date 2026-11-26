@@ -92,3 +92,39 @@ MoveNet's model licence does not replace consent, privacy, data-protection, or
 clinical validation requirements. Obtain explicit consent before any
 patient-facing use. Do not claim diagnosis, recovery, treatment, or clinical
 accuracy based on model output.
+
+## Video file replay (no live camera needed)
+
+When a live webcam isn't available, replay a locally held video file instead
+of capturing from a camera. Point either script at a clip placed in
+`fixtures/approved_test_frames/` (gitignored, never committed) or at any other
+local path outside Git — only use footage you have the rights and consent to
+use; never real patient footage.
+
+1. Keypoint-detection check against the running MoveNet vision service (start
+   it with `VISION_MODE=movenet` first):
+
+   ```powershell
+   cd vision_service
+   python scripts/video_file_replay.py <path-to-video> --url http://127.0.0.1:8001
+   ```
+
+   This reports `person_detected_pct`, per-landmark valid percentage and mean
+   confidence, and mean inference time across the sampled frames.
+
+2. End-to-end rep-count/angle check through the vision service *and* the
+   movement engine:
+
+   ```powershell
+   python backend/scripts/replay_video_session.py <path-to-video> \
+     --target-reps N --rest-min-deg X --rest-max-deg Y \
+     --target-min-deg A --target-max-deg B
+   ```
+
+   The angle-band and rep-count arguments must come from an actual
+   clinician-approved protocol — the script accepts no defaults for them and
+   invents no clinical numbers.
+
+Both scripts are engineering checks only: they verify wiring and plausibility
+on a recorded clip, not clinical accuracy, and the app still does not
+diagnose, predict recovery, or assess treatment from their output.

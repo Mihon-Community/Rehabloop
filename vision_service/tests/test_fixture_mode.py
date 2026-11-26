@@ -43,6 +43,16 @@ def test_every_fixture_inference_is_labelled_simulated():
         assert all(landmark.valid for landmark in result.landmarks.values())
 
 
+def test_fixture_mapping_version_is_distinct_from_movenet_mapping():
+    """Regression: the backend expects a different mapping_version for fixture
+    sessions than for real MoveNet sessions; fixture output must not report the
+    MoveNet YAML's version or every backend frame fails MAPPING_VERSION_MISMATCH."""
+    engine = InferenceEngine(fixture_settings())
+    result = engine.infer(0, 0, "aGVsbG8=")
+    assert result.mapping_version == "rehabloop-knee-map-1.0"
+    assert result.mapping_version != load_mapping(MOVENET_MAPPING_PATH).version
+
+
 def test_fixture_sequence_cycles():
     engine = InferenceEngine(fixture_settings())
     first = engine.infer(0, 0, "aGVsbG8=")

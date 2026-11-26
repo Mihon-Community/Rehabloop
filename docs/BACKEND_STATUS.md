@@ -1,6 +1,6 @@
 # Backend integration status
 
-Updated: 2026-11-25
+Updated: 2026-11-26
 Branch: `feature/lennox`
 
 ## Implemented
@@ -79,5 +79,74 @@ Branch: `feature/lennox`
   patient-facing use remain pending. Steve's review of proposed API changes
   also remains pending.
 
-These changes are committed and pushed to `feature/lennox`; no branch was
-deleted or force-pushed.
+## 2026-11-26 — no-camera test harness, two live bugs found and fixed
+
+- Added a local, camera-free test harness so the vision/backend pipeline can
+  be validated without a webcam: `vision_service/scripts/video_file_replay.py`
+  (video → MoveNet, reports keypoint-detection stats) and
+  `backend/scripts/replay_video_session.py` (video → vision service →
+  movement engine, reports rep-count/angle metrics). Both read a local video
+  file only (never committed; see `fixtures/approved_test_frames/README.md`
+  and `docs/model-smoke-test.md`); no footage was fetched from the web.
+  `vision_service/scripts/generate_synthetic_test_video.py` produces a fully
+  synthetic test clip from the existing validated seated-figure frame so the
+  harness can be exercised with zero licensing/consent questions.
+- **Fixed a real bug**: `vision_service/app/inference.py` always reported the
+  MoveNet YAML's `mapping_version` even in fixture/simulated mode, while the
+  backend's `Settings.keypoint_mapping_version` expected a different value for
+  fixture sessions. Every real frame through the default local dev stack
+  (`VISION_MODE=fixture`) failed `MAPPING_VERSION_MISMATCH` — fixture-mode
+  sessions produced zero usable measurements end-to-end, even though isolated
+  unit tests passed (they stub the vision client, so the real-HTTP mismatch
+  never showed up). Fixed by giving fixture output its own mapping-version
+  identity; added a regression test
+  (`test_fixture_mapping_version_is_distinct_from_movenet_mapping`). Verified
+  live: before the fix, a 40-frame streamed session returned 40
+  `quality_warning` events and `usable_frame_pct=0`; after, 40 `measurement`
+  events and `usable_frame_pct=100`.
+- **Fixed a safety gap**: `backend/app/services/nvidia_summary.py`'s
+  `clinician_review_note` was provider-generated text validated only against
+  `DISALLOWED_CLAIMS` (diagnosis/recovery/treatment wording). A live NVIDIA
+  call returned `"No review required"` for this field — it matches no banned
+  word, so it passed validation, but it directly contradicts the app's own
+  disclaimer that a clinician must interpret the data. This field is now a
+  fixed constant (`CLINICIAN_REVIEW_NOTE`), the same treatment the disclaimer
+  already got, never provider-controlled regardless of what the model
+  returns. Added a regression test
+  (`test_clinician_review_note_is_never_provider_controlled`).
+- **Fixed stale demo seed data**: `supabase/seed/001_synthetic_demo.sql`'s
+  protocol `parameters` used array keys (`target_range_deg`/`rest_range_deg`)
+  that no longer match `SessionService._protocol_configuration`'s required
+  flat keys (`rest_min_deg`/`target_min_deg`/etc.) — creating a session from
+  that seeded protocol would have 422'd. Fixed in the repo only; **not**
+  applied to the live Supabase project (seed application stays a deliberate,
+  separate step, same as migrations).
+- Re-verified both services clean after all fixes: vision pytest 9 passed
+  (was 8), backend pytest 42 passed / 1 opt-in live test skipped (was 39/1);
+  Ruff, Ruff format, and mypy clean for both.
+- Live-verified a full session lifecycle twice (before and after the fixes)
+  against the actually-running Docker containers: protocol creation → session
+  creation → start with consent → 40 frames over a real WebSocket → complete
+  → summary (real NVIDIA call, `source=nvidia`) → final session/progress
+  reads. Used the backend's in-memory repository (a supported first-class
+  mode, toggled only via a temporary shell-level env override, `.env` itself
+  untouched) to avoid writing anything to the live Supabase project while its
+  credentials are pending rotation (see below); the real NVIDIA API was used
+  deliberately, matching the existing `backend/scripts/nvidia_smoke_test.py`
+  precedent. Backend was restored to its original (real-Supabase) config
+  after each test and reconfirmed healthy.
+- Read-only cross-check of all 5 Supabase migrations against
+  `supabase_repository.py`'s actual table/RPC/column usage (grants, RPC
+  signatures, unique constraints) — no mismatches found.
+- **Open item, not acted on without explicit sign-off**: during this session
+  a `grep` on `.env` accidentally printed `SUPABASE_SERVICE_ROLE_KEY` and
+  `NVIDIA_API_KEY` into a local tool-output transcript (not git — `.env`
+  stayed gitignored throughout). Rotate both credentials.
+- `frontend/`, `docker-compose*.yml`, `docs/api_contract.md`, and
+  `supabase/migrations/*` were not touched by any of the above.
+- Everything in this "2026-11-26" section is in the local working tree only
+  and is **not yet committed or pushed**.
+
+The "Implemented"/"Validation"/"Limits and follow-up" sections above describe
+the 2026-11-25 work, which is already committed and pushed to
+`feature/lennox`; no branch was deleted or force-pushed.

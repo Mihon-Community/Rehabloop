@@ -21,6 +21,11 @@ from .keypoint_adapter import (
 )
 from .schemas import InferenceResponse, Landmark
 
+# Fixture output has no real COCO-17 mapping; it is a distinct, versioned
+# contract from the MoveNet YAML mapping and must be reported as such so the
+# backend's expected mapping_version for fixture sessions actually matches.
+FIXTURE_MAPPING_VERSION = "rehabloop-knee-map-1.0"
+
 # Labelled synthetic frames. Coordinates are illustrative, not clinical values.
 _FIXTURE_SEQUENCE: list[dict[str, tuple[float, float, float]]] = [
     {
@@ -79,6 +84,11 @@ class InferenceEngine:
             return "fixture-simulated"
         return self.settings.movenet_model_name
 
+    def mapping_version(self) -> str:
+        if self.simulated:
+            return FIXTURE_MAPPING_VERSION
+        return self.mapping.version
+
     def infer(self, sequence: int, timestamp_ms: int, image_b64: str) -> InferenceResponse:
         started = time.perf_counter()
         # Decode only to validate that a frame was supplied; never persist bytes.
@@ -134,7 +144,7 @@ class InferenceEngine:
             timestamp_ms=timestamp_ms,
             sequence=sequence,
             model=self.model_name(),
-            mapping_version=self.mapping.version,
+            mapping_version=self.mapping_version(),
             landmarks=landmarks,
             inference_ms=round((time.perf_counter() - started) * 1000, 3),
             person_detected=person,

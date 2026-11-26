@@ -34,10 +34,10 @@ values (
   '00000000-0000-0000-0000-000000000001',
   '00000000-0000-0000-0000-000000000002',
   'Seated knee extension — demonstration protocol', 1,
-  '{"side":"right","target_reps":8,"target_range_deg":[110,125],
-    "rest_range_deg":[70,80],"camera":"side","hold_ms":400}'::jsonb,
+  '{"side":"right","target_reps":8,"target_min_deg":110,"target_max_deg":125,
+    "rest_min_deg":70,"rest_max_deg":80,"camera":"side","hold_ms":400}'::jsonb,
   now(), true
-) on conflict do nothing;
+) on conflict (id) do update set parameters = excluded.parameters;
 
 -- Consent record for the synthetic patient.
 insert into public.consent_records (id, patient_id, consent_version, purpose)

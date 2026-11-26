@@ -12,3 +12,7 @@ This directory holds **no** frames and must remain that way in the repository.
   consent scope and retention schedule outside the repository and never upload
   it to a third-party model endpoint without satisfying the legal, contractual
   and privacy requirements described in `docs/backend_guide.md`.
+- `vision_service/scripts/video_file_replay.py` and
+  `backend/scripts/replay_video_session.py` can read a locally-placed,
+  approved clip from this directory for local testing; neither script ever
+  writes video or frames back into Git.

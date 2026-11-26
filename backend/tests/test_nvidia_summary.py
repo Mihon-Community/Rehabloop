@@ -9,6 +9,7 @@ import httpx
 import pytest
 from app.core.config import Settings
 from app.services.nvidia_summary import (
+    CLINICIAN_REVIEW_NOTE,
     NON_CLINICAL_DISCLAIMER,
     generate_summary,
     summary_response_format,
@@ -117,6 +118,23 @@ def test_sends_only_minimal_metrics_and_returns_validated_metadata() -> None:
     assert body["response_format"] == summary_response_format()
     assert body["stream"] is False
     assert "Authorization" in seen[0].headers
+
+
+def test_clinician_review_note_is_never_provider_controlled() -> None:
+    """Regression: a provider note can dismiss clinician review (e.g. "no review
+    required") without tripping DISALLOWED_CLAIMS, since that phrase matches no
+    banned word. This field must always be the fixed safety note instead."""
+    content = {**VALID_CONTENT, "clinician_review_note": "No review is required for this session."}
+    assert validate_summary(content, METRICS) is not None  # passes the regex/number gate
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return _provider_response(content)
+
+    result = asyncio.run(
+        generate_summary(METRICS, _settings(), transport=httpx.MockTransport(handler))
+    )
+    assert result.source == "nvidia"
+    assert result.clinician_review_note == CLINICIAN_REVIEW_NOTE
 
 
 def test_retries_once_after_provider_failure() -> None:
