@@ -149,6 +149,36 @@ def test_low_confidence_partial_and_second_person_sequences_count_nothing() -> N
     assert "PERSON_COUNT_NOT_ONE" in engine.quality_flags
 
 
+def test_camera_drift_does_not_break_rep_counting() -> None:
+    """Angle math only depends on relative joint vectors, so a slow uniform
+    translation of hip/knee/ankle together must not change the rep count."""
+    engine, results, data = _run_fixture("camera_drift.json")
+    assert engine.rep_count == data["expected_completed_reps"] == 8
+    assert all(result.usable for result in results)
+
+
+def test_persistent_single_landmark_low_confidence_counts_zero_reps() -> None:
+    """Unlike dropout.json's transient confidence drop, the ankle here stays
+    below the confidence gate for every frame. landmarks_usable() requires
+    every REQUIRED_LANDMARK (hip, knee, and ankle) to clear min_confidence,
+    so this is fully gated rather than degraded gracefully: no frame is ever
+    usable and no reps are counted."""
+    engine, results, data = _run_fixture("persistent_partial_visibility.json")
+    assert engine.rep_count == data["expected_completed_reps"] == 0
+    assert "LANDMARK_CONFIDENCE_LOW" in engine.quality_flags
+    assert not any(result.usable for result in results)
+
+
+def test_variable_sample_rate_only_counts_cycles_that_satisfy_hold_duration() -> None:
+    """The same cycle shape repeats at a normal, a compressed, and a
+    stretched sample interval. Only the compressed cycle's in-target dwell
+    is too short to satisfy RepConfig.hold_ms (configured at 400ms in
+    _run_fixture), so it is discarded while the normal and stretched cycles
+    both count."""
+    engine, _results, data = _run_fixture("variable_speed.json")
+    assert engine.rep_count == data["expected_completed_reps"] == 2
+
+
 def test_model_and_mapping_changes_are_rejected() -> None:
     engine = MovementEngine(
         RepConfig(70, 80, 110, 125), target_reps=8, model_version="fixture-simulated"

@@ -124,6 +124,30 @@ Branch: `feature/lennox`
 - Re-verified both services clean after all fixes: vision pytest 9 passed
   (was 8), backend pytest 42 passed / 1 opt-in live test skipped (was 39/1);
   Ruff, Ruff format, and mypy clean for both.
+- **Re-verified independently 2026-11-26 night**: vision pytest still 9
+  passed, matching this doc exactly. Backend pytest actually collects 40
+  passed / 1 skipped (41 total), not 42/1 as recorded just above — `git log
+  --stat` shows only additions to `backend/tests/` since this doc was
+  written, no deletions, so the discrepancy isn't a regression from missing
+  tests; the "42" figure above was most likely inaccurate when first
+  recorded. Ruff/ruff-format/mypy still clean on both services. Treat the
+  per-file breakdown as authoritative going forward: test_auth 4,
+  test_health 5, test_movement_engine 11, test_nvidia_live 1 (skipped),
+  test_nvidia_summary 7, test_session_api 8, test_stream_api 3,
+  test_vision_client 2 = 41 backend tests total.
+- **Added 2026-11-26 night**: three more synthetic fixtures/tests closing
+  gaps in the mission's "Robust Testing" edge-case list —
+  `camera_drift.json` (confirms the engine's angle math is genuinely
+  translation-invariant: 8/8 reps despite a steady per-frame coordinate
+  drift), `persistent_partial_visibility.json` (sustained, not transient,
+  low ankle confidence for a whole sequence — 0 reps, `LANDMARK_CONFIDENCE_LOW`,
+  confirming the engine gates hip/knee/ankle identically with no
+  graceful-degradation path for any single joint), `variable_speed.json`
+  (same rep shape at 50ms/200ms/400ms sample intervals — 2 of 3 cycles
+  count, the 50ms one correctly rejected for not clearing `hold_ms`). No
+  `movement_engine.py` changes were needed; all three matched its existing,
+  correct behavior. Backend suite now 43 passed / 1 skipped (44 total,
+  `test_movement_engine.py` 11→14). Ruff/ruff-format/mypy clean.
 - Live-verified a full session lifecycle twice (before and after the fixes)
   against the actually-running Docker containers: protocol creation → session
   creation → start with consent → 40 frames over a real WebSocket → complete

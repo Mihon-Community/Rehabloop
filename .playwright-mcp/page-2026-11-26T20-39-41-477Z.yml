@@ -1,0 +1,845 @@
+- generic [ref=e2]:
+  - navigation "Main Kaggle page navigation" [ref=e3]:
+    - generic [ref=e5]:
+      - button "Navigation menu" [ref=e7] [cursor=pointer]: menu
+      - link "Skip to content" [ref=e8] [cursor=pointer]:
+        - /url: "#site-content"
+        - text: Skip tocontent
+    - button "Create on Kaggle" [ref=e10] [cursor=pointer]:
+      - generic [ref=e11]:
+        - generic:
+          - generic:
+            - paragraph: Create
+    - generic [ref=e16]:
+      - list [ref=e17]:
+        - listitem "Home List Item" [ref=e18]:
+          - link "Home" [ref=e20] [cursor=pointer]:
+            - /url: /
+            - paragraph [ref=e25]: Home
+        - listitem "Competitions List Item" [ref=e26]:
+          - link "Competitions" [ref=e28] [cursor=pointer]:
+            - /url: /competitions
+            - paragraph [ref=e33]: Competitions
+        - listitem "Benchmarks List Item" [ref=e34]:
+          - link "Benchmarks" [ref=e36] [cursor=pointer]:
+            - /url: /benchmarks
+            - paragraph [ref=e41]: Benchmarks
+        - listitem "Arenas List Item" [ref=e42]:
+          - link "Arenas" [ref=e44] [cursor=pointer]:
+            - /url: /arenas
+            - paragraph [ref=e49]: Arenas
+        - listitem "Game Arena List Item" [ref=e50]:
+          - link "Game Arena" [ref=e52] [cursor=pointer]:
+            - /url: /game-arena
+            - paragraph [ref=e57]: Game Arena
+      - list [ref=e58]:
+        - listitem "Data Hub List Item" [ref=e59]:
+          - link "Data Hub" [ref=e61] [cursor=pointer]:
+            - /url: "#"
+            - paragraph [ref=e66]: Data Hub
+      - list [ref=e67]:
+        - listitem "More on Kaggle List Item" [ref=e68]:
+          - link "More on Kaggle" [ref=e70] [cursor=pointer]:
+            - /url: "#"
+            - paragraph [ref=e75]: More
+  - navigation "Main menu, search and your account" [ref=e77]:
+    - generic [ref=e78]:
+      - generic [ref=e82]:
+        - textbox "Search" [ref=e84]
+        - group [aria-hidden]
+      - generic [ref=e86]:
+        - link [ref=e87] [cursor=pointer]:
+          - /url: /account/login?phase=startSignInTab&returnUrl=%2Fdatasets%2Fsulaimanmuhammed%2Fwlu-rehabilitation-posture
+          - button "Login" [ref=e88]
+        - link [ref=e90] [cursor=pointer]:
+          - /url: /account/login?phase=startRegisterTab&returnUrl=%2Fdatasets%2Fsulaimanmuhammed%2Fwlu-rehabilitation-posture
+          - button "Sign Up" [ref=e91]
+  - main [ref=e93]:
+    - generic [ref=e95]:
+      - generic [ref=e96]: Kaggle uses cookies from Google to deliver and enhance the quality of its services and to analyze traffic.
+      - generic [ref=e97]:
+        - link "Learn more" [ref=e98] [cursor=pointer]:
+          - /url: /cookies
+        - generic [ref=e100] [cursor=pointer]: OK, Got it.
+    - generic [ref=e104]:
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - link "Sulaiman Muhammad's profile" [ref=e108] [cursor=pointer]:
+            - /url: /sulaimanmuhammed
+            - generic "Sulaiman Muhammad" [ref=e109]
+          - generic [ref=e113]:
+            - generic [ref=e116]:
+              - link "Go to profile for Sulaiman Muhammad" [ref=e117] [cursor=pointer]:
+                - /url: /sulaimanmuhammed
+                - text: Sulaiman Muhammad
+              - button "and 3 collaborators" [ref=e118] [cursor=pointer]
+            - generic [ref=e119]: · Updated 2 years ago
+          - generic [ref=e120]:
+            - generic [ref=e121]:
+              - button "Upvote" [ref=e122] [cursor=pointer]:
+                - generic [ref=e123]: arrow_drop_up
+              - button "20 votes" [ref=e124] [cursor=pointer]: "20"
+            - button "Code" [ref=e126] [cursor=pointer]:
+              - generic [aria-hidden] [ref=e127]: code
+            - button "Download" [ref=e130] [cursor=pointer]:
+              - generic [aria-hidden] [ref=e131]: file_download
+            - img "bronze medal" [ref=e133]
+            - button "More options for this dataset" [ref=e135] [cursor=pointer]: more_vert
+        - generic [ref=e137]:
+          - heading "WLU Rehabilitation Posture" [level=1] [ref=e138]
+          - generic [ref=e139]: "Exercises: Arm Raise, Knee Extension and Sit To Stand"
+      - generic [ref=e142]:
+        - tablist [ref=e149]:
+          - tab "Data Card, 1 of 4" [selected] [ref=e150] [cursor=pointer]:
+            - generic [ref=e151]: Data Card
+          - tab "Code (1), 2 of 4" [ref=e152] [cursor=pointer]:
+            - generic [ref=e153]: Code (1)
+          - tab "Discussion (0), 3 of 4" [ref=e154] [cursor=pointer]:
+            - generic [ref=e155]: Discussion (0)
+          - tab "Suggestions (0), 4 of 4" [ref=e156] [cursor=pointer]:
+            - generic [ref=e157]: Suggestions (0)
+        - separator [ref=e159]
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - heading "About Dataset" [level=2] [ref=e166]
+            - generic [ref=e170]:
+              - paragraph [ref=e171]: This dataset was created to support research on exercise verification and repetition count tracking, specifically focusing on post-stroke rehabilitation exercises. To ensure privacy, all videos in this dataset have been intentionally blurred while maintaining essential motion details required for analysis.
+              - paragraph [ref=e172]: The dataset includes videos recorded from multiple angles and devices, covering exercises such as arm raise, knee extension, and sit-to-stand. While testing our models, we used the original unblurred version of the dataset to ensure accuracy and performance.
+              - paragraph [ref=e173]: We hope this dataset contributes to advancements in AI-based rehabilitation and pose estimation technologies.
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - heading "Usability" [level=2] [ref=e176]
+              - tooltip "Hit enter to view usability metrics" [ref=e178]: info
+            - paragraph [ref=e179]: "8.75"
+            - heading "License" [level=2] [ref=e180]
+            - paragraph [ref=e181]:
+              - link "MIT (opens in a new tab) opens in new window" [ref=e182] [cursor=pointer]:
+                - /url: https://www.mit.edu/~amini/LICENSE.md
+                - text: MIT
+            - heading "Expected update frequency" [level=2] [ref=e183]
+            - paragraph [ref=e184]: Annually
+            - heading "Tags" [level=2] [ref=e185]
+            - group "Tags" [ref=e188]:
+              - link "Exercise opens in new window" [ref=e189] [cursor=pointer]:
+                - /url: /datasets?tags=4130-Exercise
+                - generic [ref=e190]: Exercise
+              - link "Computer Vision opens in new window" [ref=e191] [cursor=pointer]:
+                - /url: /datasets?tags=13207-Computer+Vision
+                - generic [ref=e192]: Computer Vision
+              - link "Artificial Intelligence opens in new window" [ref=e193] [cursor=pointer]:
+                - /url: /datasets?tags=12101-Artificial+Intelligence
+                - generic [ref=e194]: Artificial Intelligence
+              - link "Video opens in new window" [ref=e195] [cursor=pointer]:
+                - /url: /datasets?tags=14105-Video
+                - generic [ref=e196]: Video
+              - link "Pose Detection opens in new window" [ref=e197] [cursor=pointer]:
+                - /url: /datasets?tags=16713-Pose+Detection
+                - generic [ref=e198]: Pose Detection
+        - generic [ref=e201]:
+          - generic [ref=e203]:
+            - generic [ref=e204]:
+              - heading "Blurred(6 directories)" [level=2] [ref=e205]:
+                - text: Blurred
+                - generic [ref=e206]: (6 directories)
+              - button "Maximize view" [ref=e209] [cursor=pointer]: fullscreen
+              - button "Hide tree" [ref=e212] [cursor=pointer]
+            - generic [ref=e213]:
+              - generic [ref=e214]: About this directory
+              - paragraph [ref=e219]: Videos are organised under correct and incorrect folders for each exercise.
+            - generic [ref=e221]:
+              - generic [ref=e222] [cursor=pointer]:
+                - generic [ref=e223]: folder
+                - generic [ref=e225]:
+                  - paragraph [ref=e226]: Arm Raise Correct
+                  - text: 51 files
+              - generic [ref=e227] [cursor=pointer]:
+                - generic [ref=e228]: folder
+                - generic [ref=e230]:
+                  - paragraph [ref=e231]: Arm Raise Incorrect
+                  - text: 55 files
+              - generic [ref=e232] [cursor=pointer]:
+                - generic [ref=e233]: folder
+                - generic [ref=e235]:
+                  - paragraph [ref=e236]: Knee Extension Correct
+                  - text: 44 files
+              - generic [ref=e237] [cursor=pointer]:
+                - generic [ref=e238]: folder
+                - generic [ref=e240]:
+                  - paragraph [ref=e241]: Knee Extension Incorrect
+                  - text: 62 files
+              - generic [ref=e242] [cursor=pointer]:
+                - generic [ref=e243]: folder
+                - generic [ref=e245]:
+                  - paragraph [ref=e246]: Sit To Stand Correct
+                  - text: 79 files
+              - generic [ref=e247] [cursor=pointer]:
+                - generic [ref=e248]: folder
+                - generic [ref=e250]:
+                  - paragraph [ref=e251]: Sit To Stand Incorrect
+                  - text: 48 files
+          - generic [ref=e252]:
+            - generic [ref=e254]:
+              - generic [ref=e255]:
+                - heading "Data Explorer" [level=2] [ref=e256]
+                - paragraph [ref=e257]:
+                  - button "View version history" [ref=e258] [cursor=pointer]: Version 1
+                  - text: (877.74 MB)
+              - list [ref=e259]:
+                - listitem [ref=e260]:
+                  - generic [ref=e261] [cursor=pointer]:
+                    - button "arrow_drop_down" [expanded] [ref=e262]
+                    - generic [ref=e265]: folder
+                    - paragraph [ref=e269]: Blurred
+                  - list [ref=e270]:
+                    - listitem [ref=e271]:
+                      - generic [ref=e272] [cursor=pointer]:
+                        - button "arrow_right" [ref=e273]
+                        - generic [ref=e276]: folder
+                        - paragraph [ref=e280]: Arm Raise Correct
+                    - listitem [ref=e281]:
+                      - generic [ref=e282] [cursor=pointer]:
+                        - button "arrow_right" [ref=e283]
+                        - generic [ref=e286]: folder
+                        - paragraph [ref=e290]: Arm Raise Incorrect
+                    - listitem [ref=e291]:
+                      - generic [ref=e292] [cursor=pointer]:
+                        - button "arrow_right" [ref=e293]
+                        - generic [ref=e296]: folder
+                        - paragraph [ref=e300]: Knee Extension Correct
+                    - listitem [ref=e301]:
+                      - generic [ref=e302] [cursor=pointer]:
+                        - button "arrow_right" [ref=e303]
+                        - generic [ref=e306]: folder
+                        - paragraph [ref=e310]: Knee Extension Incorrect
+                    - listitem [ref=e311]:
+                      - generic [ref=e312] [cursor=pointer]:
+                        - button "arrow_right" [ref=e313]
+                        - generic [ref=e316]: folder
+                        - paragraph [ref=e320]: Sit To Stand Correct
+                    - listitem [ref=e321]:
+                      - generic [ref=e322] [cursor=pointer]:
+                        - button "arrow_right" [ref=e323]
+                        - generic [ref=e326]: folder
+                        - paragraph [ref=e330]: Sit To Stand Incorrect
+            - generic [ref=e331]:
+              - heading "Summary" [level=2] [ref=e332]
+              - button "Expand 339 files" [ref=e334] [cursor=pointer]:
+                - generic "Collapse 339 files" [ref=e336]: arrow_right
+                - generic [ref=e337]: folder
+                - paragraph [ref=e339]: 339 files
+        - generic [ref=e341]:
+          - generic [ref=e343]:
+            - generic [aria-hidden] [ref=e344]: lightbulb
+            - heading "See what others are saying about this dataset" [level=2] [ref=e346]
+          - heading "What have you used this dataset for?" [level=3] [ref=e347]
+          - group "What have you used this dataset for?" [ref=e348]:
+            - button "Learning 3 false" [ref=e349] [cursor=pointer]:
+              - generic [ref=e350]: Learning 3
+            - button "Research 7 false" [ref=e351] [cursor=pointer]:
+              - generic [ref=e352]: Research 7
+            - button "Application 2 false" [ref=e353] [cursor=pointer]:
+              - generic [ref=e354]: Application 2
+            - button "LLM Fine-Tuning 0 false" [ref=e355] [cursor=pointer]:
+              - generic [ref=e356]: LLM Fine-Tuning 0
+          - heading "How would you describe this dataset?" [level=3] [ref=e357]
+          - group "How would you describe this dataset?" [ref=e358]:
+            - button "Well-documented 1 false" [ref=e359] [cursor=pointer]:
+              - generic [ref=e360]: Well-documented 1
+            - button "Well-maintained 2 false" [ref=e361] [cursor=pointer]:
+              - generic [ref=e362]: Well-maintained 2
+            - button "Clean data 2 false" [ref=e363] [cursor=pointer]:
+              - generic [ref=e364]: Clean data 2
+            - button "Original 3 false" [ref=e365] [cursor=pointer]:
+              - generic [ref=e366]: Original 3
+            - button "High-quality notebooks 0 false" [ref=e367] [cursor=pointer]:
+              - generic [ref=e368]: High-quality notebooks 0
+            - checkbox "Other" [ref=e369] [cursor=pointer]
+        - separator [ref=e371]
+        - generic [ref=e372]:
+          - generic [ref=e373]:
+            - generic [ref=e374]:
+              - generic [aria-hidden] [ref=e375]: text_snippet
+              - heading "Metadata" [level=2] [ref=e377]
+            - button "Expand All Metadata Sections" [ref=e378] [cursor=pointer]:
+              - generic [aria-hidden] [ref=e379]: unfold_more
+              - generic [ref=e380]: Expand All
+          - generic [ref=e381]:
+            - generic [ref=e383] [cursor=pointer]:
+              - heading "Collaborators" [level=3] [ref=e385]
+              - button "Expand Collaborators" [ref=e386]: keyboard_arrow_down
+            - generic [ref=e388] [cursor=pointer]:
+              - heading "Authors" [level=3] [ref=e390]
+              - button "Expand Authors" [ref=e391]: keyboard_arrow_down
+            - generic [ref=e393] [cursor=pointer]:
+              - heading "Coverage" [level=3] [ref=e395]
+              - button "Expand Coverage" [ref=e396]: keyboard_arrow_down
+            - generic [ref=e398] [cursor=pointer]:
+              - heading "DOI Citation" [level=3] [ref=e400]
+              - button "Expand DOI Citation" [ref=e401]: keyboard_arrow_down
+            - generic [ref=e403] [cursor=pointer]:
+              - heading "Provenance" [level=3] [ref=e405]
+              - button "Expand Provenance" [ref=e406]: keyboard_arrow_down
+            - generic [ref=e408] [cursor=pointer]:
+              - heading "License" [level=3] [ref=e410]
+              - button "Expand License" [ref=e411]: keyboard_arrow_down
+            - generic [ref=e413] [cursor=pointer]:
+              - heading "Expected Update Frequency" [level=3] [ref=e415]
+              - button "Expand Expected Update Frequency" [ref=e416]: keyboard_arrow_down
+        - generic [ref=e417]:
+          - generic [ref=e419]:
+            - generic [aria-hidden] [ref=e420]: insights
+            - heading "Activity Overview" [level=2] [ref=e422]
+          - generic [ref=e423]:
+            - generic [ref=e424]:
+              - generic [ref=e425]:
+                - generic [ref=e426]: visibility
+                - heading "Views" [level=3] [ref=e429]
+              - generic [ref=e430]:
+                - generic [ref=e432]:
+                  - generic [ref=e433]: "5092"
+                  - generic "A chart." [ref=e439]:
+                    - img "A chart." [ref=e440]
+                    - generic "A tabular representation of the data in the chart." [ref=e450]:
+                      - table [ref=e451]:
+                        - rowgroup [ref=e452]:
+                          - row [ref=e453]:
+                            - columnheader "date" [ref=e454]
+                            - columnheader "Views" [ref=e455]
+                        - rowgroup [ref=e456]:
+                          - row [ref=e457]:
+                            - cell "Oct 28, 2026" [ref=e458]
+                            - cell "11" [ref=e459]
+                          - row [ref=e460]:
+                            - cell "Oct 29, 2026" [ref=e461]
+                            - cell "4" [ref=e462]
+                          - row [ref=e463]:
+                            - cell "Oct 30, 2026" [ref=e464]
+                            - cell "5" [ref=e465]
+                          - row [ref=e466]:
+                            - cell "Oct 31, 2026" [ref=e467]
+                            - cell "2" [ref=e468]
+                          - row [ref=e469]:
+                            - cell "Nov 1, 2026" [ref=e470]
+                            - cell "10" [ref=e471]
+                          - row [ref=e472]:
+                            - cell "Nov 2, 2026" [ref=e473]
+                            - cell "9" [ref=e474]
+                          - row [ref=e475]:
+                            - cell "Nov 3, 2026" [ref=e476]
+                            - cell "14" [ref=e477]
+                          - row [ref=e478]:
+                            - cell "Nov 4, 2026" [ref=e479]
+                            - cell "24" [ref=e480]
+                          - row [ref=e481]:
+                            - cell "Nov 5, 2026" [ref=e482]
+                            - cell "10" [ref=e483]
+                          - row [ref=e484]:
+                            - cell "Nov 6, 2026" [ref=e485]
+                            - cell "6" [ref=e486]
+                          - row [ref=e487]:
+                            - cell "Nov 7, 2026" [ref=e488]
+                            - cell "3" [ref=e489]
+                          - row [ref=e490]:
+                            - cell "Nov 8, 2026" [ref=e491]
+                            - cell "4" [ref=e492]
+                          - row [ref=e493]:
+                            - cell "Nov 9, 2026" [ref=e494]
+                            - cell "4" [ref=e495]
+                          - row [ref=e496]:
+                            - cell "Nov 10, 2026" [ref=e497]
+                            - cell "5" [ref=e498]
+                          - row [ref=e499]:
+                            - cell "Nov 11, 2026" [ref=e500]
+                            - cell "8" [ref=e501]
+                          - row [ref=e502]:
+                            - cell "Nov 12, 2026" [ref=e503]
+                            - cell "7" [ref=e504]
+                          - row [ref=e505]:
+                            - cell "Nov 13, 2026" [ref=e506]
+                            - cell "6" [ref=e507]
+                          - row [ref=e508]:
+                            - cell "Nov 14, 2026" [ref=e509]
+                            - cell "8" [ref=e510]
+                          - row [ref=e511]:
+                            - cell "Nov 15, 2026" [ref=e512]
+                            - cell "7" [ref=e513]
+                          - row [ref=e514]:
+                            - cell "Nov 16, 2026" [ref=e515]
+                            - cell "15" [ref=e516]
+                          - row [ref=e517]:
+                            - cell "Nov 17, 2026" [ref=e518]
+                            - cell "2" [ref=e519]
+                          - row [ref=e520]:
+                            - cell "Nov 18, 2026" [ref=e521]
+                            - cell "5" [ref=e522]
+                          - row [ref=e523]:
+                            - cell "Nov 19, 2026" [ref=e524]
+                            - cell "4" [ref=e525]
+                          - row [ref=e526]:
+                            - cell "Nov 20, 2026" [ref=e527]
+                            - cell "5" [ref=e528]
+                          - row [ref=e529]:
+                            - cell "Nov 21, 2026" [ref=e530]
+                            - cell "17" [ref=e531]
+                          - row [ref=e532]:
+                            - cell "Nov 22, 2026" [ref=e533]
+                            - cell "10" [ref=e534]
+                          - row [ref=e535]:
+                            - cell "Nov 23, 2026" [ref=e536]
+                            - cell "14" [ref=e537]
+                          - row [ref=e538]:
+                            - cell "Nov 24, 2026" [ref=e539]
+                            - cell "2" [ref=e540]
+                          - row [ref=e541]:
+                            - cell "Nov 25, 2026" [ref=e542]
+                            - cell "5" [ref=e543]
+                - generic [ref=e544]:
+                  - generic [ref=e545]:
+                    - generic [ref=e546]: trending_up
+                    - text: "226"
+                  - generic [ref=e547]: in the last 30 days
+            - generic [ref=e548]:
+              - generic [ref=e549]:
+                - generic [ref=e550]: download
+                - heading "Downloads" [level=3] [ref=e553]
+              - generic [ref=e554]:
+                - generic [ref=e556]:
+                  - generic [ref=e557]: "1226"
+                  - generic "A chart." [ref=e563]:
+                    - img "A chart." [ref=e564]
+                    - generic "A tabular representation of the data in the chart." [ref=e574]:
+                      - table [ref=e575]:
+                        - rowgroup [ref=e576]:
+                          - row [ref=e577]:
+                            - columnheader "date" [ref=e578]
+                            - columnheader "Downloads" [ref=e579]
+                        - rowgroup [ref=e580]:
+                          - row [ref=e581]:
+                            - cell "Oct 28, 2026" [ref=e582]
+                            - cell "1" [ref=e583]
+                          - row [ref=e584]:
+                            - cell "Oct 29, 2026" [ref=e585]
+                            - cell "1" [ref=e586]
+                          - row [ref=e587]:
+                            - cell "Oct 30, 2026" [ref=e588]
+                            - cell "1" [ref=e589]
+                          - row [ref=e590]:
+                            - cell "Nov 1, 2026" [ref=e591]
+                            - cell "5" [ref=e592]
+                          - row [ref=e593]:
+                            - cell "Nov 2, 2026" [ref=e594]
+                            - cell "2" [ref=e595]
+                          - row [ref=e596]:
+                            - cell "Nov 3, 2026" [ref=e597]
+                            - cell "2" [ref=e598]
+                          - row [ref=e599]:
+                            - cell "Nov 5, 2026" [ref=e600]
+                            - cell "4" [ref=e601]
+                          - row [ref=e602]:
+                            - cell "Nov 9, 2026" [ref=e603]
+                            - cell "11" [ref=e604]
+                          - row [ref=e605]:
+                            - cell "Nov 10, 2026" [ref=e606]
+                            - cell "1" [ref=e607]
+                          - row [ref=e608]:
+                            - cell "Nov 11, 2026" [ref=e609]
+                            - cell "2" [ref=e610]
+                          - row [ref=e611]:
+                            - cell "Nov 13, 2026" [ref=e612]
+                            - cell "4" [ref=e613]
+                          - row [ref=e614]:
+                            - cell "Nov 14, 2026" [ref=e615]
+                            - cell "4" [ref=e616]
+                          - row [ref=e617]:
+                            - cell "Nov 15, 2026" [ref=e618]
+                            - cell "6" [ref=e619]
+                          - row [ref=e620]:
+                            - cell "Nov 16, 2026" [ref=e621]
+                            - cell "5" [ref=e622]
+                          - row [ref=e623]:
+                            - cell "Nov 17, 2026" [ref=e624]
+                            - cell "2" [ref=e625]
+                          - row [ref=e626]:
+                            - cell "Nov 18, 2026" [ref=e627]
+                            - cell "5" [ref=e628]
+                          - row [ref=e629]:
+                            - cell "Nov 19, 2026" [ref=e630]
+                            - cell "1" [ref=e631]
+                          - row [ref=e632]:
+                            - cell "Nov 20, 2026" [ref=e633]
+                            - cell "3" [ref=e634]
+                          - row [ref=e635]:
+                            - cell "Nov 21, 2026" [ref=e636]
+                            - cell "4" [ref=e637]
+                          - row [ref=e638]:
+                            - cell "Nov 22, 2026" [ref=e639]
+                            - cell "5" [ref=e640]
+                          - row [ref=e641]:
+                            - cell "Nov 23, 2026" [ref=e642]
+                            - cell "3" [ref=e643]
+                          - row [ref=e644]:
+                            - cell "Nov 24, 2026" [ref=e645]
+                            - cell "4" [ref=e646]
+                          - row [ref=e647]:
+                            - cell "Nov 25, 2026" [ref=e648]
+                            - cell "4" [ref=e649]
+                - generic [ref=e650]:
+                  - generic [ref=e651]:
+                    - generic [ref=e652]: trending_up
+                    - text: "80"
+                  - generic [ref=e653]: in the last 30 days
+            - generic [ref=e654]:
+              - generic [ref=e655]:
+                - generic [ref=e656]: downloading
+                - heading "Engagement" [level=3] [ref=e659]
+              - generic [ref=e660]:
+                - generic [ref=e662]: "0.24077"
+                - generic [ref=e664]: downloads per view
+            - generic [ref=e666]:
+              - generic [ref=e667]:
+                - generic [ref=e668]: forum
+                - heading "Comments" [level=3] [ref=e671]
+              - generic [ref=e672]:
+                - generic [ref=e674]: "0"
+                - generic [ref=e676]: posted
+            - generic [ref=e678]:
+              - generic [ref=e679]:
+                - generic [ref=e680]: person
+                - heading "Top Contributors" [level=3] [ref=e684]
+              - link "aminechaabouni's profile" [ref=e688] [cursor=pointer]:
+                - /url: /amine2008chaabouni
+                - generic "aminechaabouni" [ref=e689]
+          - generic [ref=e693]:
+            - generic [ref=e694] [cursor=pointer]:
+              - heading "Detail View" [level=3] [ref=e696]
+              - button "Collapse Detail View" [expanded] [ref=e697]: keyboard_arrow_up
+            - generic [ref=e699]:
+              - generic [ref=e700]:
+                - generic [ref=e701]:
+                  - heading "Views" [level=4] [ref=e702]
+                  - generic [ref=e704]:
+                    - combobox "Select combobox. Last month currently selected." [ref=e705] [cursor=pointer]:
+                      - generic [ref=e706]: Last month
+                    - textbox [aria-hidden]: "[object Object]"
+                - generic "A chart." [ref=e712]:
+                  - img "A chart." [ref=e713]:
+                    - generic [ref=e725]:
+                      - generic [ref=e726]: 11/02
+                      - generic [ref=e728]: 11/09
+                      - generic [ref=e730]: 11/16
+                      - generic [ref=e732]: 11/23
+                      - generic [ref=e734]: "0"
+                      - generic [ref=e736]: "10"
+                      - generic [ref=e738]: "20"
+                      - generic [ref=e740]: "30"
+                  - generic "A tabular representation of the data in the chart." [ref=e742]:
+                    - table [ref=e743]:
+                      - rowgroup [ref=e744]:
+                        - row [ref=e745]:
+                          - columnheader "date" [ref=e746]
+                          - columnheader "Views" [ref=e747]
+                      - rowgroup [ref=e748]:
+                        - row [ref=e749]:
+                          - cell "Oct 28, 2026" [ref=e750]
+                          - cell "11" [ref=e751]
+                        - row [ref=e752]:
+                          - cell "Oct 29, 2026" [ref=e753]
+                          - cell "4" [ref=e754]
+                        - row [ref=e755]:
+                          - cell "Oct 30, 2026" [ref=e756]
+                          - cell "5" [ref=e757]
+                        - row [ref=e758]:
+                          - cell "Oct 31, 2026" [ref=e759]
+                          - cell "2" [ref=e760]
+                        - row [ref=e761]:
+                          - cell "Nov 1, 2026" [ref=e762]
+                          - cell "10" [ref=e763]
+                        - row [ref=e764]:
+                          - cell "Nov 2, 2026" [ref=e765]
+                          - cell "9" [ref=e766]
+                        - row [ref=e767]:
+                          - cell "Nov 3, 2026" [ref=e768]
+                          - cell "14" [ref=e769]
+                        - row [ref=e770]:
+                          - cell "Nov 4, 2026" [ref=e771]
+                          - cell "24" [ref=e772]
+                        - row [ref=e773]:
+                          - cell "Nov 5, 2026" [ref=e774]
+                          - cell "10" [ref=e775]
+                        - row [ref=e776]:
+                          - cell "Nov 6, 2026" [ref=e777]
+                          - cell "6" [ref=e778]
+                        - row [ref=e779]:
+                          - cell "Nov 7, 2026" [ref=e780]
+                          - cell "3" [ref=e781]
+                        - row [ref=e782]:
+                          - cell "Nov 8, 2026" [ref=e783]
+                          - cell "4" [ref=e784]
+                        - row [ref=e785]:
+                          - cell "Nov 9, 2026" [ref=e786]
+                          - cell "4" [ref=e787]
+                        - row [ref=e788]:
+                          - cell "Nov 10, 2026" [ref=e789]
+                          - cell "5" [ref=e790]
+                        - row [ref=e791]:
+                          - cell "Nov 11, 2026" [ref=e792]
+                          - cell "8" [ref=e793]
+                        - row [ref=e794]:
+                          - cell "Nov 12, 2026" [ref=e795]
+                          - cell "7" [ref=e796]
+                        - row [ref=e797]:
+                          - cell "Nov 13, 2026" [ref=e798]
+                          - cell "6" [ref=e799]
+                        - row [ref=e800]:
+                          - cell "Nov 14, 2026" [ref=e801]
+                          - cell "8" [ref=e802]
+                        - row [ref=e803]:
+                          - cell "Nov 15, 2026" [ref=e804]
+                          - cell "7" [ref=e805]
+                        - row [ref=e806]:
+                          - cell "Nov 16, 2026" [ref=e807]
+                          - cell "15" [ref=e808]
+                        - row [ref=e809]:
+                          - cell "Nov 17, 2026" [ref=e810]
+                          - cell "2" [ref=e811]
+                        - row [ref=e812]:
+                          - cell "Nov 18, 2026" [ref=e813]
+                          - cell "5" [ref=e814]
+                        - row [ref=e815]:
+                          - cell "Nov 19, 2026" [ref=e816]
+                          - cell "4" [ref=e817]
+                        - row [ref=e818]:
+                          - cell "Nov 20, 2026" [ref=e819]
+                          - cell "5" [ref=e820]
+                        - row [ref=e821]:
+                          - cell "Nov 21, 2026" [ref=e822]
+                          - cell "17" [ref=e823]
+                        - row [ref=e824]:
+                          - cell "Nov 22, 2026" [ref=e825]
+                          - cell "10" [ref=e826]
+                        - row [ref=e827]:
+                          - cell "Nov 23, 2026" [ref=e828]
+                          - cell "14" [ref=e829]
+                        - row [ref=e830]:
+                          - cell "Nov 24, 2026" [ref=e831]
+                          - cell "2" [ref=e832]
+                        - row [ref=e833]:
+                          - cell "Nov 25, 2026" [ref=e834]
+                          - cell "5" [ref=e835]
+              - generic [ref=e836]:
+                - generic [ref=e837]:
+                  - heading "Downloads" [level=4] [ref=e838]
+                  - generic [ref=e840]:
+                    - combobox "Select combobox. Last month currently selected." [ref=e841] [cursor=pointer]:
+                      - generic [ref=e842]: Last month
+                    - textbox [aria-hidden]: "[object Object]"
+                - generic "A chart." [ref=e848]:
+                  - img "A chart." [ref=e849]:
+                    - generic [ref=e861]:
+                      - generic [ref=e862]: 11/02
+                      - generic [ref=e864]: 11/09
+                      - generic [ref=e866]: 11/16
+                      - generic [ref=e868]: 11/23
+                      - generic [ref=e870]: "0"
+                      - generic [ref=e872]: "5"
+                      - generic [ref=e874]: "10"
+                      - generic [ref=e876]: "15"
+                  - generic "A tabular representation of the data in the chart." [ref=e878]:
+                    - table [ref=e879]:
+                      - rowgroup [ref=e880]:
+                        - row [ref=e881]:
+                          - columnheader "date" [ref=e882]
+                          - columnheader "Downloads" [ref=e883]
+                      - rowgroup [ref=e884]:
+                        - row [ref=e885]:
+                          - cell "Oct 28, 2026" [ref=e886]
+                          - cell "1" [ref=e887]
+                        - row [ref=e888]:
+                          - cell "Oct 29, 2026" [ref=e889]
+                          - cell "1" [ref=e890]
+                        - row [ref=e891]:
+                          - cell "Oct 30, 2026" [ref=e892]
+                          - cell "1" [ref=e893]
+                        - row [ref=e894]:
+                          - cell "Nov 1, 2026" [ref=e895]
+                          - cell "5" [ref=e896]
+                        - row [ref=e897]:
+                          - cell "Nov 2, 2026" [ref=e898]
+                          - cell "2" [ref=e899]
+                        - row [ref=e900]:
+                          - cell "Nov 3, 2026" [ref=e901]
+                          - cell "2" [ref=e902]
+                        - row [ref=e903]:
+                          - cell "Nov 5, 2026" [ref=e904]
+                          - cell "4" [ref=e905]
+                        - row [ref=e906]:
+                          - cell "Nov 9, 2026" [ref=e907]
+                          - cell "11" [ref=e908]
+                        - row [ref=e909]:
+                          - cell "Nov 10, 2026" [ref=e910]
+                          - cell "1" [ref=e911]
+                        - row [ref=e912]:
+                          - cell "Nov 11, 2026" [ref=e913]
+                          - cell "2" [ref=e914]
+                        - row [ref=e915]:
+                          - cell "Nov 13, 2026" [ref=e916]
+                          - cell "4" [ref=e917]
+                        - row [ref=e918]:
+                          - cell "Nov 14, 2026" [ref=e919]
+                          - cell "4" [ref=e920]
+                        - row [ref=e921]:
+                          - cell "Nov 15, 2026" [ref=e922]
+                          - cell "6" [ref=e923]
+                        - row [ref=e924]:
+                          - cell "Nov 16, 2026" [ref=e925]
+                          - cell "5" [ref=e926]
+                        - row [ref=e927]:
+                          - cell "Nov 17, 2026" [ref=e928]
+                          - cell "2" [ref=e929]
+                        - row [ref=e930]:
+                          - cell "Nov 18, 2026" [ref=e931]
+                          - cell "5" [ref=e932]
+                        - row [ref=e933]:
+                          - cell "Nov 19, 2026" [ref=e934]
+                          - cell "1" [ref=e935]
+                        - row [ref=e936]:
+                          - cell "Nov 20, 2026" [ref=e937]
+                          - cell "3" [ref=e938]
+                        - row [ref=e939]:
+                          - cell "Nov 21, 2026" [ref=e940]
+                          - cell "4" [ref=e941]
+                        - row [ref=e942]:
+                          - cell "Nov 22, 2026" [ref=e943]
+                          - cell "5" [ref=e944]
+                        - row [ref=e945]:
+                          - cell "Nov 23, 2026" [ref=e946]
+                          - cell "3" [ref=e947]
+                        - row [ref=e948]:
+                          - cell "Nov 24, 2026" [ref=e949]
+                          - cell "4" [ref=e950]
+                        - row [ref=e951]:
+                          - cell "Nov 25, 2026" [ref=e952]
+                          - cell "4" [ref=e953]
+        - generic [ref=e954]:
+          - generic [ref=e955]:
+            - generic [ref=e957]:
+              - generic [ref=e958]:
+                - generic [aria-hidden] [ref=e959]: code
+                - heading "Related Notebooks" [level=2] [ref=e961]
+              - button "See all Related Notebooks" [ref=e962] [cursor=pointer]:
+                - generic [ref=e963]: See all
+            - list [ref=e964]:
+              - listitem "newVersion3" [ref=e965]:
+                - link "newVersion3 More options for this notebook Updated 5 months ago WLU Rehabilitation Posture+3" [ref=e966] [cursor=pointer]:
+                  - /url: /code/amine2008chaabouni/newversion3
+                  - generic [ref=e967]:
+                    - generic [ref=e968]:
+                      - generic [ref=e969]: newVersion3
+                      - button "More options for this notebook" [ref=e971]: more_vert
+                    - generic [ref=e972]: Updated 5 months ago
+                    - generic [ref=e974]: WLU Rehabilitation Posture+3
+                - generic [ref=e976]:
+                  - generic [ref=e977]:
+                    - button "Upvote" [ref=e978] [cursor=pointer]:
+                      - generic [ref=e979]: arrow_drop_up
+                    - generic "2 votes" [ref=e980]: "2"
+                  - link "aminechaabouni's profile (opens in a new tab)" [ref=e982] [cursor=pointer]:
+                    - /url: /amine2008chaabouni
+                    - generic "aminechaabouni" [ref=e983]
+          - generic [ref=e988]:
+            - generic [ref=e991]:
+              - generic [aria-hidden] [ref=e992]: table_chart
+              - heading "You May Also Like" [level=2] [ref=e994]
+            - list [ref=e995]:
+              - listitem "Exercise Detection dataset" [ref=e996]:
+                - link "Exercise Detection dataset More options for this dataset MRIGAANK JASWAL Usability 10.0 · Updated 2 years ago 1 File (CSV) · 1 MB · 3,392 downloads" [ref=e997] [cursor=pointer]:
+                  - /url: /datasets/mrigaankjaswal/exercise-detection-dataset
+                  - generic [ref=e998]:
+                    - generic [ref=e999]:
+                      - generic [ref=e1000]: Exercise Detection dataset
+                      - button "More options for this dataset" [ref=e1001]: more_vert
+                    - link "MRIGAANK JASWAL" [ref=e1004]:
+                      - /url: /mrigaankjaswal
+                    - generic [ref=e1006]:
+                      - generic [ref=e1007]: Usability 10.0
+                      - text: · Updated 2 years ago
+                    - generic [ref=e1009]: 1 File (CSV) · 1 MB · 3,392 downloads
+                - generic [ref=e1011]:
+                  - generic [ref=e1012]:
+                    - button "Upvote" [ref=e1013] [cursor=pointer]:
+                      - generic [ref=e1014]: arrow_drop_up
+                    - generic "59 votes" [ref=e1015]: "59"
+                  - generic [ref=e1016]:
+                    - img "bronze medal" [ref=e1017]
+                    - link "MRIGAANK JASWAL's profile (opens in a new tab)" [ref=e1018] [cursor=pointer]:
+                      - /url: /mrigaankjaswal
+                      - generic "MRIGAANK JASWAL" [ref=e1019]
+              - listitem "Real-Time Exercise Recognition Dataset" [ref=e1023]:
+                - link "Real-Time Exercise Recognition Dataset More options for this dataset Riccardo Riccio Usability 7.5 · Updated 2 years ago 608942 Files (JSON, other) · 3 GB · 1,816 downloads" [ref=e1024] [cursor=pointer]:
+                  - /url: /datasets/riccardoriccio/real-time-exercise-recognition-dataset
+                  - generic [ref=e1025]:
+                    - generic [ref=e1026]:
+                      - generic [ref=e1027]: Real-Time Exercise Recognition Dataset
+                      - button "More options for this dataset" [ref=e1028]: more_vert
+                    - link "Riccardo Riccio" [ref=e1031]:
+                      - /url: /riccardoriccio
+                    - generic [ref=e1033]:
+                      - generic [ref=e1034]: Usability 7.5
+                      - text: · Updated 2 years ago
+                    - generic [ref=e1036]: 608942 Files (JSON, other) · 3 GB · 1,816 downloads
+                - generic [ref=e1038]:
+                  - generic [ref=e1039]:
+                    - button "Upvote" [ref=e1040] [cursor=pointer]:
+                      - generic [ref=e1041]: arrow_drop_up
+                    - generic "36 votes" [ref=e1042]: "36"
+                  - generic [ref=e1043]:
+                    - img "silver medal" [ref=e1044]
+                    - link "Riccardo Riccio's profile (opens in a new tab)" [ref=e1045] [cursor=pointer]:
+                      - /url: /riccardoriccio
+                      - generic "Riccardo Riccio" [ref=e1046]
+              - 'listitem "LSTM Exercise Classification: Push Up Videos" [ref=e1050]':
+                - 'link "LSTM Exercise Classification: Push Up Videos More options for this dataset Mohamad Ashraf Usability 8.8 · Updated 4 years ago 102 Files (other) · 19 MB · 2,072 downloads" [ref=e1051] [cursor=pointer]':
+                  - /url: /datasets/mohamadashrafsalama/pushup
+                  - generic [ref=e1052]:
+                    - generic [ref=e1053]:
+                      - generic [ref=e1054]: "LSTM Exercise Classification: Push Up Videos"
+                      - button "More options for this dataset" [ref=e1055]: more_vert
+                    - link "Mohamad Ashraf" [ref=e1058]:
+                      - /url: /mohamadashrafsalama
+                    - generic [ref=e1060]:
+                      - generic [ref=e1061]: Usability 8.8
+                      - text: · Updated 4 years ago
+                    - generic [ref=e1063]: 102 Files (other) · 19 MB · 2,072 downloads
+                - generic [ref=e1065]:
+                  - generic [ref=e1066]:
+                    - button "Upvote" [ref=e1067] [cursor=pointer]:
+                      - generic [ref=e1068]: arrow_drop_up
+                    - generic "32 votes" [ref=e1069]: "32"
+                  - generic [ref=e1070]:
+                    - img "bronze medal" [ref=e1071]
+                    - link "Mohamad Ashraf's profile (opens in a new tab)" [ref=e1072] [cursor=pointer]:
+                      - /url: /mohamadashrafsalama
+                      - generic "Mohamad Ashraf" [ref=e1073]
+              - listitem "Multi-Class Exercise Poses for Human Skeleton" [ref=e1077]:
+                - link "Multi-Class Exercise Poses for Human Skeleton More options for this dataset Dhruvil Patel Usability 8.8 · Updated 4 years ago 1 File (CSV) · 3 MB · 983 downloads" [ref=e1078] [cursor=pointer]:
+                  - /url: /datasets/dp5995/gym-exercise-mediapipe-33-landmarks
+                  - generic [ref=e1079]:
+                    - generic [ref=e1080]:
+                      - generic [ref=e1081]: Multi-Class Exercise Poses for Human Skeleton
+                      - button "More options for this dataset" [ref=e1082]: more_vert
+                    - link "Dhruvil Patel" [ref=e1085]:
+                      - /url: /dp5995
+                    - generic [ref=e1087]:
+                      - generic [ref=e1088]: Usability 8.8
+                      - text: · Updated 4 years ago
+                    - generic [ref=e1090]: 1 File (CSV) · 3 MB · 983 downloads
+                - generic [ref=e1092]:
+                  - generic [ref=e1093]:
+                    - button "Upvote" [ref=e1094] [cursor=pointer]:
+                      - generic [ref=e1095]: arrow_drop_up
+                    - generic "14 votes" [ref=e1096]: "14"
+                  - link "Dhruvil Patel's profile (opens in a new tab)" [ref=e1098] [cursor=pointer]:
+                    - /url: /dp5995
+                    - generic "Dhruvil Patel" [ref=e1099]
+  - alert [ref=e1104]
