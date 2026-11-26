@@ -8,7 +8,7 @@ export type RepState = 'REST' | 'EXTENDING' | 'TARGET_HOLD' | 'RETURNING' | 'INV
 export interface Quality {
   usable: boolean;
   reason: string | null;
-  confidence: number;
+  confidence: number | null;
 }
 
 export interface FrameEvent {
@@ -34,10 +34,36 @@ export interface MeasurementEvent {
 export interface QualityWarningEvent {
   type: 'quality_warning';
   sequence: number;
+  timestamp_ms?: number;
   reason: string;
   message: string;
   rep_count: number;
+  model_version?: string;
   simulated?: boolean;
+}
+
+export interface StreamErrorEvent {
+  type: 'error';
+  code: string;
+  message: string;
+}
+
+export interface Profile {
+  id: string;
+  role: 'patient' | 'clinician' | 'admin';
+  display_name: string;
+}
+
+export interface Protocol {
+  id: string;
+  patient_id: string;
+  clinician_id: string;
+  protocol_name: string;
+  version: number;
+  parameters: Record<string, unknown>;
+  approved_at: string | null;
+  active: boolean;
+  persisted?: boolean;
 }
 
 export interface SessionSummary {
@@ -60,6 +86,8 @@ export interface SessionSummary {
   };
   quality_flags: string[];
   raw_video_stored: false;
+  persisted?: boolean;
+  stream_token?: string | null;
 }
 
 export interface SummaryPayload {

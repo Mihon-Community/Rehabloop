@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  // Docker mounts node_modules as a read-only dependency volume. Keep Vite's
+  // optimizer cache in the writable source mount instead.
+  cacheDir: process.env.VITE_CACHE_DIR ?? '.vite-cache',
   server: {
     host: '0.0.0.0',
     port: 5173,

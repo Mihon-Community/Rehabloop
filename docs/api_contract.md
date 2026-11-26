@@ -5,8 +5,8 @@ against it. **Any change to the HTTP endpoints, WebSocket events, error codes or
 state names requires a PR that is explicitly approved by both Steve and Lennox.**
 Update this file in the same PR as the code. See `GIT_WORKFLOW.md`.
 
-This contract implements blueprint Section 11. All paths are relative to the
-API base URL (`VITE_API_BASE_URL`, default `http://localhost:8000`). All
+This contract defines the current API. All paths are relative to the API base
+URL (`VITE_API_BASE_URL`, default `http://localhost:8000`). All
 protected routes require an authenticated user; the backend verifies role and
 patient-clinician assignment on the server. The UI may hide controls but is
 **never** an authorization control.
@@ -21,7 +21,7 @@ contract details under **PROPOSED** below; Steve must review those shared API
 changes before merge. This status describes branch implementation and does not
 replace that review.
 
-## HTTP endpoints (blueprint Section 11)
+## HTTP endpoints
 
 | Method / path | Purpose | Authorization | Body | Success |
 |---|---|---|---|---|
@@ -136,7 +136,7 @@ Validation rules: validate every body with Pydantic and explicit size limits;
 log model version, mapping version, duration and quality outcomes — **never**
 log raw image content.
 
-## Session state machine (blueprint Section 5)
+## Session state machine
 
 | State | Meaning | Transition |
 |---|---|---|
@@ -150,7 +150,7 @@ log raw image content.
 
 Invalid transitions return **409**. The backend is authoritative for state.
 
-## Repetition state machine (blueprint Section 7)
+## Repetition state machine
 
 | State | Entry | Exit / action |
 |---|---|---|
@@ -163,7 +163,7 @@ Invalid transitions return **409**. The backend is authoritative for state.
 All thresholds are patient- and protocol-specific, approved by the treating
 physiotherapist. There is no universal medical threshold.
 
-## Example payloads (blueprint Appendix A)
+## Example payloads
 
 Session metrics object (all numbers are illustrative fixtures, not clinical
 thresholds):

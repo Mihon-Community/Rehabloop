@@ -2,7 +2,7 @@ import type { MeasurementEvent, QualityWarningEvent } from '../../types';
 
 /**
  * SIMULATED fixture events for UI development. Every event is explicitly
- * labelled; this is NOT real Sapiens2 inference and must never be displayed
+ * labelled; this is NOT real model inference and must never be displayed
  * as such. Keep these in sync with docs/api_contract.md.
  */
 export const SIMULATED_LABEL = 'SIMULATED — synthetic fixture, not real inference';

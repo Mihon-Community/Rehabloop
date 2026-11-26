@@ -15,7 +15,7 @@ import numpy as np
 from PIL import Image, ImageOps
 
 from .config import VisionSettings
-from .detector import VisionUnavailableError
+from .errors import VisionUnavailableError
 
 INPUT_SIZE = 192
 EXPECTED_KEYPOINTS = 17

@@ -6,13 +6,16 @@ import asyncio
 import json
 
 import httpx
+import pytest
 from app.core.config import Settings
 from app.services.nvidia_summary import (
     NON_CLINICAL_DISCLAIMER,
     generate_summary,
+    summary_response_format,
     validate_summary,
 )
 from app.services.schemas_metrics import SessionMetrics
+from scripts.nvidia_smoke_test import LiveSmokeFailure, select_summary_model
 
 METRICS = SessionMetrics(
     completed_reps=4,
@@ -48,6 +51,16 @@ def _provider_response(content: dict[str, object]) -> httpx.Response:
             "choices": [{"message": {"content": json.dumps(content)}}],
         },
     )
+
+
+def test_live_model_selection_excludes_instruct_named_translation_models() -> None:
+    catalog = [
+        "nvidia/riva-translate-4b-instruct-v2",
+        "nvidia/nemotron-3.5-bolt-e4b",
+    ]
+    assert select_summary_model(catalog) == "nvidia/nemotron-3.5-bolt-e4b"
+    with pytest.raises(LiveSmokeFailure, match="not_schema_approved"):
+        select_summary_model(catalog, "nvidia/riva-translate-4b-instruct-v2")
 
 
 def test_validates_all_numbers_and_rejects_unsafe_or_extra_content() -> None:
@@ -101,6 +114,8 @@ def test_sends_only_minimal_metrics_and_returns_validated_metadata() -> None:
     assert len(seen) == 1
     body = json.loads(seen[0].content)
     assert json.loads(body["messages"][1]["content"]) == METRICS.model_dump(mode="json")
+    assert body["response_format"] == summary_response_format()
+    assert body["stream"] is False
     assert "Authorization" in seen[0].headers
 
 

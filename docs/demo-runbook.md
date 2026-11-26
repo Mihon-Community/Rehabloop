@@ -1,6 +1,6 @@
 # Demo runbook (stub)
 
-Owner: both. Blueprint Sections 10, 14, 17 and 18.
+Owner: both.
 
 ## Before the demo
 

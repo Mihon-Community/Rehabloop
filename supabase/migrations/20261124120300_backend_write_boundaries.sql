@@ -4,15 +4,53 @@
 
 drop policy if exists "clinician creates links" on public.clinician_patient_links;
 drop policy if exists "clinician revokes links" on public.clinician_patient_links;
-revoke insert, update on public.clinician_patient_links from authenticated;
 
 drop policy if exists "patient creates own session" on public.sessions;
 drop policy if exists "clinician creates demo session" on public.sessions;
 drop policy if exists "owner or clinician updates session" on public.sessions;
-revoke insert, update on public.sessions from authenticated;
 
+drop policy if exists "clinician creates protocols" on public.exercise_protocols;
 drop policy if exists "clinician versions protocols" on public.exercise_protocols;
-revoke update on public.exercise_protocols from authenticated;
+
+-- Supabase's existing default ACLs grant broad Data API privileges to all
+-- three API roles. Remove those grants from the app tables, then add only the
+-- operations the signed-in frontend still uses. RLS continues to scope rows.
+revoke all on table public.profiles,
+  public.clinician_patient_links,
+  public.exercise_protocols,
+  public.sessions,
+  public.session_metrics,
+  public.rep_events,
+  public.session_flags,
+  public.consent_records,
+  public.ai_summaries,
+  public.audit_events
+ from public, anon, authenticated;
+revoke all on all sequences in schema public from public, anon, authenticated;
+
+grant usage on schema public to authenticated;
+grant select on table public.profiles,
+  public.clinician_patient_links,
+  public.exercise_protocols,
+  public.sessions,
+  public.session_metrics,
+  public.rep_events,
+  public.session_flags,
+  public.consent_records,
+  public.ai_summaries,
+  public.audit_events
+to authenticated;
+grant insert on table public.consent_records to authenticated;
+grant update (display_name) on table public.profiles to authenticated;
+
+-- Future tables, routines, and sequences created by the migration owner must
+-- opt into Data API access explicitly instead of inheriting broad grants.
+alter default privileges for role postgres in schema public
+  revoke all on tables from public, anon, authenticated, service_role;
+alter default privileges for role postgres in schema public
+  revoke all on sequences from public, anon, authenticated, service_role;
+alter default privileges for role postgres in schema public
+  revoke execute on functions from public, anon, authenticated, service_role;
 
 drop policy if exists "audit actor read" on public.audit_events;
 create policy "audit actor or admin read" on public.audit_events for select to authenticated

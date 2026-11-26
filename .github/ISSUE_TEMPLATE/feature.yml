@@ -1,5 +1,5 @@
 name: Feature / task
-description: Planned work from the blueprint or a follow-up
+description: Planned work from the current implementation docs or a follow-up
 labels: [enhancement]
 body:
   - type: textarea

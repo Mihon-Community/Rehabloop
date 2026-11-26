@@ -1,4 +1,4 @@
-﻿# Model smoke test — MoveNet SinglePose Lightning
+# Model smoke test — MoveNet SinglePose Lightning
 
 Owner: Lennox. This is the default real pose model for CPU inference. The
 [official model card](https://storage.googleapis.com/movenet/MoveNet.SinglePose%20Model%20Card.pdf)
@@ -32,7 +32,6 @@ validated anatomical measurements.
    | Variable | Meaning |
    |---|---|
    | `VISION_MODE=movenet` | Enables real MoveNet inference |
-   | `VISION_DEVICE=cpu` | Uses the CPU runtime |
    | `MOVENET_MODEL_ROOT` | Host directory containing `movenet_singlepose_lightning.tflite` |
    | `MOVENET_MODEL_PATH=/models/movenet_singlepose_lightning.tflite` | Read-only container path |
    | `MOVENET_TARGET_SIDE=left` | Selects `left` or `right` leg |
@@ -40,16 +39,48 @@ validated anatomical measurements.
    The model directory is mounted read-only. The model file must stay outside
    Git and is never copied into the Docker image.
 
-3. Start the CPU stack:
+3. Start the CPU vision service (or start the backend too if you want its API):
 
    ```powershell
-   docker compose -f docker-compose.yml -f docker-compose.cpu.yml up --build
+   docker-compose -f docker-compose.yml -f docker-compose.cpu.yml up --build -d vision_service
    ```
 
-4. Verify `GET http://localhost:8001/health` reports `mode=movenet`,
-   `model=movenet-singlepose-lightning`, and `simulated=false`. A synthetic
-   640×480 image can exercise the full service; it validates wiring and output
-   shape only, not pose accuracy.
+4. Run the repeatable synthetic check from inside the container:
+
+   ```powershell
+   docker-compose -f docker-compose.yml -f docker-compose.cpu.yml exec -T vision_service python scripts/synthetic_movenet_smoke.py --url http://127.0.0.1:8001
+   ```
+
+   It checks `/health`, `/mapping`, and `/infer` using a generated 640×480
+   seated figure held in memory. Expected output includes
+   `valid_landmarks=3/3` and `Smoke test passed`. This verifies wiring only;
+   it does not measure pose accuracy.
+
+5. You can also open `http://localhost:8001/health` in a browser. It should
+   report `mode=movenet`, `model=movenet-singlepose-lightning`, and
+   `simulated=false`.
+
+To start the backend and its required vision dependency, run:
+
+```powershell
+docker-compose -f docker-compose.yml -f docker-compose.cpu.yml up --build -d backend
+```
+
+The frontend camera setup and live-session flow can capture and stream camera
+frames to the backend after the user accepts the session consent prompt. For
+a model-only check, use synthetic input as described above; this does not test
+camera quality or clinical accuracy.
+
+To create a visual overlay from the generated seated figure, run:
+
+```powershell
+docker-compose -f docker-compose.yml -f docker-compose.cpu.yml exec -T vision_service python scripts/synthetic_movenet_overlay.py --url http://127.0.0.1:8001 --output /app/synthetic-movenet-overlay.png
+```
+
+The script saves the generated PNG at
+`vision_service/synthetic-movenet-overlay.png` (ignored by Git) and reports the
+selected-leg landmark count. It uses no camera or patient footage. A successful
+overlay is an engineering visual check only, not clinical validation.
 
 The mapping comes from the official model card's COCO-17 order: left
 hip/knee/ankle = 11/13/15, right = 12/14/16. Output coordinates are mapped
@@ -61,11 +92,3 @@ MoveNet's model licence does not replace consent, privacy, data-protection, or
 clinical validation requirements. Obtain explicit consent before any
 patient-facing use. Do not claim diagnosis, recovery, treatment, or clinical
 accuracy based on model output.
-
-## Optional Sapiens2 runner
-
-The legacy Sapiens2 runner remains available in code but is not selected by the
-CPU workflow. Its licence has restrictions that may prohibit biometric
-processing, including rehabilitation movement analysis. Do not enable it unless
-legal review confirms the exact intended use is allowed. See the
-[official Sapiens2 licence](https://github.com/facebookresearch/sapiens2/blob/main/LICENSE.md).

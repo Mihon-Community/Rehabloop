@@ -1,6 +1,21 @@
--- Backend integration fixes for explicit service-role privileges, consent
+-- Backend integration fixes for least-privilege service-role access, consent
 -- revocation, and atomic protocol/session completion writes.
 -- Additive migration only; do not apply outside the authorized Supabase workflow.
+
+-- The backend uses the service role for its PostgREST repository. Strip the
+-- inherited broad grants before restoring only the repository's operations.
+revoke all on table public.profiles,
+  public.clinician_patient_links,
+  public.exercise_protocols,
+  public.sessions,
+  public.session_metrics,
+  public.rep_events,
+  public.session_flags,
+  public.consent_records,
+  public.ai_summaries,
+  public.audit_events
+from service_role;
+revoke all on all sequences in schema public from service_role;
 
 -- Data API grants and RLS are separate controls. Grant only the operations the
 -- server-side repository needs; service_role continues to bypass RLS.

@@ -1,7 +1,7 @@
 # RehabLoop architecture
 
-Source of truth: `RehabLoop_Full_Product_and_Technical_Blueprint.md` (blueprint
-Sections 6–13). This file is a map, not a replacement.
+The current implementation references are this architecture map,
+`backend_guide.md`, and `api_contract.md`.
 
 ## Boundaries
 
@@ -14,10 +14,9 @@ Sections 6–13). This file is a map, not a replacement.
 | Database | Hosted Supabase Postgres | Users, roles, links, protocols, sessions, metrics, events, consent, audit; RLS |
 | Language model | NVIDIA hosted API | Structured explanation of approved numeric output only |
 
-The vision runtime is deliberately separate: GPU-heavy, different model and
-checkpoint dependencies, and fault isolation from auth/session routes. It can
-be swapped between local GPU inference, remote GPU and labelled fixture without
-changing the patient-facing app.
+The vision runtime is deliberately separate for fault isolation from
+auth/session routes. It supports labelled fixtures and the real CPU MoveNet
+path without changing the patient-facing app.
 
 ## Data flow (text)
 
@@ -48,7 +47,7 @@ no GPU and no weights are needed for local development.
 
 ## Repository map
 
-See blueprint Section 16 and the tree in the root `README.md`. Ownership:
+See the ownership table and service layout in the root `README.md`. Ownership:
 Steve → `frontend/`; Lennox → `backend/`, `vision_service/`, `supabase/`,
 `fixtures/`; shared → `docs/`, `docker-compose*.yml`, `.env.example`, `.github/`,
 root config.

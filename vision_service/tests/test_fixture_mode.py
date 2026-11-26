@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 import pytest
 from app.config import VisionSettings
-from app.detector import VisionUnavailableError
+from app.errors import VisionUnavailableError
 from app.inference import InferenceEngine
 from app.keypoint_adapter import (
     MOVENET_MAPPING_PATH,
@@ -19,7 +19,7 @@ FRAME = FrameRequest(sequence=1, timestamp_ms=100, image_b64="aGVsbG8=").model_d
 
 
 def fixture_settings(**overrides: object) -> VisionSettings:
-    values = {"vision_mode": "fixture", "sapiens_checkpoint_root": ""}
+    values = {"vision_mode": "fixture"}
     values.update(overrides)
     return VisionSettings(**values)  # type: ignore[arg-type]
 
@@ -52,21 +52,6 @@ def test_fixture_sequence_cycles():
     assert first.landmarks == fifth.landmarks
 
 
-def test_sapiens_mode_without_weights_fails_clearly():
-    with pytest.raises(VisionUnavailableError, match="vision service unavailable"):
-        InferenceEngine(fixture_settings(vision_mode="sapiens"))
-
-
-def test_sapiens_mode_without_source_fails_clearly():
-    settings = fixture_settings(
-        vision_mode="sapiens",
-        sapiens_checkpoint_root="C:/definitely/missing/rehabloop-checkpoints",
-        sapiens_root="",
-    )
-    with pytest.raises(VisionUnavailableError, match="SAPIENS_ROOT"):
-        InferenceEngine(settings)
-
-
 def test_placeholder_mapping_is_refused():
     placeholder = Mapping(
         version="test",
@@ -77,27 +62,6 @@ def test_placeholder_mapping_is_refused():
     )
     with pytest.raises(KeypointMappingError, match="placeholders"):
         map_raw_keypoints([{"x": 0.1, "y": 0.2}], placeholder)
-
-
-def test_resolved_sapiens_mapping_maps_left_and_right_from_official_indices():
-    mapping = load_mapping()
-    assert not mapping.is_placeholder
-    raw = [
-        {"x": i / 308, "y": 0.0, "x_px": float(i), "y_px": 0.0, "confidence": 0.9, "valid": True}
-        for i in range(308)
-    ]
-    left = map_raw_keypoints(raw, mapping, "left")
-    right = map_raw_keypoints(raw, mapping, "right")
-    assert [left[n]["x_px"] for n in ("selected_hip", "selected_knee", "selected_ankle")] == [
-        11,
-        13,
-        15,
-    ]
-    assert [right[n]["x_px"] for n in ("selected_hip", "selected_knee", "selected_ankle")] == [
-        12,
-        14,
-        16,
-    ]
 
 
 def test_movenet_mapping_uses_published_coco17_side_indices():

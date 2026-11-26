@@ -12,7 +12,6 @@ services:
       target: dev
     environment:
       VISION_MODE: ${VISION_MODE:-fixture}
-      VISION_DEVICE: ${VISION_DEVICE:-cpu}
       MOVENET_MODEL_PATH: ${MOVENET_MODEL_PATH:-/models/movenet_singlepose_lightning.tflite}
       MOVENET_MODEL_NAME: ${MOVENET_MODEL_NAME:-movenet-singlepose-lightning}
       MOVENET_TARGET_SIDE: ${MOVENET_TARGET_SIDE:-left}

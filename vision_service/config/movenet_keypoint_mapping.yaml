@@ -1,12 +1,13 @@
 version: rehabloop-movenet-knee-map-1.0
-status: RESOLVED_FROM_OFFICIAL_MOVENET_MODEL_CARD_PENDING_MANUAL_REVIEW
+status: SYNTHETIC_VISUAL_REVIEWED_PENDING_CLINICAL_VALIDATION
 keypoint_format: COCO-17
 source: https://storage.googleapis.com/movenet/MoveNet.SinglePose%20Model%20Card.pdf
 notes: >-
   COCO keypoint indices published by Google's official MoveNet model card.
   The side is selected at runtime with MOVENET_TARGET_SIDE (left/right).
-  Manual synthetic and consented overlay review is required before use beyond
-  engineering tests.
+  A generated seated figure overlay was visually reviewed on 2026-11-25 and
+  all selected-side landmarks were placed on the expected joints. This is an
+  engineering check only; clinical validation remains pending.
 required_confidence: 0.6
 sides:
   left:

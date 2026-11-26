@@ -12,10 +12,9 @@ class Settings(BaseSettings):
 
     app_env: str = "development"
     auth_mode: Literal["supabase", "dev"] = "supabase"
-    vision_mode: Literal["fixture", "movenet", "sapiens"] = "fixture"
+    vision_mode: Literal["fixture", "movenet"] = "fixture"
     movenet_model_name: str = "movenet-singlepose-lightning"
     movenet_keypoint_mapping_version: str = "rehabloop-movenet-knee-map-1.0"
-    sapiens_pose_model: str = "sapiens2-pose-0.4b"
     log_level: str = "INFO"
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
