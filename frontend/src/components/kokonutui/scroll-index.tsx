@@ -517,7 +517,7 @@ export default function ScrollIndex({
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute top-0 right-9 whitespace-nowrap rounded-md border border-zinc-200 bg-white px-2 py-1 font-medium text-xs text-zinc-700 opacity-0 shadow-sm transition-[opacity,transform] duration-150 ease-out dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+            className="pointer-events-none absolute top-0 right-9 whitespace-nowrap rounded-md border border-[var(--border)] bg-[var(--popover)] px-2 py-1 font-medium text-[var(--popover-foreground)] text-xs opacity-0 shadow-sm transition-[opacity,transform] duration-150 ease-out"
             ref={labelRef}
           />
         </div>
@@ -527,13 +527,12 @@ export default function ScrollIndex({
 }
 
 function SampleArticle() {
-  const p = "mt-3 text-[15px] text-zinc-600 leading-relaxed dark:text-zinc-400";
-  const h2 =
-    "mt-12 font-semibold text-xl text-zinc-900 tracking-tight first:mt-0 dark:text-zinc-100";
-  const h3 = "mt-8 font-medium text-base text-zinc-900 dark:text-zinc-100";
+  const p = "mt-3 text-[15px] text-[var(--muted-foreground)] leading-relaxed";
+  const h2 = "mt-12 font-semibold text-xl text-[var(--foreground)] tracking-tight first:mt-0";
+  const h3 = "mt-8 font-medium text-base text-[var(--foreground)]";
   return (
     <article className="mx-auto max-w-xl">
-      <p className="font-medium text-xs text-zinc-400 dark:text-zinc-500">
+      <p className="font-medium text-xs text-[var(--muted-foreground)]">
         Field notes · 8 min read
       </p>
       <h2 className={cn(h2, "mt-2 text-2xl")}>Building a component library</h2>
