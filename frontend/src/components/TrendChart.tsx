@@ -1,10 +1,7 @@
 import { useId, useState, type ReactNode } from 'react';
 import {
   Area,
-  Bar,
-  BarChart,
   CartesianGrid,
-  Cell,
   ComposedChart,
   Legend,
   Line,
@@ -14,10 +11,18 @@ import {
   YAxis,
 } from 'recharts';
 import { Activity, ChartNoAxesCombined, Gauge, TableProperties } from 'lucide-react';
+import { useTheme } from '@/app/themeStore';
 import { Button } from '@/components/ui/button';
+import { EChartsBarChart, type ChartConfig } from '@/components/evilcharts/charts/echarts-bar-chart';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { SimulatedBadge } from './SimulatedBadge';
 import type { DataSource, SessionRecord } from '@/types';
+
+// Series colors reference the active theme's own tokens (see src/index.css),
+// so the bar automatically matches every color theme — never a fixed hex.
+const qualityChartConfig = {
+  quality: { label: 'Usable frames (%)', colors: { light: ['var(--chart-2)'] } },
+} satisfies ChartConfig;
 
 interface Props {
   sessions: SessionRecord[];
@@ -110,6 +115,7 @@ export function TrendChart({ sessions, source }: Props) {
   const [showRepTable, setShowRepTable] = useState(false);
   const [showQualityTable, setShowQualityTable] = useState(false);
   const reducedMotion = useReducedMotion();
+  const { themeId } = useTheme();
   const rawId = useId().replace(/:/g, '');
   const lineTitleId = `reps-title-${rawId}`;
   const barTitleId = `quality-title-${rawId}`;
@@ -248,57 +254,27 @@ export function TrendChart({ sessions, source }: Props) {
         table={table}
       >
         {qualityCount ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-              <XAxis
-                dataKey="date"
-                tick={axisTick}
-                tickFormatter={(value: string) => value.slice(5)}
-                interval="preserveStartEnd"
-                minTickGap={16}
-                label={{
-                  value: 'Session date',
-                  position: 'insideBottom',
-                  offset: -4,
-                  ...axisLabel,
-                }}
-              />
-              <YAxis
-                width={54}
-                domain={[0, 100]}
-                tick={axisTick}
-                label={{
-                  value: 'Usable frames (%)',
-                  angle: -90,
-                  position: 'insideLeft',
-                  ...axisLabel,
-                }}
-              />
-              <Tooltip
-                content={
-                  <ChartTooltip formatValue={(value) => `Usable frames: ${value}%`} />
-                }
-              />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar
-                dataKey="quality"
-                name="Usable frames (%)"
-                fill="var(--chart-2)"
-                radius={[6, 6, 0, 0]}
-                maxBarSize={44}
-                isAnimationActive={!reducedMotion}
-                animationDuration={450}
-              >
-                {data.map((point, index) => (
-                  <Cell
-                    key={index}
-                    fill={point.quality === null ? 'var(--border)' : 'var(--chart-2)'}
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          <EChartsBarChart
+            key={themeId}
+            data={data}
+            config={qualityChartConfig}
+            xDataKey="date"
+            className="h-full w-full"
+            barRadius={6}
+          >
+            <EChartsBarChart.XAxis
+              dataKey="date"
+              tickFormatter={(value) => value.slice(5)}
+              label="Session date"
+            />
+            <EChartsBarChart.YAxis
+              tickFormatter={(value) => `${value}%`}
+              label="Usable frames (%)"
+            />
+            <EChartsBarChart.Grid />
+            <EChartsBarChart.Tooltip />
+            <EChartsBarChart.Bar dataKey="quality" />
+          </EChartsBarChart>
         ) : (
           <div className="chart-empty" role="status">
             No quality data is available yet.

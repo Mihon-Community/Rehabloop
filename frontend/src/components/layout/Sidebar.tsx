@@ -7,6 +7,7 @@ import {
   Home,
   PanelLeftClose,
   PanelLeftOpen,
+  Settings,
   Sparkles,
   Stethoscope,
   Video,
@@ -47,6 +48,10 @@ const groups: { name: string; items: NavItem[] }[] = [
   {
     name: 'Recovery',
     items: [{ to: '/twin', label: 'Recovery Twin', icon: Box }],
+  },
+  {
+    name: 'Preferences',
+    items: [{ to: '/settings', label: 'Settings', icon: Settings }],
   },
 ];
 

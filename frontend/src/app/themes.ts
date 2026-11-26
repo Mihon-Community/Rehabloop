@@ -30,14 +30,14 @@ export const themes: ThemeDefinition[] = [
   {
     id: 'lavender-calm',
     label: 'Lavender Calm',
-    description: 'Muted violet, soft lilac, cool neutrals',
-    preview: ['#f7f5fb', '#6d4bb8', '#eee7fb'],
+    description: 'Calming periwinkle, soft lilac, cool neutrals',
+    preview: ['#f7f5fb', '#4f61b0', '#eee7fb'],
   },
   {
     id: 'warm-sand',
     label: 'Warm Sand',
-    description: 'Terracotta, cream, warm charcoal',
-    preview: ['#faf6f0', '#a6502f', '#f6e8dc'],
+    description: 'Warm terracotta, cream, soft charcoal',
+    preview: ['#faf6f0', '#a85d3f', '#f6e8dc'],
   },
   {
     id: 'midnight',

@@ -11,6 +11,7 @@ import { CameraSetupScreen } from '../features/sessions/CameraSetupScreen';
 import { LiveSessionScreen } from '../features/sessions/LiveSessionScreen';
 import { PatientHomeScreen } from '../features/sessions/PatientHomeScreen';
 import { SessionResultScreen } from '../features/sessions/SessionResultScreen';
+import { SettingsScreen } from '../features/settings/SettingsScreen';
 
 /** Public journey: landing -> sign in / sign up -> existing app screens. */
 export function AppRoutes() {
@@ -29,6 +30,7 @@ export function AppRoutes() {
         <Route path="/sessions/:id/result" element={<SessionResultScreen />} />
         <Route path="/clinician" element={<ClinicianDashboardScreen />} />
         <Route path="/twin" element={<RecoveryTwinScreen />} />
+        <Route path="/settings" element={<SettingsScreen />} />
       </Route>
 
       <Route path="*" element={<LandingPage />} />
