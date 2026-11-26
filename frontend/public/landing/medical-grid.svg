@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <pattern id="crosses" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M34 14h12v20h20v12H46v20H34V46H14V34h20z" fill="#000" />
+    </pattern>
+  </defs>
+  <rect width="640" height="400" fill="url(#crosses)" opacity="0.7" />
+  <g fill="none" stroke="#000" stroke-width="2" opacity="0.5">
+    <circle cx="120" cy="110" r="52" />
+    <circle cx="520" cy="300" r="72" />
+    <path d="M0 200h640M320 0v400" />
+  </g>
+</svg>

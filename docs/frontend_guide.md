@@ -1,3 +1,5 @@
+ den
+
 # Frontend developer guide — Steve
 
 Owner: **Steve** · branch: `feature/steve` · area: `frontend/`
@@ -85,13 +87,13 @@ npm run lint && npm run typecheck && npm test && npm run build
 Environment variables (all **public** build-time config; never put a secret in
 `VITE_*`):
 
-| Variable | Meaning | Default |
-|---|---|---|
-| `VITE_SUPABASE_URL` | Public Supabase project URL | empty |
-| `VITE_SUPABASE_ANON_KEY` | Public anon key, subject to RLS — not an auth bypass | empty |
-| `VITE_API_BASE_URL` | FastAPI base URL | `http://localhost:8000` |
-| `VITE_FRAME_SAMPLE_RATE` | Camera sampling target, 5–10 fps | `8` |
-| `VITE_POLLING` | Set `false` to disable Docker polling watch locally | unset (polling on) |
+| Variable                   | Meaning                                               | Default                   |
+| -------------------------- | ----------------------------------------------------- | ------------------------- |
+| `VITE_SUPABASE_URL`      | Public Supabase project URL                           | empty                     |
+| `VITE_SUPABASE_ANON_KEY` | Public anon key, subject to RLS — not an auth bypass | empty                     |
+| `VITE_API_BASE_URL`      | FastAPI base URL                                      | `http://localhost:8000` |
+| `VITE_FRAME_SAMPLE_RATE` | Camera sampling target, 5–10 fps                     | `8`                     |
+| `VITE_POLLING`           | Set `false` to disable Docker polling watch locally | unset (polling on)        |
 
 With empty Supabase values the app still renders in demo mode (`supabase` is
 `null`); do not fake a signed-in session.
@@ -103,16 +105,16 @@ Every screen must handle: **loading**, **empty**, **error**, **camera denied**
 scaffolded screens document their required states inline; replace the
 placeholder with real UI, keeping the SafetyBanner.
 
-| # | Screen | Purpose | Data source | Required states |
-|---|---|---|---|---|
-| 1 | Authentication | Patient/clinician sign-in; role-aware landing. Role is verified server-side. | Supabase Auth + `GET /api/v1/me` | loading, signed out, error, non-camera review (declined) |
-| 2 | Patient home | Assigned protocol, next guidance, recent session status. No approved protocol → read-only demo mode, suggest no exercise. | `GET /api/v1/patients/me/protocols`, patient progress | loading, empty, error, demo mode |
-| 3 | Protocol detail | Name, clinician instructions, side, target range, stop instructions, version. Confirm understanding. | assigned protocol from `/patients/me/protocols` | loading, missing protocol, error, confirm gate |
-| 4 | Camera setup | Live preview, framing guide, consent state, lighting/visibility checklist. Start only when checks pass. | `getUserMedia`, local consent state | camera denied, framing fail, loading, error |
-| 5 | Live session | Pose overlay, rep count, current projected angle, quality indicator, pause/resume/end, hide overlay. | `WS /sessions/{id}/stream` (or labelled mocks) | camera denied, vision unavailable, paused, low quality, reconnecting |
-| 6 | Session result | Measured summary, data-quality note, event list, AI explanation. Show canonical numbers only. | `GET /sessions/{id}`, `POST /sessions/{id}/summary` | loading, unsaved/retry, error, summary fallback |
-| 7 | Clinician dashboard | Patient list, protocol editor, sessions, trend charts, review notes. New version per change; no automatic plan update. | `GET /me`, patient progress, `PATCH /protocols/{id}` | no assigned patients, loading, error, access revoked |
-| 8 | Recovery Twin | 3D avatar, joint/metric selection, timeline scrubber, two-session compare. | session angle trace from `GET /sessions/{id}` | no session, missing/low-quality frames, compare mode |
+| # | Screen              | Purpose                                                                                                                    | Data source                                              | Required states                                                      |
+| - | ------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------- |
+| 1 | Authentication      | Patient/clinician sign-in; role-aware landing. Role is verified server-side.                                               | Supabase Auth + `GET /api/v1/me`                       | loading, signed out, error, non-camera review (declined)             |
+| 2 | Patient home        | Assigned protocol, next guidance, recent session status. No approved protocol → read-only demo mode, suggest no exercise. | `GET /api/v1/patients/me/protocols`, patient progress  | loading, empty, error, demo mode                                     |
+| 3 | Protocol detail     | Name, clinician instructions, side, target range, stop instructions, version. Confirm understanding.                       | assigned protocol from `/patients/me/protocols`        | loading, missing protocol, error, confirm gate                       |
+| 4 | Camera setup        | Live preview, framing guide, consent state, lighting/visibility checklist. Start only when checks pass.                    | `getUserMedia`, local consent state                    | camera denied, framing fail, loading, error                          |
+| 5 | Live session        | Pose overlay, rep count, current projected angle, quality indicator, pause/resume/end, hide overlay.                       | `WS /sessions/{id}/stream` (or labelled mocks)         | camera denied, vision unavailable, paused, low quality, reconnecting |
+| 6 | Session result      | Measured summary, data-quality note, event list, AI explanation. Show canonical numbers only.                              | `GET /sessions/{id}`, `POST /sessions/{id}/summary`  | loading, unsaved/retry, error, summary fallback                      |
+| 7 | Clinician dashboard | Patient list, protocol editor, sessions, trend charts, review notes. New version per change; no automatic plan update.     | `GET /me`, patient progress, `PATCH /protocols/{id}` | no assigned patients, loading, error, access revoked                 |
+| 8 | Recovery Twin       | 3D avatar, joint/metric selection, timeline scrubber, two-session compare.                                                 | session angle trace from `GET /sessions/{id}`          | no session, missing/low-quality frames, compare mode                 |
 
 Routes already exist in `src/app/routes.tsx`: `/`, `/home`, `/protocols/:id`,
 `/setup`, `/sessions/:id/live`, `/sessions/:id/result`, `/clinician`, `/twin`.
@@ -184,6 +186,7 @@ biomechanics or anatomical accuracy.
 ## 9. Testing
 
 Vitest + Testing Library (`npm test`, jsdom environment).
+
 - Keep the smoke test green; add component tests for each screen's states.
 - Test with mock events: valid measurement, quality warning, simulated badge,
   duplicate/out-of-order sequence, socket close.
@@ -226,6 +229,7 @@ present in the repo, so its example screenshots are not bundled.
 ## 13. First tasks for Steve (blueprint Section 15, 0–16h)
 
 0–8 h:
+
 1. Vite React TS shell, route map, design tokens and auth layout (the scaffold
    gives you the shell — replace the placeholders and wire the routes/guards).
 2. Patient home, protocol detail and consent/setup screens; agree the JSON
