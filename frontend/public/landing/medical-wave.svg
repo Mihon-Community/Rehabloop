@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice">
+  <g fill="none" stroke="#000" stroke-width="1" opacity="0.55">
+    <path d="M0 70H1200M0 140H1200M0 210H1200M0 280H1200M0 350H1200" />
+    <path d="M100 0V420M300 0V420M500 0V420M700 0V420M900 0V420M1100 0V420" />
+  </g>
+  <path
+    d="M0 235 H110 L145 235 L165 190 L195 290 L225 150 L255 235 H360 L390 235 L410 200 L440 265 L470 235 H600 L630 235 L650 180 L680 285 L710 215 L740 235 H860 L890 235 L915 195 L945 270 L975 235 H1200"
+    fill="none"
+    stroke="#000"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <g fill="#000">
+    <circle cx="165" cy="190" r="7" />
+    <circle cx="650" cy="180" r="7" />
+    <circle cx="915" cy="195" r="7" />
+    <circle cx="255" cy="235" r="4" />
+    <circle cx="740" cy="235" r="4" />
+  </g>
+  <g fill="none" stroke="#000" stroke-width="2" opacity="0.6">
+    <path d="M1060 55h22v-11h14v11h22v14h-22v11h-14V69h-22z" />
+    <path d="M55 330h18v-9h12v9h18v12H85v9H73v-9H55z" />
+  </g>
+</svg>

@@ -1,10 +1,30 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="clinical-teal">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#10243a" />
+    <meta name="theme-color" content="#0f766e" />
     <title>RehabLoop — movement measurement (prototype)</title>
+    <script>
+      // Apply the saved theme before first paint; allowed ids mirror src/app/themes.ts.
+      (function () {
+        var allowed = [
+          'clinical-teal',
+          'ocean-blue',
+          'sage-green',
+          'lavender-calm',
+          'warm-sand',
+          'midnight',
+        ];
+        var stored = null;
+        try {
+          stored = localStorage.getItem('rehabloop-theme');
+        } catch (e) {}
+        var theme = allowed.indexOf(stored) >= 0 ? stored : 'clinical-teal';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme === 'midnight' ? 'dark' : 'light';
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

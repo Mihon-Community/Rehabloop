@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { CameraSetupScreen } from './CameraSetupScreen';
+import { DemoProvider } from '../../app/DemoProvider';
 import { api } from '../../lib/api';
 import { createCameraConsent, setActiveCameraStream } from '../../lib/camera';
 import type { SessionSummary } from '../../types';
@@ -94,26 +95,31 @@ describe('CameraSetupScreen', () => {
         future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
         initialEntries={['/setup']}
       >
-        <Routes>
-          <Route path="/setup" element={<CameraSetupScreen />} />
-          <Route path="/sessions/:id/live" element={<p>Live stream route</p>} />
-        </Routes>
+        <DemoProvider>
+          <Routes>
+            <Route path="/setup" element={<CameraSetupScreen />} />
+            <Route path="/sessions/:id/live" element={<p>Live stream route</p>} />
+          </Routes>
+        </DemoProvider>
       </MemoryRouter>,
     );
 
     expect(await screen.findByText('Synthetic seated movement protocol')).toBeInTheDocument();
     expect(getUserMedia).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('checkbox', { name: /read this notice/i }));
-    fireEvent.click(screen.getByRole('button', { name: /accept and enable camera/i }));
+    fireEvent.click(screen.getByRole('checkbox', { name: /i consent to camera frames/i }));
+    fireEvent.click(screen.getByRole('button', { name: /allow camera/i }));
     await waitFor(() => expect(getUserMedia).toHaveBeenCalledOnce());
     expect(createCameraConsent).toHaveBeenCalledWith('patient-1');
     expect(setActiveCameraStream).toHaveBeenCalledWith(cameraStream);
 
-    const startButton = screen.getByRole('button', { name: /start live session/i });
+    const startButton = screen.getByRole('button', { name: /start measurement session/i });
     expect(startButton).toBeDisabled();
-    fireEvent.click(screen.getByRole('checkbox', { name: /hip, knee, and ankle/i }));
-    fireEvent.click(screen.getByRole('checkbox', { name: /camera is steady/i }));
+    fireEvent.click(screen.getByRole('checkbox', { name: /approximately side-on/i }));
+    fireEvent.click(screen.getByRole('checkbox', { name: /hip, knee and ankle/i }));
+    fireEvent.click(screen.getByRole('checkbox', { name: /camera is stable/i }));
+    fireEvent.click(screen.getByRole('checkbox', { name: /lighting is even/i }));
+    fireEvent.click(screen.getByRole('checkbox', { name: /only one person/i }));
     expect(startButton).toBeEnabled();
 
     fireEvent.click(startButton);

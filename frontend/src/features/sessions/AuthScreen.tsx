@@ -1,121 +1,104 @@
-import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ApiError, api } from '../../lib/api';
-import { clearLocalDemoToken, setLocalDemoToken } from '../../lib/auth';
-import { supabase, supabaseConfigured } from '../../lib/supabase';
-import { SafetyBanner } from '../../components/SafetyBanner';
+import { useDemo } from '../../app/demoStore';
+import { SimulatedBadge } from '../../components/SimulatedBadge';
+import { StateMessage } from '../../components/StateMessage';
+import { StatusPill } from '../../components/StatusPill';
+import { loadMe } from '../../lib/data';
+import { useAsync } from '../../lib/useAsync';
 
+/** Screen 1 — sign-in / role-aware landing. Role here is display-only. */
 export function AuthScreen() {
+  const { role, setRole, setCameraMode } = useDemo();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState('');
-
-  async function signIn(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setBusy(true);
-    setError('');
-    clearLocalDemoToken();
-
-    try {
-      if (!supabase) throw new Error('Supabase sign-in is not configured for this build.');
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
-      if (authError) throw authError;
-      const profile = await api.me();
-      navigate(profile.role === 'patient' ? '/home' : '/clinician');
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Sign-in failed. Please try again.');
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function useLocalDemo() {
-    setBusy(true);
-    setError('');
-    try {
-      if (supabase) {
-        const { error: signOutError } = await supabase.auth.signOut();
-        if (signOutError) throw signOutError;
-      }
-      setLocalDemoToken('demo-patient-token');
-      const profile = await api.me();
-      navigate(profile.role === 'patient' ? '/home' : '/clinician');
-    } catch (cause) {
-      clearLocalDemoToken();
-      const message =
-        cause instanceof ApiError && cause.status === 401
-          ? 'The backend rejected local demo sign-in. Local demo auth requires APP_ENV=local and AUTH_MODE=dev.'
-          : cause instanceof Error
-            ? cause.message
-            : 'Local demo sign-in failed.';
-      setError(message);
-    } finally {
-      setBusy(false);
-    }
-  }
+  const { status, data, source, error, reload } = useAsync(() => loadMe(), []);
 
   return (
     <section className="card" aria-labelledby="auth-heading">
-      <h1 id="auth-heading">Sign in to RehabLoop</h1>
-      <SafetyBanner />
-      <p>Use your RehabLoop account to view assigned protocols and run a camera session.</p>
+      <div className="screen-title-row">
+        <h1 id="auth-heading">1. Sign in / demo access</h1>
+        <SimulatedBadge source={source ?? 'simulated'} />
+      </div>
+      <p>
+        RehabLoop shows a patient their clinician-assigned exercise protocol and recorded movement
+        measurements. A physiotherapist configures and reviews; the app does not diagnose or advise.
+      </p>
 
-      {supabaseConfigured ? (
-        <form className="form-stack" onSubmit={signIn}>
-          <label>
-            Email
-            <input
-              autoComplete="username"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Password
-            <input
-              autoComplete="current-password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </label>
-          <button className="primary" disabled={busy} type="submit">
-            {busy ? 'Signing in…' : 'Sign in'}
-          </button>
-        </form>
-      ) : (
-        <p className="notice" role="status">
-          Supabase Auth is not configured. Use the local synthetic account while running the app in
-          development, or configure the public Supabase URL and anon key.
-        </p>
-      )}
-
-      {import.meta.env.DEV && (
-        <div className="local-demo">
-          <h2>Local synthetic test account</h2>
-          <p className="meta">
-            This option is shown only in a development build. The backend must also have
-            <code> APP_ENV=local</code> and <code> AUTH_MODE=dev</code>.
-          </p>
-          <button disabled={busy} onClick={useLocalDemo} type="button">
-            Continue as synthetic patient
-          </button>
-        </div>
-      )}
-
-      {error && (
-        <p className="error-message" role="alert">
+      {status === 'loading' ? (
+        <StateMessage kind="loading" title="Loading profile…">
+          Checking the API for a signed-in user.
+        </StateMessage>
+      ) : null}
+      {status === 'error' ? (
+        <StateMessage
+          kind="error"
+          title="Could not load profile"
+          action={<button onClick={reload}>Retry</button>}
+        >
           {error}
-        </p>
-      )}
+        </StateMessage>
+      ) : null}
+      {status === 'ready' ? (
+        <>
+          <StateMessage kind="empty" title="Demo mode — no real sign-in configured">
+            {data?.display_name ? `API profile: ${data.display_name}. ` : ''}
+            Supabase values are empty in this build, so no real session is created. Choose a demo
+            role below; the backend verifies the real role and patient assignment.
+          </StateMessage>
+
+          <fieldset className="role-picker">
+            <legend>View the demo as</legend>
+            <label>
+              <input
+                type="radio"
+                name="demo-role"
+                checked={role === 'patient'}
+                onChange={() => setRole('patient')}
+              />
+              Patient
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="demo-role"
+                checked={role === 'clinician'}
+                onChange={() => setRole('clinician')}
+              />
+              Physiotherapist / clinician
+            </label>
+          </fieldset>
+          <p className="meta">
+            <StatusPill tone="warn">Display-only role</StatusPill> This choice changes what is
+            shown. It is never an authorization control.
+          </p>
+
+          <div className="button-row">
+            {role === 'patient' ? (
+              <button className="primary" type="button" onClick={() => navigate('/home')}>
+                Continue to patient home
+              </button>
+            ) : (
+              <button className="primary" type="button" onClick={() => navigate('/clinician')}>
+                Continue to clinician dashboard
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                setCameraMode('review');
+                navigate('/home');
+              }}
+            >
+              Decline camera — non-camera review
+            </button>
+          </div>
+          <p className="meta">
+            Declining camera access never blocks protocol review or previously saved reports.
+          </p>
+        </>
+      ) : null}
       <p className="meta">
-        Camera access is optional. You can review assigned information without starting a camera
-        session. <Link to="/home">Continue to patient home</Link>
+        <Link to="/home">Open patient home</Link> ·{' '}
+        <Link to="/clinician">Open clinician dashboard</Link>
       </p>
     </section>
   );
