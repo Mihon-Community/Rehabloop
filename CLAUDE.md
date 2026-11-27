@@ -39,13 +39,29 @@ out of scope here).
 
 - Real patient footage, model weights, and patient data never go in Git
   (`AGENTS.md`, enforced by `.gitignore`).
-- This project does not build a model that classifies, diagnoses, or judges
-  a patient's movement/recovery/progress. That is a direct conflict with
-  `AGENTS.md`'s rule against recovery/diagnosis/progression claims and with
-  the project's own stated DPIA/legal-review requirements for real movement
-  data (`docs/backend_guide.md` §10). Don't start this work from a casual
-  request — it needs an actual `AGENTS.md` change the project's stakeholders
-  agree to, not an inline decision made mid-task.
+- As of the `AGENTS.md` change committed 2026-11-26 (`c4a22a9`), internal
+  R&D may build and evaluate exercise-recognition, repetition
+  segmentation/counting, and classifiers for movement categories or
+  deviations that are **explicitly defined by permitted dataset
+  annotations**. Outputs describe the observed/dataset-defined movement
+  pattern only — never injury, danger, or a patient's clinical status;
+  never recovery, prognosis, or clinical progression; never a treatment
+  recommendation or prescribed exercise target. This still does not make
+  RehabLoop a diagnostic or recovery-prediction product — see
+  `AGENTS.md`'s "Safety and data handling" section for the exact wording,
+  which controls if this summary ever drifts from it.
+- `docs/backend_guide.md` §10's DPIA/legal-advice requirement is scoped to
+  **any real-patient pilot** (RehabLoop actually used on real patients) —
+  that gate is untouched by this change and still blocks real-patient use
+  regardless of what model code exists. It does not, by itself, block
+  training/evaluating on already-published, already-licensed third-party
+  research datasets (e.g. WLU, MobiPhysio) within the scope their own
+  license and stated research purpose actually cover — that usage is
+  governed by `AGENTS.md`'s dataset-verification rule instead (license,
+  consent/IRB scope, intended-use match), not a fresh RehabLoop-side DPIA.
+- Dataset licence/consent verification still comes first for every dataset,
+  per `AGENTS.md`'s dataset rules — a `license_class` label or this
+  project's ownership never substitutes for actually checking terms.
 - Hugging Face MCP (and similar dataset/model discovery tools) may be used
   for: researching alternative *pose-estimation* models (measurement
   accuracy, not diagnosis), or datasets for validating keypoint-detection

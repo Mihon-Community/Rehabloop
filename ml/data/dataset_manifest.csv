@@ -1,0 +1,675 @@
+filename,exercise_code,exercise_name,participant_id,angle_code,angle_name,variation_code,variation_name,gender_code,eaaq_average_score,split,license_class,file_id,filesize_bytes,download_status,extraction_status,sequence_path,sequence_frames,mean_keypoint_confidence
+E01_P02_AF_VFL_GM.mp4,E01,Abduction,P02,F,Front,FL,Full Light,M,92.8571,train,commercial_ok,11674943,13436022,skipped_existing,ok,ml/data/processed/mobiphysio_movenet/train/E01_P02_AF_VFL_GM.npz,41,0.3604
+E01_P02_AF_VLL_GM.mp4,E01,Abduction,P02,F,Front,LL,Low Light,M,79.5238,train,commercial_ok,11679832,57649027,skipped_existing,ok,ml/data/processed/mobiphysio_movenet/train/E01_P02_AF_VLL_GM.npz,194,0.5327
+E01_P02_AF_VO_GM.mp4,E01,Abduction,P02,F,Front,O,Occlusion,M,74.7619,train,commercial_ok,11674805,19035166,skipped_existing,ok,ml/data/processed/mobiphysio_movenet/train/E01_P02_AF_VO_GM.npz,60,0.5334
+E01_P02_AL_VFL_GM.mp4,E01,Abduction,P02,L,Left,FL,Full Light,M,92.8571,train,commercial_ok,11681697,73723991,skipped_existing,ok,ml/data/processed/mobiphysio_movenet/train/E01_P02_AL_VFL_GM.npz,223,0.6173
+E01_P02_AL_VLL_GM.mp4,E01,Abduction,P02,L,Left,LL,Low Light,M,78.0952,train,commercial_ok,11679837,59929068,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P02_AL_VLL_GM.npz,181,0.5996
+E01_P02_AL_VO_GM.mp4,E01,Abduction,P02,L,Left,O,Occlusion,M,74.7619,train,commercial_ok,11681380,66495059,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P02_AL_VO_GM.npz,201,0.5716
+E01_P02_AR_VFL_GM.mp4,E01,Abduction,P02,R,Right,FL,Full Light,M,92.8571,train,commercial_ok,11674858,50834605,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P02_AR_VFL_GM.npz,201,0.5816
+E01_P02_AR_VLL_GM.mp4,E01,Abduction,P02,R,Right,LL,Low Light,M,76.6667,train,commercial_ok,11681340,64444388,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P02_AR_VLL_GM.npz,193,0.4422
+E01_P02_AR_VO_GM.mp4,E01,Abduction,P02,R,Right,O,Occlusion,M,73.3333,train,commercial_ok,11679827,56422166,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P02_AR_VO_GM.npz,200,0.4298
+E01_P04_AF_VFL_GM.mp4,E01,Abduction,P04,F,Front,FL,Full Light,M,82.8571,train,commercial_ok,11674972,18232404,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P04_AF_VFL_GM.npz,190,0.5929
+E01_P04_AF_VLL_GM.mp4,E01,Abduction,P04,F,Front,LL,Low Light,M,76.1905,train,commercial_ok,11674981,31221593,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P04_AF_VLL_GM.npz,224,0.5301
+E01_P04_AF_VO_GM.mp4,E01,Abduction,P04,F,Front,O,Occlusion,M,100.0000,train,commercial_ok,11674866,25027978,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P04_AF_VO_GM.npz,221,0.6113
+E01_P04_AL_VFL_GM.mp4,E01,Abduction,P04,L,Left,FL,Full Light,M,84.2857,train,commercial_ok,11681386,63941923,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P04_AL_VFL_GM.npz,194,0.6111
+E01_P04_AL_VLL_GM.mp4,E01,Abduction,P04,L,Left,LL,Low Light,M,80.4762,train,commercial_ok,11681359,70711573,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P04_AL_VLL_GM.npz,213,0.5918
+E01_P04_AL_VO_GM.mp4,E01,Abduction,P04,L,Left,O,Occlusion,M,84.2857,train,commercial_ok,11681700,71828750,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P04_AL_VO_GM.npz,217,0.5837
+E01_P04_AR_VFL_GM.mp4,E01,Abduction,P04,R,Right,FL,Full Light,M,84.2857,train,commercial_ok,11674942,13319294,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P04_AR_VFL_GM.npz,271,0.5882
+E01_P04_AR_VLL_GM.mp4,E01,Abduction,P04,R,Right,LL,Low Light,M,81.9048,train,commercial_ok,11679830,51288992,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P04_AR_VLL_GM.npz,218,0.6287
+E01_P04_AR_VO_GM.mp4,E01,Abduction,P04,R,Right,O,Occlusion,M,100.0000,train,commercial_ok,11674878,29697327,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P04_AR_VO_GM.npz,192,0.4458
+E01_P05_AF_VFL_GM.mp4,E01,Abduction,P05,F,Front,FL,Full Light,M,79.5238,train,commercial_ok,11674887,13314099,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P05_AF_VFL_GM.npz,194,0.6667
+E01_P05_AF_VLL_GM.mp4,E01,Abduction,P05,F,Front,LL,Low Light,M,90.4762,train,commercial_ok,11679825,54984330,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P05_AF_VLL_GM.npz,241,0.5485
+E01_P05_AF_VO_GM.mp4,E01,Abduction,P05,F,Front,O,Occlusion,M,85.7143,train,commercial_ok,11674801,16342945,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P05_AF_VO_GM.npz,186,0.6098
+E01_P05_AL_VFL_GM.mp4,E01,Abduction,P05,L,Left,FL,Full Light,M,79.5238,train,commercial_ok,11681750,84448525,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P05_AL_VFL_GM.npz,255,0.5944
+E01_P05_AL_VLL_GM.mp4,E01,Abduction,P05,L,Left,LL,Low Light,M,90.4762,train,commercial_ok,11681691,78236030,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P05_AL_VLL_GM.npz,236,0.5716
+E01_P05_AL_VO_GM.mp4,E01,Abduction,P05,L,Left,O,Occlusion,M,85.7143,train,commercial_ok,11681368,70251105,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P05_AL_VO_GM.npz,212,0.5709
+E01_P05_AR_VFL_GM.mp4,E01,Abduction,P05,R,Right,FL,Full Light,M,79.5238,train,commercial_ok,11674883,12526386,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P05_AR_VFL_GM.npz,39,0.5283
+E01_P05_AR_VLL_GM.mp4,E01,Abduction,P05,R,Right,LL,Low Light,M,74.7619,train,commercial_ok,11674874,16847469,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P05_AR_VLL_GM.npz,254,0.5837
+E01_P05_AR_VO_GM.mp4,E01,Abduction,P05,R,Right,O,Occlusion,M,85.7143,train,commercial_ok,11675081,20656967,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P05_AR_VO_GM.npz,239,0.5516
+E01_P07_AF_VFL_GM.mp4,E01,Abduction,P07,F,Front,FL,Full Light,M,84.2857,train,commercial_ok,11675061,22227307,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P07_AF_VFL_GM.npz,231,0.5592
+E01_P07_AF_VLL_GM.mp4,E01,Abduction,P07,F,Front,LL,Low Light,M,84.2857,train,commercial_ok,11681374,64537889,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P07_AF_VLL_GM.npz,268,0.5455
+E01_P07_AF_VO_GM.mp4,E01,Abduction,P07,F,Front,O,Occlusion,M,88.0952,train,commercial_ok,11674961,16301868,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P07_AF_VO_GM.npz,215,0.5743
+E01_P07_AL_VFL_GM.mp4,E01,Abduction,P07,L,Left,FL,Full Light,M,84.2857,train,commercial_ok,11681763,84536948,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P07_AL_VFL_GM.npz,256,0.6100
+E01_P07_AL_VLL_GM.mp4,E01,Abduction,P07,L,Left,LL,Low Light,M,84.2857,train,commercial_ok,11681751,85617497,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P07_AL_VLL_GM.npz,258,0.5846
+E01_P07_AL_VO_GM.mp4,E01,Abduction,P07,L,Left,O,Occlusion,M,72.3810,train,commercial_ok,11681694,71898198,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P07_AL_VO_GM.npz,218,0.6155
+E01_P07_AR_VFL_GM.mp4,E01,Abduction,P07,R,Right,FL,Full Light,M,84.2857,train,commercial_ok,11675079,11285348,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P07_AR_VFL_GM.npz,213,0.6014
+E01_P07_AR_VLL_GM.mp4,E01,Abduction,P07,R,Right,LL,Low Light,M,84.2857,train,commercial_ok,11674868,44490229,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P07_AR_VLL_GM.npz,258,0.5560
+E01_P07_AR_VO_GM.mp4,E01,Abduction,P07,R,Right,O,Occlusion,M,88.0952,train,commercial_ok,11674810,21148138,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P07_AR_VO_GM.npz,260,0.4590
+E01_P08_AF_VFL_GM.mp4,E01,Abduction,P08,F,Front,FL,Full Light,M,73.3333,train,commercial_ok,11674821,11055957,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P08_AF_VFL_GM.npz,202,0.4764
+E01_P08_AF_VLL_GM.mp4,E01,Abduction,P08,F,Front,LL,Low Light,M,69.0476,train,commercial_ok,11675065,48703844,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P08_AF_VLL_GM.npz,190,0.6429
+E01_P08_AF_VO_GM.mp4,E01,Abduction,P08,F,Front,O,Occlusion,M,71.9048,train,commercial_ok,11675000,14201102,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P08_AF_VO_GM.npz,305,0.4569
+E01_P08_AL_VFL_GM.mp4,E01,Abduction,P08,L,Left,FL,Full Light,M,74.7619,train,commercial_ok,11681674,75244973,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P08_AL_VFL_GM.npz,227,0.6678
+E01_P08_AL_VLL_GM.mp4,E01,Abduction,P08,L,Left,LL,Low Light,M,69.0476,train,commercial_ok,11681766,85419061,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P08_AL_VLL_GM.npz,257,0.6241
+E01_P08_AL_VO_GM.mp4,E01,Abduction,P08,L,Left,O,Occlusion,M,73.3333,train,commercial_ok,11681361,67271072,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P08_AL_VO_GM.npz,204,0.6499
+E01_P08_AR_VFL_GM.mp4,E01,Abduction,P08,R,Right,FL,Full Light,M,74.7619,train,commercial_ok,11674826,12963081,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P08_AR_VFL_GM.npz,40,0.5258
+E01_P08_AR_VLL_GM.mp4,E01,Abduction,P08,R,Right,LL,Low Light,M,71.9048,train,commercial_ok,11674922,14585265,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P08_AR_VLL_GM.npz,269,0.4655
+E01_P08_AR_VO_GM.mp4,E01,Abduction,P08,R,Right,O,Occlusion,M,90.4762,train,commercial_ok,11675080,15535100,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P08_AR_VO_GM.npz,245,0.5998
+E01_P09_AF_VFL_GF.mp4,E01,Abduction,P09,F,Front,FL,Full Light,F,69.0476,train,commercial_ok,11674844,28958723,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P09_AF_VFL_GF.npz,253,0.5747
+E01_P09_AF_VLL_GF.mp4,E01,Abduction,P09,F,Front,LL,Low Light,F,100.0000,train,commercial_ok,11679836,54440158,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P09_AF_VLL_GF.npz,228,0.4274
+E01_P09_AF_VO_GF.mp4,E01,Abduction,P09,F,Front,O,Occlusion,F,63.8095,train,commercial_ok,11674857,23742842,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P09_AF_VO_GF.npz,211,0.4328
+E01_P09_AL_VFL_GF.mp4,E01,Abduction,P09,L,Left,FL,Full Light,F,69.0476,train,commercial_ok,11681876,101438185,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P09_AL_VFL_GF.npz,307,0.4590
+E01_P09_AL_VLL_GF.mp4,E01,Abduction,P09,L,Left,LL,Low Light,F,100.0000,train,commercial_ok,11681656,73376885,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P09_AL_VLL_GF.npz,222,0.4124
+E01_P09_AL_VO_GF.mp4,E01,Abduction,P09,L,Left,O,Occlusion,F,72.3810,train,commercial_ok,11679835,60494516,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P09_AL_VO_GF.npz,183,0.4675
+E01_P09_AR_VFL_GF.mp4,E01,Abduction,P09,R,Right,FL,Full Light,F,67.6190,train,commercial_ok,11674837,16043510,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P09_AR_VFL_GF.npz,219,0.4801
+E01_P09_AR_VLL_GF.mp4,E01,Abduction,P09,R,Right,LL,Low Light,F,84.2857,train,commercial_ok,11675083,16078625,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P09_AR_VLL_GF.npz,222,0.5920
+E01_P09_AR_VO_GF.mp4,E01,Abduction,P09,R,Right,O,Occlusion,F,68.0952,train,commercial_ok,11674757,30395435,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P09_AR_VO_GF.npz,223,0.4932
+E01_P10_AF_VFL_GF.mp4,E01,Abduction,P10,F,Front,FL,Full Light,F,100.0000,train,commercial_ok,11674890,30794624,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P10_AF_VFL_GF.npz,220,0.5776
+E01_P10_AF_VLL_GF.mp4,E01,Abduction,P10,F,Front,LL,Low Light,F,59.5238,train,commercial_ok,11674793,46094309,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P10_AF_VLL_GF.npz,271,0.5760
+E01_P10_AF_VO_GF.mp4,E01,Abduction,P10,F,Front,O,Occlusion,F,76.6667,train,commercial_ok,11674764,23836599,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P10_AF_VO_GF.npz,294,0.6282
+E01_P10_AL_VFL_GF.mp4,E01,Abduction,P10,L,Left,FL,Full Light,F,100.0000,train,commercial_ok,11681879,92278617,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P10_AL_VFL_GF.npz,279,0.3747
+E01_P10_AL_VLL_GF.mp4,E01,Abduction,P10,L,Left,LL,Low Light,F,63.8095,train,commercial_ok,11681349,65502908,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P10_AL_VLL_GF.npz,198,0.3406
+E01_P10_AL_VO_GF.mp4,E01,Abduction,P10,L,Left,O,Occlusion,F,79.5238,train,commercial_ok,11681356,67694529,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P10_AL_VO_GF.npz,205,0.3851
+E01_P10_AR_VFL_GF.mp4,E01,Abduction,P10,R,Right,FL,Full Light,F,100.0000,train,commercial_ok,11675025,21345485,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P10_AR_VFL_GF.npz,222,0.5920
+E01_P10_AR_VLL_GF.mp4,E01,Abduction,P10,R,Right,LL,Low Light,F,69.5238,train,commercial_ok,11674929,19448475,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P10_AR_VLL_GF.npz,182,0.6093
+E01_P10_AR_VO_GF.mp4,E01,Abduction,P10,R,Right,O,Occlusion,F,79.5238,train,commercial_ok,11674889,45233230,ok,ok,ml/data/processed/mobiphysio_movenet/train/E01_P10_AR_VO_GF.npz,261,0.5054
+E01_P21_AF_VFL_GM.mp4,E01,Abduction,P21,F,Front,FL,Full Light,M,92.8571,val,commercial_ok,11674939,20636626,ok,ok,ml/data/processed/mobiphysio_movenet/val/E01_P21_AF_VFL_GM.npz,211,0.5560
+E01_P21_AF_VLL_GM.mp4,E01,Abduction,P21,F,Front,LL,Low Light,M,75.2381,val,commercial_ok,11675021,44808340,ok,ok,ml/data/processed/mobiphysio_movenet/val/E01_P21_AF_VLL_GM.npz,192,0.6020
+E01_P21_AF_VO_GM.mp4,E01,Abduction,P21,F,Front,O,Occlusion,M,64.7619,val,commercial_ok,11675030,19999056,ok,ok,ml/data/processed/mobiphysio_movenet/val/E01_P21_AF_VO_GM.npz,190,0.5709
+E01_P21_AL_VFL_GM.mp4,E01,Abduction,P21,L,Left,FL,Full Light,M,92.8571,val,commercial_ok,11681696,80501562,ok,ok,ml/data/processed/mobiphysio_movenet/val/E01_P21_AL_VFL_GM.npz,243,0.5892
+E01_P21_AL_VLL_GM.mp4,E01,Abduction,P21,L,Left,LL,Low Light,M,78.0952,val,commercial_ok,11681748,86073465,ok,ok,ml/data/processed/mobiphysio_movenet/val/E01_P21_AL_VLL_GM.npz,261,0.5295
+E01_P21_AL_VO_GM.mp4,E01,Abduction,P21,L,Left,O,Occlusion,M,67.6190,val,commercial_ok,11681684,76595336,ok,ok,ml/data/processed/mobiphysio_movenet/val/E01_P21_AL_VO_GM.npz,231,0.5212
+E01_P21_AR_VFL_GM.mp4,E01,Abduction,P21,R,Right,FL,Full Light,M,77.1429,val,commercial_ok,11675057,14412280,ok,ok,ml/data/processed/mobiphysio_movenet/val/E01_P21_AR_VFL_GM.npz,294,0.6277
+E01_P21_AR_VLL_GM.mp4,E01,Abduction,P21,R,Right,LL,Low Light,M,78.0952,val,commercial_ok,11674814,14850629,ok,ok,ml/data/processed/mobiphysio_movenet/val/E01_P21_AR_VLL_GM.npz,46,0.5812
+E01_P21_AR_VO_GM.mp4,E01,Abduction,P21,R,Right,O,Occlusion,M,67.6190,val,commercial_ok,11674980,18004475,ok,ok,ml/data/processed/mobiphysio_movenet/val/E01_P21_AR_VO_GM.npz,216,0.6081
+E01_P22_AF_VFL_GM.mp4,E01,Abduction,P22,F,Front,FL,Full Light,M,95.2381,test,commercial_ok,11674885,21059118,ok,ok,ml/data/processed/mobiphysio_movenet/test/E01_P22_AF_VFL_GM.npz,219,0.6232
+E01_P22_AF_VLL_GM.mp4,E01,Abduction,P22,F,Front,LL,Low Light,M,90.4762,test,commercial_ok,11675066,40617282,ok,ok,ml/data/processed/mobiphysio_movenet/test/E01_P22_AF_VLL_GM.npz,236,0.5924
+E01_P22_AF_VO_GM.mp4,E01,Abduction,P22,F,Front,O,Occlusion,M,88.0952,test,commercial_ok,11674845,19870845,ok,ok,ml/data/processed/mobiphysio_movenet/test/E01_P22_AF_VO_GM.npz,214,0.6263
+E01_P22_AL_VFL_GM.mp4,E01,Abduction,P22,L,Left,FL,Full Light,M,79.5238,test,commercial_ok,11681757,82900458,ok,ok,ml/data/processed/mobiphysio_movenet/test/E01_P22_AL_VFL_GM.npz,251,0.6192
+E01_P22_AL_VLL_GM.mp4,E01,Abduction,P22,L,Left,LL,Low Light,M,74.7619,test,commercial_ok,11681658,72962074,ok,ok,ml/data/processed/mobiphysio_movenet/test/E01_P22_AL_VLL_GM.npz,221,0.5448
+E01_P22_AL_VO_GM.mp4,E01,Abduction,P22,L,Left,O,Occlusion,M,72.3810,test,commercial_ok,11681358,67785660,ok,ok,ml/data/processed/mobiphysio_movenet/test/E01_P22_AL_VO_GM.npz,206,0.5604
+E01_P22_AR_VFL_GM.mp4,E01,Abduction,P22,R,Right,FL,Full Light,M,79.5238,test,commercial_ok,11674779,15443055,ok,ok,ml/data/processed/mobiphysio_movenet/test/E01_P22_AR_VFL_GM.npz,204,0.6372
+E01_P22_AR_VLL_GM.mp4,E01,Abduction,P22,R,Right,LL,Low Light,M,73.3333,test,commercial_ok,11674760,25209457,ok,ok,ml/data/processed/mobiphysio_movenet/test/E01_P22_AR_VLL_GM.npz,240,0.5247
+E01_P22_AR_VO_GM.mp4,E01,Abduction,P22,R,Right,O,Occlusion,M,72.3810,test,commercial_ok,11674897,21588191,ok,ok,ml/data/processed/mobiphysio_movenet/test/E01_P22_AR_VO_GM.npz,226,0.5795
+E02_P02_AF_VFL_GM.mp4,E02,Adduction,P02,F,Front,FL,Full Light,M,73.3333,train,commercial_ok,11703852,19139865,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P02_AF_VFL_GM.npz,186,0.5636
+E02_P02_AF_VLL_GM.mp4,E02,Adduction,P02,F,Front,LL,Low Light,M,57.1429,train,commercial_ok,11704002,47029527,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P02_AF_VLL_GM.npz,174,0.5502
+E02_P02_AF_VO_GM.mp4,E02,Adduction,P02,F,Front,O,Occlusion,M,61.9048,train,commercial_ok,11703834,16888414,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P02_AF_VO_GM.npz,182,0.5520
+E02_P02_AL_VFL_GM.mp4,E02,Adduction,P02,L,Left,FL,Full Light,M,74.7619,train,commercial_ok,11704075,57581302,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P02_AL_VFL_GM.npz,174,0.6073
+E02_P02_AL_VLL_GM.mp4,E02,Adduction,P02,L,Left,LL,Low Light,M,57.1429,train,commercial_ok,11704056,55305278,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P02_AL_VLL_GM.npz,167,0.5902
+E02_P02_AL_VO_GM.mp4,E02,Adduction,P02,L,Left,O,Occlusion,M,61.9048,train,commercial_ok,11704046,59108838,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P02_AL_VO_GM.npz,178,0.5587
+E02_P02_AR_VFL_GM.mp4,E02,Adduction,P02,R,Right,FL,Full Light,M,73.3333,train,commercial_ok,11703958,25672965,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P02_AR_VFL_GM.npz,176,0.4707
+E02_P02_AR_VLL_GM.mp4,E02,Adduction,P02,R,Right,LL,Low Light,M,57.1429,train,commercial_ok,11704052,58470642,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P02_AR_VLL_GM.npz,174,0.4461
+E02_P02_AR_VO_GM.mp4,E02,Adduction,P02,R,Right,O,Occlusion,M,61.9048,train,commercial_ok,11704058,54988567,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P02_AR_VO_GM.npz,178,0.4314
+E02_P04_AF_VFL_GM.mp4,E02,Adduction,P04,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11703841,13646145,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P04_AF_VFL_GM.npz,210,0.6443
+E02_P04_AF_VLL_GM.mp4,E02,Adduction,P04,F,Front,LL,Low Light,M,97.6190,train,commercial_ok,11703937,50167163,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P04_AF_VLL_GM.npz,206,0.5885
+E02_P04_AF_VO_GM.mp4,E02,Adduction,P04,F,Front,O,Occlusion,M,97.6190,train,commercial_ok,11703861,17916833,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P04_AF_VO_GM.npz,193,0.5787
+E02_P04_AL_VFL_GM.mp4,E02,Adduction,P04,L,Left,FL,Full Light,M,82.8571,train,commercial_ok,11704520,68855201,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P04_AL_VFL_GM.npz,208,0.6629
+E02_P04_AL_VLL_GM.mp4,E02,Adduction,P04,L,Left,LL,Low Light,M,97.6190,train,commercial_ok,11704539,66352311,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P04_AL_VLL_GM.npz,201,0.5757
+E02_P04_AL_VO_GM.mp4,E02,Adduction,P04,L,Left,O,Occlusion,M,79.0476,train,commercial_ok,11704495,63215333,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P04_AL_VO_GM.npz,191,0.6203
+E02_P04_AR_VFL_GM.mp4,E02,Adduction,P04,R,Right,FL,Full Light,M,82.8571,train,commercial_ok,11703827,10896026,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P04_AR_VFL_GM.npz,207,0.6864
+E02_P04_AR_VLL_GM.mp4,E02,Adduction,P04,R,Right,LL,Low Light,M,81.9048,train,commercial_ok,11703985,40889812,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P04_AR_VLL_GM.npz,202,0.6422
+E02_P04_AR_VO_GM.mp4,E02,Adduction,P04,R,Right,O,Occlusion,M,77.6190,train,commercial_ok,11703984,21600109,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P04_AR_VO_GM.npz,191,0.6603
+E02_P05_AF_VFL_GM.mp4,E02,Adduction,P05,F,Front,FL,Full Light,M,90.4762,train,commercial_ok,11703828,11689038,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P05_AF_VFL_GM.npz,184,0.5481
+E02_P05_AF_VLL_GM.mp4,E02,Adduction,P05,F,Front,LL,Low Light,M,90.4762,train,commercial_ok,11703908,41595490,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P05_AF_VLL_GM.npz,173,0.5115
+E02_P05_AF_VO_GM.mp4,E02,Adduction,P05,F,Front,O,Occlusion,M,92.8571,train,commercial_ok,11703848,16683708,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P05_AF_VO_GM.npz,172,0.5434
+E02_P05_AL_VFL_GM.mp4,E02,Adduction,P05,L,Left,FL,Full Light,M,90.4762,train,commercial_ok,11704082,59684608,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P05_AL_VFL_GM.npz,180,0.6007
+E02_P05_AL_VLL_GM.mp4,E02,Adduction,P05,L,Left,LL,Low Light,M,90.4762,train,commercial_ok,11704034,54482685,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P05_AL_VLL_GM.npz,165,0.5541
+E02_P05_AL_VO_GM.mp4,E02,Adduction,P05,L,Left,O,Occlusion,M,92.8571,train,commercial_ok,11704061,58232180,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P05_AL_VO_GM.npz,177,0.5751
+E02_P05_AR_VFL_GM.mp4,E02,Adduction,P05,R,Right,FL,Full Light,M,90.4762,train,commercial_ok,11703826,8748168,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P05_AR_VFL_GM.npz,183,0.6109
+E02_P05_AR_VLL_GM.mp4,E02,Adduction,P05,R,Right,LL,Low Light,M,74.7619,train,commercial_ok,11703808,16478973,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P05_AR_VLL_GM.npz,154,0.5541
+E02_P05_AR_VO_GM.mp4,E02,Adduction,P05,R,Right,O,Occlusion,M,92.8571,train,commercial_ok,11703854,17834355,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P05_AR_VO_GM.npz,171,0.5532
+E02_P07_AF_VFL_GM.mp4,E02,Adduction,P07,F,Front,FL,Full Light,M,50.0000,train,commercial_ok,11703804,13205598,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P07_AF_VFL_GM.npz,212,0.6110
+E02_P07_AF_VLL_GM.mp4,E02,Adduction,P07,F,Front,LL,Low Light,M,47.6190,train,commercial_ok,11703980,48846455,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P07_AF_VLL_GM.npz,198,0.5811
+E02_P07_AF_VO_GM.mp4,E02,Adduction,P07,F,Front,O,Occlusion,M,47.6190,train,commercial_ok,11703874,18510371,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P07_AF_VO_GM.npz,214,0.5292
+E02_P07_AL_VFL_GM.mp4,E02,Adduction,P07,L,Left,FL,Full Light,M,50.0000,train,commercial_ok,11704574,74206642,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P07_AL_VFL_GM.npz,224,0.6221
+E02_P07_AL_VLL_GM.mp4,E02,Adduction,P07,L,Left,LL,Low Light,M,47.6190,train,commercial_ok,11704538,64449136,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P07_AL_VLL_GM.npz,195,0.5934
+E02_P07_AL_VO_GM.mp4,E02,Adduction,P07,L,Left,O,Occlusion,M,47.6190,train,commercial_ok,11704526,70673769,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P07_AL_VO_GM.npz,214,0.6170
+E02_P07_AR_VFL_GM.mp4,E02,Adduction,P07,R,Right,FL,Full Light,M,50.0000,train,commercial_ok,11703840,10635072,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P07_AR_VFL_GM.npz,213,0.6760
+E02_P07_AR_VLL_GM.mp4,E02,Adduction,P07,R,Right,LL,Low Light,M,47.6190,train,commercial_ok,11703993,35523954,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P07_AR_VLL_GM.npz,194,0.6161
+E02_P07_AR_VO_GM.mp4,E02,Adduction,P07,R,Right,O,Occlusion,M,47.6190,train,commercial_ok,11703881,18365738,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P07_AR_VO_GM.npz,210,0.6427
+E02_P08_AF_VFL_GM.mp4,E02,Adduction,P08,F,Front,FL,Full Light,M,90.4762,train,commercial_ok,11703812,12269188,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P08_AF_VFL_GM.npz,209,0.6086
+E02_P08_AF_VLL_GM.mp4,E02,Adduction,P08,F,Front,LL,Low Light,M,77.1429,train,commercial_ok,11703910,38565543,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P08_AF_VLL_GM.npz,205,0.5343
+E02_P08_AF_VO_GM.mp4,E02,Adduction,P08,F,Front,O,Occlusion,M,77.1429,train,commercial_ok,11703795,15406563,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P08_AF_VO_GM.npz,205,0.5982
+E02_P08_AL_VFL_GM.mp4,E02,Adduction,P08,L,Left,FL,Full Light,M,90.4762,train,commercial_ok,11704551,66341991,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P08_AL_VFL_GM.npz,201,0.6161
+E02_P08_AL_VLL_GM.mp4,E02,Adduction,P08,L,Left,LL,Low Light,M,75.7143,train,commercial_ok,11704528,71186213,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P08_AL_VLL_GM.npz,215,0.5896
+E02_P08_AL_VO_GM.mp4,E02,Adduction,P08,L,Left,O,Occlusion,M,75.7143,train,commercial_ok,11704550,68549721,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P08_AL_VO_GM.npz,207,0.6271
+E02_P08_AR_VFL_GM.mp4,E02,Adduction,P08,R,Right,FL,Full Light,M,90.4762,train,commercial_ok,11703872,11681723,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P08_AR_VFL_GM.npz,203,0.7416
+E02_P08_AR_VLL_GM.mp4,E02,Adduction,P08,R,Right,LL,Low Light,M,77.1429,train,commercial_ok,11703909,29422558,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P08_AR_VLL_GM.npz,211,0.6525
+E02_P08_AR_VO_GM.mp4,E02,Adduction,P08,R,Right,O,Occlusion,M,77.1429,train,commercial_ok,11703880,15864275,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P08_AR_VO_GM.npz,207,0.6599
+E02_P09_AF_VFL_GF.mp4,E02,Adduction,P09,F,Front,FL,Full Light,F,77.1429,train,commercial_ok,11704008,21094238,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P09_AF_VFL_GF.npz,220,0.5040
+E02_P09_AF_VLL_GF.mp4,E02,Adduction,P09,F,Front,LL,Low Light,F,100.0000,train,commercial_ok,11703979,42643218,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P09_AF_VLL_GF.npz,181,0.4004
+E02_P09_AF_VO_GF.mp4,E02,Adduction,P09,F,Front,O,Occlusion,F,80.9524,train,commercial_ok,11703821,18193467,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P09_AF_VO_GF.npz,160,0.4899
+E02_P09_AL_VFL_GF.mp4,E02,Adduction,P09,L,Left,FL,Full Light,F,75.7143,train,commercial_ok,11704584,75320028,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P09_AL_VFL_GF.npz,228,0.4711
+E02_P09_AL_VLL_GF.mp4,E02,Adduction,P09,L,Left,LL,Low Light,F,84.2857,train,commercial_ok,11704071,57986585,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P09_AL_VLL_GF.npz,175,0.4164
+E02_P09_AL_VO_GF.mp4,E02,Adduction,P09,L,Left,O,Occlusion,F,63.8095,train,commercial_ok,11703982,50968814,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P09_AL_VO_GF.npz,155,0.4666
+E02_P09_AR_VFL_GF.mp4,E02,Adduction,P09,R,Right,FL,Full Light,F,75.7143,train,commercial_ok,11703793,12187576,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P09_AR_VFL_GF.npz,214,0.4855
+E02_P09_AR_VLL_GF.mp4,E02,Adduction,P09,R,Right,LL,Low Light,F,84.2857,train,commercial_ok,11703859,12055754,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P09_AR_VLL_GF.npz,177,0.5043
+E02_P09_AR_VO_GF.mp4,E02,Adduction,P09,R,Right,O,Occlusion,F,63.8095,train,commercial_ok,11704005,26486945,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P09_AR_VO_GF.npz,155,0.4651
+E02_P10_AF_VFL_GF.mp4,E02,Adduction,P10,F,Front,FL,Full Light,F,54.7619,train,commercial_ok,11703987,24457723,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P10_AF_VFL_GF.npz,224,0.4199
+E02_P10_AF_VLL_GF.mp4,E02,Adduction,P10,F,Front,LL,Low Light,F,50.0000,train,commercial_ok,11703989,39639105,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P10_AF_VLL_GF.npz,182,0.4186
+E02_P10_AF_VO_GF.mp4,E02,Adduction,P10,F,Front,O,Occlusion,F,52.3810,train,commercial_ok,11703856,17955620,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P10_AF_VO_GF.npz,181,0.4244
+E02_P10_AL_VFL_GF.mp4,E02,Adduction,P10,L,Left,FL,Full Light,F,54.7619,train,commercial_ok,11704593,73882388,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P10_AL_VFL_GF.npz,224,0.4254
+E02_P10_AL_VLL_GF.mp4,E02,Adduction,P10,L,Left,LL,Low Light,F,50.0000,train,commercial_ok,11704042,60054451,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P10_AL_VLL_GF.npz,181,0.4024
+E02_P10_AL_VO_GF.mp4,E02,Adduction,P10,L,Left,O,Occlusion,F,52.3810,train,commercial_ok,11704040,58446165,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P10_AL_VO_GF.npz,177,0.4065
+E02_P10_AR_VFL_GF.mp4,E02,Adduction,P10,R,Right,FL,Full Light,F,54.7619,train,commercial_ok,11703860,15805800,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P10_AR_VFL_GF.npz,222,0.5050
+E02_P10_AR_VLL_GF.mp4,E02,Adduction,P10,R,Right,LL,Low Light,F,50.0000,train,commercial_ok,11703839,16319348,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P10_AR_VLL_GF.npz,181,0.4777
+E02_P10_AR_VO_GF.mp4,E02,Adduction,P10,R,Right,O,Occlusion,F,52.3810,train,commercial_ok,11703946,28746017,ok,ok,ml/data/processed/mobiphysio_movenet/train/E02_P10_AR_VO_GF.npz,181,0.4544
+E02_P21_AF_VFL_GM.mp4,E02,Adduction,P21,F,Front,FL,Full Light,M,84.2857,val,commercial_ok,11703806,15980177,ok,ok,ml/data/processed/mobiphysio_movenet/val/E02_P21_AF_VFL_GM.npz,199,0.5861
+E02_P21_AF_VLL_GM.mp4,E02,Adduction,P21,F,Front,LL,Low Light,M,77.1429,val,commercial_ok,11703932,34084360,ok,ok,ml/data/processed/mobiphysio_movenet/val/E02_P21_AF_VLL_GM.npz,202,0.5331
+E02_P21_AF_VO_GM.mp4,E02,Adduction,P21,F,Front,O,Occlusion,M,73.3333,val,commercial_ok,11703805,15562000,ok,ok,ml/data/processed/mobiphysio_movenet/val/E02_P21_AF_VO_GM.npz,202,0.5308
+E02_P21_AL_VFL_GM.mp4,E02,Adduction,P21,L,Left,FL,Full Light,M,77.1429,val,commercial_ok,11704559,64298750,ok,ok,ml/data/processed/mobiphysio_movenet/val/E02_P21_AL_VFL_GM.npz,194,0.5965
+E02_P21_AL_VLL_GM.mp4,E02,Adduction,P21,L,Left,LL,Low Light,M,75.7143,val,commercial_ok,11704560,67195099,ok,ok,ml/data/processed/mobiphysio_movenet/val/E02_P21_AL_VLL_GM.npz,203,0.5478
+E02_P21_AL_VO_GM.mp4,E02,Adduction,P21,L,Left,O,Occlusion,M,73.3333,val,commercial_ok,11704536,66376421,ok,ok,ml/data/processed/mobiphysio_movenet/val/E02_P21_AL_VO_GM.npz,201,0.5301
+E02_P21_AR_VFL_GM.mp4,E02,Adduction,P21,R,Right,FL,Full Light,M,84.2857,val,commercial_ok,11703819,11119369,ok,ok,ml/data/processed/mobiphysio_movenet/val/E02_P21_AR_VFL_GM.npz,193,0.6783
+E02_P21_AR_VLL_GM.mp4,E02,Adduction,P21,R,Right,LL,Low Light,M,75.7143,val,commercial_ok,11703879,11095860,ok,ok,ml/data/processed/mobiphysio_movenet/val/E02_P21_AR_VLL_GM.npz,196,0.6075
+E02_P21_AR_VO_GM.mp4,E02,Adduction,P21,R,Right,O,Occlusion,M,90.4762,val,commercial_ok,11703822,14059839,ok,ok,ml/data/processed/mobiphysio_movenet/val/E02_P21_AR_VO_GM.npz,194,0.6495
+E02_P22_AF_VFL_GM.mp4,E02,Adduction,P22,F,Front,FL,Full Light,M,84.2857,test,commercial_ok,11703849,18964778,ok,ok,ml/data/processed/mobiphysio_movenet/test/E02_P22_AF_VFL_GM.npz,234,0.5680
+E02_P22_AF_VLL_GM.mp4,E02,Adduction,P22,F,Front,LL,Low Light,M,84.2857,test,commercial_ok,11703991,30783873,ok,ok,ml/data/processed/mobiphysio_movenet/test/E02_P22_AF_VLL_GM.npz,188,0.5602
+E02_P22_AF_VO_GM.mp4,E02,Adduction,P22,F,Front,O,Occlusion,M,82.8571,test,commercial_ok,11703802,15230596,ok,ok,ml/data/processed/mobiphysio_movenet/test/E02_P22_AF_VO_GM.npz,177,0.5498
+E02_P22_AL_VFL_GM.mp4,E02,Adduction,P22,L,Left,FL,Full Light,M,84.2857,test,commercial_ok,11704583,76372245,ok,ok,ml/data/processed/mobiphysio_movenet/test/E02_P22_AL_VFL_GM.npz,231,0.6047
+E02_P22_AL_VLL_GM.mp4,E02,Adduction,P22,L,Left,LL,Low Light,M,100.0000,test,commercial_ok,11704497,63072586,ok,ok,ml/data/processed/mobiphysio_movenet/test/E02_P22_AL_VLL_GM.npz,191,0.5696
+E02_P22_AL_VO_GM.mp4,E02,Adduction,P22,L,Left,O,Occlusion,M,80.0000,test,commercial_ok,11704076,57969532,ok,ok,ml/data/processed/mobiphysio_movenet/test/E02_P22_AL_VO_GM.npz,176,0.5933
+E02_P22_AR_VFL_GM.mp4,E02,Adduction,P22,R,Right,FL,Full Light,M,82.8571,test,commercial_ok,11703799,13850398,ok,ok,ml/data/processed/mobiphysio_movenet/test/E02_P22_AR_VFL_GM.npz,235,0.6759
+E02_P22_AR_VLL_GM.mp4,E02,Adduction,P22,R,Right,LL,Low Light,M,82.8571,test,commercial_ok,11703832,11411588,ok,ok,ml/data/processed/mobiphysio_movenet/test/E02_P22_AR_VLL_GM.npz,187,0.5962
+E02_P22_AR_VO_GM.mp4,E02,Adduction,P22,R,Right,O,Occlusion,M,82.8571,test,commercial_ok,11703824,17694573,ok,ok,ml/data/processed/mobiphysio_movenet/test/E02_P22_AR_VO_GM.npz,187,0.6073
+E03_P02_AF_VFL_GM.mp4,E03,Lateral Rotation,P02,F,Front,FL,Full Light,M,26.1905,train,commercial_ok,11704683,7973966,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P02_AF_VFL_GM.npz,141,0.5920
+E03_P02_AF_VLL_GM.mp4,E03,Lateral Rotation,P02,F,Front,LL,Low Light,M,21.4286,train,commercial_ok,11705358,36716544,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P02_AF_VLL_GM.npz,130,0.5956
+E03_P02_AF_VO_GM.mp4,E03,Lateral Rotation,P02,F,Front,O,Occlusion,M,16.6667,train,commercial_ok,11704744,9065354,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P02_AF_VO_GM.npz,131,0.5787
+E03_P02_AL_VFL_GM.mp4,E03,Lateral Rotation,P02,L,Left,FL,Full Light,M,26.1905,train,commercial_ok,11708736,45694640,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P02_AL_VFL_GM.npz,137,0.6359
+E03_P02_AL_VLL_GM.mp4,E03,Lateral Rotation,P02,L,Left,LL,Low Light,M,21.4286,train,commercial_ok,11705367,40725386,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P02_AL_VLL_GM.npz,123,0.6235
+E03_P02_AL_VO_GM.mp4,E03,Lateral Rotation,P02,L,Left,O,Occlusion,M,16.6667,train,commercial_ok,11708723,42999274,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P02_AL_VO_GM.npz,130,0.5916
+E03_P02_AR_VFL_GM.mp4,E03,Lateral Rotation,P02,R,Right,FL,Full Light,M,26.1905,train,commercial_ok,11705385,31674016,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P02_AR_VFL_GM.npz,132,0.4381
+E03_P02_AR_VLL_GM.mp4,E03,Lateral Rotation,P02,R,Right,LL,Low Light,M,21.4286,train,commercial_ok,11708797,42582159,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P02_AR_VLL_GM.npz,127,0.4378
+E03_P02_AR_VO_GM.mp4,E03,Lateral Rotation,P02,R,Right,O,Occlusion,M,16.6667,train,commercial_ok,11705377,35587303,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P02_AR_VO_GM.npz,132,0.4661
+E03_P04_AF_VFL_GM.mp4,E03,Lateral Rotation,P04,F,Front,FL,Full Light,M,81.9048,train,commercial_ok,11704839,13186957,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P04_AF_VFL_GM.npz,179,0.6218
+E03_P04_AF_VLL_GM.mp4,E03,Lateral Rotation,P04,F,Front,LL,Low Light,M,95.2381,train,commercial_ok,11708750,41788864,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P04_AF_VLL_GM.npz,184,0.5663
+E03_P04_AF_VO_GM.mp4,E03,Lateral Rotation,P04,F,Front,O,Occlusion,M,78.5714,train,commercial_ok,11704854,15171175,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P04_AF_VO_GM.npz,185,0.6197
+E03_P04_AL_VFL_GM.mp4,E03,Lateral Rotation,P04,L,Left,FL,Full Light,M,97.6190,train,commercial_ok,11708749,58838422,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P04_AL_VFL_GM.npz,178,0.6093
+E03_P04_AL_VLL_GM.mp4,E03,Lateral Rotation,P04,L,Left,LL,Low Light,M,79.5238,train,commercial_ok,11708798,61069768,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P04_AL_VLL_GM.npz,185,0.5950
+E03_P04_AL_VO_GM.mp4,E03,Lateral Rotation,P04,L,Left,O,Occlusion,M,75.7143,train,commercial_ok,11714787,62034804,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P04_AL_VO_GM.npz,188,0.6007
+E03_P04_AR_VFL_GM.mp4,E03,Lateral Rotation,P04,R,Right,FL,Full Light,M,97.6190,train,commercial_ok,11704627,9184636,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P04_AR_VFL_GM.npz,177,0.6923
+E03_P04_AR_VLL_GM.mp4,E03,Lateral Rotation,P04,R,Right,LL,Low Light,M,79.5238,train,commercial_ok,11704927,29747133,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P04_AR_VLL_GM.npz,178,0.6901
+E03_P04_AR_VO_GM.mp4,E03,Lateral Rotation,P04,R,Right,O,Occlusion,M,81.4286,train,commercial_ok,11704790,17551834,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P04_AR_VO_GM.npz,188,0.6813
+E03_P05_AF_VFL_GM.mp4,E03,Lateral Rotation,P05,F,Front,FL,Full Light,M,69.0476,train,commercial_ok,11704806,11915068,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P05_AF_VFL_GM.npz,179,0.5792
+E03_P05_AF_VLL_GM.mp4,E03,Lateral Rotation,P05,F,Front,LL,Low Light,M,80.4762,train,commercial_ok,11705384,31501584,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P05_AF_VLL_GM.npz,170,0.5696
+E03_P05_AF_VO_GM.mp4,E03,Lateral Rotation,P05,F,Front,O,Occlusion,M,71.4286,train,commercial_ok,11704878,12399595,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P05_AF_VO_GM.npz,148,0.5718
+E03_P05_AL_VFL_GM.mp4,E03,Lateral Rotation,P05,L,Left,FL,Full Light,M,69.0476,train,commercial_ok,11708780,58605537,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P05_AL_VFL_GM.npz,177,0.6390
+E03_P05_AL_VLL_GM.mp4,E03,Lateral Rotation,P05,L,Left,LL,Low Light,M,71.9048,train,commercial_ok,11708801,57847216,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P05_AL_VLL_GM.npz,175,0.5744
+E03_P05_AL_VO_GM.mp4,E03,Lateral Rotation,P05,L,Left,O,Occlusion,M,71.4286,train,commercial_ok,11708728,48026995,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P05_AL_VO_GM.npz,145,0.5611
+E03_P05_AR_VFL_GM.mp4,E03,Lateral Rotation,P05,R,Right,FL,Full Light,M,69.0476,train,commercial_ok,11704625,8795173,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P05_AR_VFL_GM.npz,175,0.5896
+E03_P05_AR_VLL_GM.mp4,E03,Lateral Rotation,P05,R,Right,LL,Low Light,M,74.7619,train,commercial_ok,11704926,22640309,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P05_AR_VLL_GM.npz,171,0.5672
+E03_P05_AR_VO_GM.mp4,E03,Lateral Rotation,P05,R,Right,O,Occlusion,M,71.4286,train,commercial_ok,11704845,11724167,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P05_AR_VO_GM.npz,134,0.5889
+E03_P07_AF_VFL_GM.mp4,E03,Lateral Rotation,P07,F,Front,FL,Full Light,M,76.1905,train,commercial_ok,11704837,15905467,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P07_AF_VFL_GM.npz,198,0.5892
+E03_P07_AF_VLL_GM.mp4,E03,Lateral Rotation,P07,F,Front,LL,Low Light,M,74.2857,train,commercial_ok,11705372,34368766,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P07_AF_VLL_GM.npz,152,0.5527
+E03_P07_AF_VO_GM.mp4,E03,Lateral Rotation,P07,F,Front,O,Occlusion,M,71.4286,train,commercial_ok,11704808,14090629,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P07_AF_VO_GM.npz,164,0.5243
+E03_P07_AL_VFL_GM.mp4,E03,Lateral Rotation,P07,L,Left,FL,Full Light,M,80.0000,train,commercial_ok,11714752,66554823,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P07_AL_VFL_GM.npz,201,0.6421
+E03_P07_AL_VLL_GM.mp4,E03,Lateral Rotation,P07,L,Left,LL,Low Light,M,74.2857,train,commercial_ok,11708774,52678691,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P07_AL_VLL_GM.npz,159,0.5704
+E03_P07_AL_VO_GM.mp4,E03,Lateral Rotation,P07,L,Left,O,Occlusion,M,71.4286,train,commercial_ok,11708796,51891191,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P07_AL_VO_GM.npz,157,0.6257
+E03_P07_AR_VFL_GM.mp4,E03,Lateral Rotation,P07,R,Right,FL,Full Light,M,80.0000,train,commercial_ok,11704741,10138081,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P07_AR_VFL_GM.npz,201,0.6777
+E03_P07_AR_VLL_GM.mp4,E03,Lateral Rotation,P07,R,Right,LL,Low Light,M,74.2857,train,commercial_ok,11704811,19832185,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P07_AR_VLL_GM.npz,156,0.5506
+E03_P07_AR_VO_GM.mp4,E03,Lateral Rotation,P07,R,Right,O,Occlusion,M,71.4286,train,commercial_ok,11704937,21797454,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P07_AR_VO_GM.npz,160,0.5958
+E03_P08_AF_VFL_GM.mp4,E03,Lateral Rotation,P08,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11704860,12615935,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P08_AF_VFL_GM.npz,206,0.5609
+E03_P08_AF_VLL_GM.mp4,E03,Lateral Rotation,P08,F,Front,LL,Low Light,M,84.2857,train,commercial_ok,11705375,34903733,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P08_AF_VLL_GM.npz,200,0.5344
+E03_P08_AF_VO_GM.mp4,E03,Lateral Rotation,P08,F,Front,O,Occlusion,M,80.0000,train,commercial_ok,11704777,13620998,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P08_AF_VO_GM.npz,188,0.5910
+E03_P08_AL_VFL_GM.mp4,E03,Lateral Rotation,P08,L,Left,FL,Full Light,M,84.2857,train,commercial_ok,11714766,68268781,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P08_AL_VFL_GM.npz,207,0.6722
+E03_P08_AL_VLL_GM.mp4,E03,Lateral Rotation,P08,L,Left,LL,Low Light,M,84.2857,train,commercial_ok,11714749,64265816,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P08_AL_VLL_GM.npz,195,0.5845
+E03_P08_AL_VO_GM.mp4,E03,Lateral Rotation,P08,L,Left,O,Occlusion,M,84.2857,train,commercial_ok,11714770,61449320,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P08_AL_VO_GM.npz,186,0.6208
+E03_P08_AR_VFL_GM.mp4,E03,Lateral Rotation,P08,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11704824,10995525,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P08_AR_VFL_GM.npz,209,0.7151
+E03_P08_AR_VLL_GM.mp4,E03,Lateral Rotation,P08,R,Right,LL,Low Light,M,84.2857,train,commercial_ok,11704848,11934271,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P08_AR_VLL_GM.npz,194,0.6574
+E03_P08_AR_VO_GM.mp4,E03,Lateral Rotation,P08,R,Right,O,Occlusion,M,81.4286,train,commercial_ok,11704813,14124162,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P08_AR_VO_GM.npz,191,0.6438
+E03_P09_AF_VFL_GF.mp4,E03,Lateral Rotation,P09,F,Front,FL,Full Light,F,69.5238,train,commercial_ok,11704928,30951145,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P09_AF_VFL_GF.npz,237,0.4550
+E03_P09_AF_VLL_GF.mp4,E03,Lateral Rotation,P09,F,Front,LL,Low Light,F,69.5238,train,commercial_ok,11705388,37523003,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P09_AF_VLL_GF.npz,179,0.4388
+E03_P09_AF_VO_GF.mp4,E03,Lateral Rotation,P09,F,Front,O,Occlusion,F,74.2857,train,commercial_ok,11704836,18467415,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P09_AF_VO_GF.npz,164,0.4378
+E03_P09_AL_VFL_GF.mp4,E03,Lateral Rotation,P09,L,Left,FL,Full Light,F,66.6667,train,commercial_ok,11714735,87153581,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P09_AL_VFL_GF.npz,264,0.5084
+E03_P09_AL_VLL_GF.mp4,E03,Lateral Rotation,P09,L,Left,LL,Low Light,F,66.6667,train,commercial_ok,11708759,58001987,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P09_AL_VLL_GF.npz,176,0.4290
+E03_P09_AL_VO_GF.mp4,E03,Lateral Rotation,P09,L,Left,O,Occlusion,F,71.4286,train,commercial_ok,11708775,52179961,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P09_AL_VO_GF.npz,158,0.4699
+E03_P09_AR_VFL_GF.mp4,E03,Lateral Rotation,P09,R,Right,FL,Full Light,F,66.6667,train,commercial_ok,11704810,14524306,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P09_AR_VFL_GF.npz,263,0.4449
+E03_P09_AR_VLL_GF.mp4,E03,Lateral Rotation,P09,R,Right,LL,Low Light,F,73.8095,train,commercial_ok,11704821,11041607,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P09_AR_VLL_GF.npz,171,0.4597
+E03_P09_AR_VO_GF.mp4,E03,Lateral Rotation,P09,R,Right,O,Occlusion,F,78.5714,train,commercial_ok,11705386,31499360,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P09_AR_VO_GF.npz,174,0.4025
+E03_P10_AF_VFL_GF.mp4,E03,Lateral Rotation,P10,F,Front,FL,Full Light,F,81.4286,train,commercial_ok,11704940,23711911,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P10_AF_VFL_GF.npz,239,0.4181
+E03_P10_AF_VLL_GF.mp4,E03,Lateral Rotation,P10,F,Front,LL,Low Light,F,81.4286,train,commercial_ok,11708784,54318544,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P10_AF_VLL_GF.npz,211,0.4265
+E03_P10_AF_VO_GF.mp4,E03,Lateral Rotation,P10,F,Front,O,Occlusion,F,100.0000,train,commercial_ok,11704830,14540636,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P10_AF_VO_GF.npz,183,0.4473
+E03_P10_AL_VFL_GF.mp4,E03,Lateral Rotation,P10,L,Left,FL,Full Light,F,81.4286,train,commercial_ok,11714739,76407505,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P10_AL_VFL_GF.npz,232,0.3733
+E03_P10_AL_VLL_GF.mp4,E03,Lateral Rotation,P10,L,Left,LL,Low Light,F,84.2857,train,commercial_ok,11714768,68677203,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P10_AL_VLL_GF.npz,208,0.3728
+E03_P10_AL_VO_GF.mp4,E03,Lateral Rotation,P10,L,Left,O,Occlusion,F,84.2857,train,commercial_ok,11708719,60056288,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P10_AL_VO_GF.npz,182,0.4441
+E03_P10_AR_VFL_GF.mp4,E03,Lateral Rotation,P10,R,Right,FL,Full Light,F,82.8571,train,commercial_ok,11704883,11884841,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P10_AR_VFL_GF.npz,221,0.4613
+E03_P10_AR_VLL_GF.mp4,E03,Lateral Rotation,P10,R,Right,LL,Low Light,F,84.2857,train,commercial_ok,11704884,19071922,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P10_AR_VLL_GF.npz,207,0.4617
+E03_P10_AR_VO_GF.mp4,E03,Lateral Rotation,P10,R,Right,O,Occlusion,F,84.2857,train,commercial_ok,11704911,30043832,ok,ok,ml/data/processed/mobiphysio_movenet/train/E03_P10_AR_VO_GF.npz,185,0.4554
+E03_P21_AF_VFL_GM.mp4,E03,Lateral Rotation,P21,F,Front,FL,Full Light,M,76.1905,val,commercial_ok,11704842,16158704,ok,ok,ml/data/processed/mobiphysio_movenet/val/E03_P21_AF_VFL_GM.npz,195,0.6054
+E03_P21_AF_VLL_GM.mp4,E03,Lateral Rotation,P21,F,Front,LL,Low Light,M,73.3333,val,commercial_ok,11705363,33645182,ok,ok,ml/data/processed/mobiphysio_movenet/val/E03_P21_AF_VLL_GM.npz,207,0.5555
+E03_P21_AF_VO_GM.mp4,E03,Lateral Rotation,P21,F,Front,O,Occlusion,M,71.4286,val,commercial_ok,11704820,15680350,ok,ok,ml/data/processed/mobiphysio_movenet/val/E03_P21_AF_VO_GM.npz,200,0.5580
+E03_P21_AL_VFL_GM.mp4,E03,Lateral Rotation,P21,L,Left,FL,Full Light,M,76.1905,val,commercial_ok,11731701,63567094,ok,ok,ml/data/processed/mobiphysio_movenet/val/E03_P21_AL_VFL_GM.npz,192,0.5806
+E03_P21_AL_VLL_GM.mp4,E03,Lateral Rotation,P21,L,Left,LL,Low Light,M,73.3333,val,commercial_ok,11731696,65690605,ok,ok,ml/data/processed/mobiphysio_movenet/val/E03_P21_AL_VLL_GM.npz,199,0.5110
+E03_P21_AL_VO_GM.mp4,E03,Lateral Rotation,P21,L,Left,O,Occlusion,M,71.4286,val,commercial_ok,11708727,61388650,ok,ok,ml/data/processed/mobiphysio_movenet/val/E03_P21_AL_VO_GM.npz,186,0.4925
+E03_P21_AR_VFL_GM.mp4,E03,Lateral Rotation,P21,R,Right,FL,Full Light,M,76.1905,val,commercial_ok,11704879,11906530,ok,ok,ml/data/processed/mobiphysio_movenet/val/E03_P21_AR_VFL_GM.npz,195,0.6754
+E03_P21_AR_VLL_GM.mp4,E03,Lateral Rotation,P21,R,Right,LL,Low Light,M,74.7619,val,commercial_ok,11704828,11568005,ok,ok,ml/data/processed/mobiphysio_movenet/val/E03_P21_AR_VLL_GM.npz,204,0.6154
+E03_P21_AR_VO_GM.mp4,E03,Lateral Rotation,P21,R,Right,O,Occlusion,M,71.4286,val,commercial_ok,11704853,13248491,ok,ok,ml/data/processed/mobiphysio_movenet/val/E03_P21_AR_VO_GM.npz,187,0.6365
+E03_P22_AF_VFL_GM.mp4,E03,Lateral Rotation,P22,F,Front,FL,Full Light,M,100.0000,test,commercial_ok,11704779,18707071,ok,ok,ml/data/processed/mobiphysio_movenet/test/E03_P22_AF_VFL_GM.npz,242,0.5414
+E03_P22_AF_VLL_GM.mp4,E03,Lateral Rotation,P22,F,Front,LL,Low Light,M,81.9048,test,commercial_ok,11705378,32456158,ok,ok,ml/data/processed/mobiphysio_movenet/test/E03_P22_AF_VLL_GM.npz,206,0.4818
+E03_P22_AF_VO_GM.mp4,E03,Lateral Rotation,P22,F,Front,O,Occlusion,M,79.0476,test,commercial_ok,11704802,15569032,ok,ok,ml/data/processed/mobiphysio_movenet/test/E03_P22_AF_VO_GM.npz,197,0.5782
+E03_P22_AL_VFL_GM.mp4,E03,Lateral Rotation,P22,L,Left,FL,Full Light,M,84.2857,test,commercial_ok,11731697,80504643,ok,ok,ml/data/processed/mobiphysio_movenet/test/E03_P22_AL_VFL_GM.npz,244,0.5976
+E03_P22_AL_VLL_GM.mp4,E03,Lateral Rotation,P22,L,Left,LL,Low Light,M,97.6190,test,commercial_ok,11731674,69770509,ok,ok,ml/data/processed/mobiphysio_movenet/test/E03_P22_AL_VLL_GM.npz,211,0.5527
+E03_P22_AL_VO_GM.mp4,E03,Lateral Rotation,P22,L,Left,O,Occlusion,M,80.4762,test,commercial_ok,11731700,69923198,ok,ok,ml/data/processed/mobiphysio_movenet/test/E03_P22_AL_VO_GM.npz,211,0.5730
+E03_P22_AR_VFL_GM.mp4,E03,Lateral Rotation,P22,R,Right,FL,Full Light,M,84.2857,test,commercial_ok,11704832,13747654,ok,ok,ml/data/processed/mobiphysio_movenet/test/E03_P22_AR_VFL_GM.npz,240,0.6540
+E03_P22_AR_VLL_GM.mp4,E03,Lateral Rotation,P22,R,Right,LL,Low Light,M,81.9048,test,commercial_ok,11704872,12063993,ok,ok,ml/data/processed/mobiphysio_movenet/test/E03_P22_AR_VLL_GM.npz,204,0.5719
+E03_P22_AR_VO_GM.mp4,E03,Lateral Rotation,P22,R,Right,O,Occlusion,M,81.9048,test,commercial_ok,11704805,16396402,ok,ok,ml/data/processed/mobiphysio_movenet/test/E03_P22_AR_VO_GM.npz,198,0.6017
+E04_P02_AF_VFL_GM.mp4,E04,Medial Rotation,P02,F,Front,FL,Full Light,M,66.6667,train,commercial_ok,11731744,6140870,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P02_AF_VFL_GM.npz,125,0.5326
+E04_P02_AF_VLL_GM.mp4,E04,Medial Rotation,P02,F,Front,LL,Low Light,M,64.2857,train,commercial_ok,11731732,22973271,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P02_AF_VLL_GM.npz,125,0.5558
+E04_P02_AF_VO_GM.mp4,E04,Medial Rotation,P02,F,Front,O,Occlusion,M,77.6190,train,commercial_ok,11731728,10813503,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P02_AF_VO_GM.npz,118,0.5835
+E04_P02_AL_VFL_GM.mp4,E04,Medial Rotation,P02,L,Left,FL,Full Light,M,66.6667,train,commercial_ok,11731743,39779128,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P02_AL_VFL_GM.npz,120,0.6007
+E04_P02_AL_VLL_GM.mp4,E04,Medial Rotation,P02,L,Left,LL,Low Light,M,64.2857,train,commercial_ok,11731742,36058139,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P02_AL_VLL_GM.npz,109,0.5993
+E04_P02_AL_VO_GM.mp4,E04,Medial Rotation,P02,L,Left,O,Occlusion,M,73.3333,train,commercial_ok,11731747,40498068,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P02_AL_VO_GM.npz,122,0.5726
+E04_P02_AR_VFL_GM.mp4,E04,Medial Rotation,P02,R,Right,FL,Full Light,M,66.6667,train,commercial_ok,11731726,30293594,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P02_AR_VFL_GM.npz,123,0.4291
+E04_P02_AR_VLL_GM.mp4,E04,Medial Rotation,P02,R,Right,LL,Low Light,M,64.2857,train,commercial_ok,11731710,38272334,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P02_AR_VLL_GM.npz,113,0.4193
+E04_P02_AR_VO_GM.mp4,E04,Medial Rotation,P02,R,Right,O,Occlusion,M,73.3333,train,commercial_ok,11731729,34499991,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P02_AR_VO_GM.npz,128,0.4274
+E04_P04_AF_VFL_GM.mp4,E04,Medial Rotation,P04,F,Front,FL,Full Light,M,57.1429,train,commercial_ok,11731804,11302529,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P04_AF_VFL_GM.npz,160,0.6644
+E04_P04_AF_VLL_GM.mp4,E04,Medial Rotation,P04,F,Front,LL,Low Light,M,64.2857,train,commercial_ok,11731784,35201880,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P04_AF_VLL_GM.npz,164,0.5472
+E04_P04_AF_VO_GM.mp4,E04,Medial Rotation,P04,F,Front,O,Occlusion,M,61.9048,train,commercial_ok,11731767,12512460,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P04_AF_VO_GM.npz,161,0.6691
+E04_P04_AL_VFL_GM.mp4,E04,Medial Rotation,P04,L,Left,FL,Full Light,M,57.1429,train,commercial_ok,11731806,51207646,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P04_AL_VFL_GM.npz,155,0.6194
+E04_P04_AL_VLL_GM.mp4,E04,Medial Rotation,P04,L,Left,LL,Low Light,M,64.2857,train,commercial_ok,11731811,51816979,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P04_AL_VLL_GM.npz,157,0.4567
+E04_P04_AL_VO_GM.mp4,E04,Medial Rotation,P04,L,Left,O,Occlusion,M,61.9048,train,commercial_ok,11731799,49174829,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P04_AL_VO_GM.npz,149,0.5935
+E04_P04_AR_VFL_GM.mp4,E04,Medial Rotation,P04,R,Right,FL,Full Light,M,57.1429,train,commercial_ok,11731771,7312508,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P04_AR_VFL_GM.npz,160,0.6964
+E04_P04_AR_VLL_GM.mp4,E04,Medial Rotation,P04,R,Right,LL,Low Light,M,64.2857,train,commercial_ok,11731769,8213046,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P04_AR_VLL_GM.npz,161,0.6497
+E04_P04_AR_VO_GM.mp4,E04,Medial Rotation,P04,R,Right,O,Occlusion,M,61.9048,train,commercial_ok,11731805,15369320,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P04_AR_VO_GM.npz,150,0.6733
+E04_P05_AF_VFL_GM.mp4,E04,Medial Rotation,P05,F,Front,FL,Full Light,M,92.8571,train,commercial_ok,11731780,9628567,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P05_AF_VFL_GM.npz,177,0.6276
+E04_P05_AF_VLL_GM.mp4,E04,Medial Rotation,P05,F,Front,LL,Low Light,M,79.5238,train,commercial_ok,11731809,29489333,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P05_AF_VLL_GM.npz,150,0.5350
+E04_P05_AF_VO_GM.mp4,E04,Medial Rotation,P05,F,Front,O,Occlusion,M,80.0000,train,commercial_ok,11731766,11533211,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P05_AF_VO_GM.npz,150,0.5595
+E04_P05_AL_VFL_GM.mp4,E04,Medial Rotation,P05,L,Left,FL,Full Light,M,92.8571,train,commercial_ok,11731792,58224421,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P05_AL_VFL_GM.npz,177,0.4545
+E04_P05_AL_VLL_GM.mp4,E04,Medial Rotation,P05,L,Left,LL,Low Light,M,78.0952,train,commercial_ok,11731781,47603548,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P05_AL_VLL_GM.npz,144,0.5121
+E04_P05_AL_VO_GM.mp4,E04,Medial Rotation,P05,L,Left,O,Occlusion,M,82.8571,train,commercial_ok,11731786,46127126,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P05_AL_VO_GM.npz,140,0.4809
+E04_P05_AR_VFL_GM.mp4,E04,Medial Rotation,P05,R,Right,FL,Full Light,M,92.8571,train,commercial_ok,11731808,9000013,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P05_AR_VFL_GM.npz,177,0.5890
+E04_P05_AR_VLL_GM.mp4,E04,Medial Rotation,P05,R,Right,LL,Low Light,M,79.5238,train,commercial_ok,11731790,8882404,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P05_AR_VLL_GM.npz,158,0.5532
+E04_P05_AR_VO_GM.mp4,E04,Medial Rotation,P05,R,Right,O,Occlusion,M,80.0000,train,commercial_ok,11731814,13886827,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P05_AR_VO_GM.npz,142,0.5732
+E04_P07_AF_VFL_GM.mp4,E04,Medial Rotation,P07,F,Front,FL,Full Light,M,65.7143,train,commercial_ok,11731872,14850005,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P07_AF_VFL_GM.npz,169,0.5096
+E04_P07_AF_VLL_GM.mp4,E04,Medial Rotation,P07,F,Front,LL,Low Light,M,77.1429,train,commercial_ok,11731821,20195327,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P07_AF_VLL_GM.npz,142,0.5387
+E04_P07_AF_VO_GM.mp4,E04,Medial Rotation,P07,F,Front,O,Occlusion,M,70.4762,train,commercial_ok,11731876,13716589,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P07_AF_VO_GM.npz,131,0.5347
+E04_P07_AL_VFL_GM.mp4,E04,Medial Rotation,P07,L,Left,FL,Full Light,M,67.1429,train,commercial_ok,11731836,55006313,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P07_AL_VFL_GM.npz,166,0.5799
+E04_P07_AL_VLL_GM.mp4,E04,Medial Rotation,P07,L,Left,LL,Low Light,M,72.8571,train,commercial_ok,11731843,43772009,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P07_AL_VLL_GM.npz,133,0.4881
+E04_P07_AL_VO_GM.mp4,E04,Medial Rotation,P07,L,Left,O,Occlusion,M,69.0476,train,commercial_ok,11731816,45625732,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P07_AL_VO_GM.npz,138,0.4628
+E04_P07_AR_VFL_GM.mp4,E04,Medial Rotation,P07,R,Right,FL,Full Light,M,65.7143,train,commercial_ok,11731864,11309727,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P07_AR_VFL_GM.npz,174,0.6374
+E04_P07_AR_VLL_GM.mp4,E04,Medial Rotation,P07,R,Right,LL,Low Light,M,72.8571,train,commercial_ok,11731879,11808730,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P07_AR_VLL_GM.npz,152,0.5931
+E04_P07_AR_VO_GM.mp4,E04,Medial Rotation,P07,R,Right,O,Occlusion,M,69.0476,train,commercial_ok,11731849,15538798,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P07_AR_VO_GM.npz,133,0.5622
+E04_P08_AF_VFL_GM.mp4,E04,Medial Rotation,P08,F,Front,FL,Full Light,M,78.5714,train,commercial_ok,11731885,11015759,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P08_AF_VFL_GM.npz,212,0.6322
+E04_P08_AF_VLL_GM.mp4,E04,Medial Rotation,P08,F,Front,LL,Low Light,M,74.2857,train,commercial_ok,11731817,31603446,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P08_AF_VLL_GM.npz,179,0.4817
+E04_P08_AF_VO_GM.mp4,E04,Medial Rotation,P08,F,Front,O,Occlusion,M,72.8571,train,commercial_ok,11731886,11542816,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P08_AF_VO_GM.npz,169,0.5920
+E04_P08_AL_VFL_GM.mp4,E04,Medial Rotation,P08,L,Left,FL,Full Light,M,84.2857,train,commercial_ok,11731824,68967558,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P08_AL_VFL_GM.npz,209,0.6227
+E04_P08_AL_VLL_GM.mp4,E04,Medial Rotation,P08,L,Left,LL,Low Light,M,77.1429,train,commercial_ok,11731877,58735495,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P08_AL_VLL_GM.npz,178,0.5070
+E04_P08_AL_VO_GM.mp4,E04,Medial Rotation,P08,L,Left,O,Occlusion,M,72.8571,train,commercial_ok,11731866,57229376,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P08_AL_VO_GM.npz,173,0.4542
+E04_P08_AR_VFL_GM.mp4,E04,Medial Rotation,P08,R,Right,FL,Full Light,M,84.2857,train,commercial_ok,11731870,10388645,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P08_AR_VFL_GM.npz,222,0.6707
+E04_P08_AR_VLL_GM.mp4,E04,Medial Rotation,P08,R,Right,LL,Low Light,M,77.1429,train,commercial_ok,11731825,9689150,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P08_AR_VLL_GM.npz,185,0.5955
+E04_P08_AR_VO_GM.mp4,E04,Medial Rotation,P08,R,Right,O,Occlusion,M,71.4286,train,commercial_ok,11731827,13972521,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P08_AR_VO_GM.npz,157,0.6430
+E04_P09_AF_VFL_GF.mp4,E04,Medial Rotation,P09,F,Front,FL,Full Light,F,75.7143,train,commercial_ok,11731857,19728636,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P09_AF_VFL_GF.npz,202,0.4666
+E04_P09_AF_VLL_GF.mp4,E04,Medial Rotation,P09,F,Front,LL,Low Light,F,84.2857,train,commercial_ok,11731826,31476680,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P09_AF_VLL_GF.npz,164,0.3725
+E04_P09_AF_VO_GF.mp4,E04,Medial Rotation,P09,F,Front,O,Occlusion,F,97.6190,train,commercial_ok,11731855,16278392,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P09_AF_VO_GF.npz,154,0.4884
+E04_P09_AL_VFL_GF.mp4,E04,Medial Rotation,P09,L,Left,FL,Full Light,F,77.1429,train,commercial_ok,11731880,69414890,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P09_AL_VFL_GF.npz,210,0.5100
+E04_P09_AL_VLL_GF.mp4,E04,Medial Rotation,P09,L,Left,LL,Low Light,F,84.2857,train,commercial_ok,11731856,53478904,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P09_AL_VLL_GF.npz,162,0.4170
+E04_P09_AL_VO_GF.mp4,E04,Medial Rotation,P09,L,Left,O,Occlusion,F,97.6190,train,commercial_ok,11731882,49555371,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P09_AL_VO_GF.npz,150,0.4572
+E04_P09_AR_VFL_GF.mp4,E04,Medial Rotation,P09,R,Right,FL,Full Light,F,77.1429,train,commercial_ok,11731833,10402525,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P09_AR_VFL_GF.npz,203,0.4462
+E04_P09_AR_VLL_GF.mp4,E04,Medial Rotation,P09,R,Right,LL,Low Light,F,84.2857,train,commercial_ok,11731858,9422859,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P09_AR_VLL_GF.npz,154,0.4466
+E04_P09_AR_VO_GF.mp4,E04,Medial Rotation,P09,R,Right,O,Occlusion,F,97.6190,train,commercial_ok,11731852,23815498,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P09_AR_VO_GF.npz,151,0.4326
+E04_P10_AF_VFL_GF.mp4,E04,Medial Rotation,P10,F,Front,FL,Full Light,F,81.9048,train,commercial_ok,11731883,16635258,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P10_AF_VFL_GF.npz,181,0.4838
+E04_P10_AF_VLL_GF.mp4,E04,Medial Rotation,P10,F,Front,LL,Low Light,F,79.0476,train,commercial_ok,11731844,34944995,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P10_AF_VLL_GF.npz,147,0.3681
+E04_P10_AF_VO_GF.mp4,E04,Medial Rotation,P10,F,Front,O,Occlusion,F,77.6190,train,commercial_ok,11731835,12457836,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P10_AF_VO_GF.npz,140,0.4476
+E04_P10_AL_VFL_GF.mp4,E04,Medial Rotation,P10,L,Left,FL,Full Light,F,81.9048,train,commercial_ok,11731878,59365283,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P10_AL_VFL_GF.npz,180,0.4352
+E04_P10_AL_VLL_GF.mp4,E04,Medial Rotation,P10,L,Left,LL,Low Light,F,79.0476,train,commercial_ok,11731862,48776044,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P10_AL_VLL_GF.npz,148,0.3970
+E04_P10_AL_VO_GF.mp4,E04,Medial Rotation,P10,L,Left,O,Occlusion,F,69.0476,train,commercial_ok,11731841,46912260,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P10_AL_VO_GF.npz,142,0.4067
+E04_P10_AR_VFL_GF.mp4,E04,Medial Rotation,P10,R,Right,FL,Full Light,F,97.6190,train,commercial_ok,11731832,11878861,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P10_AR_VFL_GF.npz,174,0.3919
+E04_P10_AR_VLL_GF.mp4,E04,Medial Rotation,P10,R,Right,LL,Low Light,F,79.0476,train,commercial_ok,11731867,14271474,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P10_AR_VLL_GF.npz,142,0.4541
+E04_P10_AR_VO_GF.mp4,E04,Medial Rotation,P10,R,Right,O,Occlusion,F,69.0476,train,commercial_ok,11731823,28396818,ok,ok,ml/data/processed/mobiphysio_movenet/train/E04_P10_AR_VO_GF.npz,127,0.4305
+E04_P21_AF_VFL_GM.mp4,E04,Medial Rotation,P21,F,Front,FL,Full Light,M,80.0000,val,commercial_ok,11731996,14304761,ok,ok,ml/data/processed/mobiphysio_movenet/val/E04_P21_AF_VFL_GM.npz,190,0.5995
+E04_P21_AF_VLL_GM.mp4,E04,Medial Rotation,P21,F,Front,LL,Low Light,M,80.0000,val,commercial_ok,11731994,27091120,ok,ok,ml/data/processed/mobiphysio_movenet/val/E04_P21_AF_VLL_GM.npz,172,0.5539
+E04_P21_AF_VO_GM.mp4,E04,Medial Rotation,P21,F,Front,O,Occlusion,M,72.3810,val,commercial_ok,11731993,13672097,ok,ok,ml/data/processed/mobiphysio_movenet/val/E04_P21_AF_VO_GM.npz,168,0.5287
+E04_P21_AL_VFL_GM.mp4,E04,Medial Rotation,P21,L,Left,FL,Full Light,M,72.8571,val,commercial_ok,11731999,60360769,ok,ok,ml/data/processed/mobiphysio_movenet/val/E04_P21_AL_VFL_GM.npz,182,0.5618
+E04_P21_AL_VLL_GM.mp4,E04,Medial Rotation,P21,L,Left,LL,Low Light,M,78.5714,val,commercial_ok,11731974,58876822,ok,ok,ml/data/processed/mobiphysio_movenet/val/E04_P21_AL_VLL_GM.npz,179,0.5024
+E04_P21_AL_VO_GM.mp4,E04,Medial Rotation,P21,L,Left,O,Occlusion,M,75.2381,val,commercial_ok,11731989,57505799,ok,ok,ml/data/processed/mobiphysio_movenet/val/E04_P21_AL_VO_GM.npz,173,0.4915
+E04_P21_AR_VFL_GM.mp4,E04,Medial Rotation,P21,R,Right,FL,Full Light,M,71.4286,val,commercial_ok,11732021,10929154,ok,ok,ml/data/processed/mobiphysio_movenet/val/E04_P21_AR_VFL_GM.npz,182,0.7031
+E04_P21_AR_VLL_GM.mp4,E04,Medial Rotation,P21,R,Right,LL,Low Light,M,72.8571,val,commercial_ok,11731960,9987891,ok,ok,ml/data/processed/mobiphysio_movenet/val/E04_P21_AR_VLL_GM.npz,176,0.6389
+E04_P21_AR_VO_GM.mp4,E04,Medial Rotation,P21,R,Right,O,Occlusion,M,69.5238,val,commercial_ok,11731968,12817111,ok,ok,ml/data/processed/mobiphysio_movenet/val/E04_P21_AR_VO_GM.npz,177,0.6274
+E04_P22_AF_VFL_GM.mp4,E04,Medial Rotation,P22,F,Front,FL,Full Light,M,66.6667,test,commercial_ok,11732016,20217645,ok,ok,ml/data/processed/mobiphysio_movenet/test/E04_P22_AF_VFL_GM.npz,250,0.5592
+E04_P22_AF_VLL_GM.mp4,E04,Medial Rotation,P22,F,Front,LL,Low Light,M,66.6667,test,commercial_ok,11732002,33746680,ok,ok,ml/data/processed/mobiphysio_movenet/test/E04_P22_AF_VLL_GM.npz,215,0.4719
+E04_P22_AF_VO_GM.mp4,E04,Medial Rotation,P22,F,Front,O,Occlusion,M,66.6667,test,commercial_ok,11732000,17584533,ok,ok,ml/data/processed/mobiphysio_movenet/test/E04_P22_AF_VO_GM.npz,222,0.5509
+E04_P22_AL_VFL_GM.mp4,E04,Medial Rotation,P22,L,Left,FL,Full Light,M,66.6667,test,commercial_ok,11714820,80211185,ok,ok,ml/data/processed/mobiphysio_movenet/test/E04_P22_AL_VFL_GM.npz,243,0.5810
+E04_P22_AL_VLL_GM.mp4,E04,Medial Rotation,P22,L,Left,LL,Low Light,M,66.6667,test,commercial_ok,11714798,74899703,ok,ok,ml/data/processed/mobiphysio_movenet/test/E04_P22_AL_VLL_GM.npz,227,0.5651
+E04_P22_AL_VO_GM.mp4,E04,Medial Rotation,P22,L,Left,O,Occlusion,M,66.6667,test,commercial_ok,11714838,75781405,ok,ok,ml/data/processed/mobiphysio_movenet/test/E04_P22_AL_VO_GM.npz,230,0.5712
+E04_P22_AR_VFL_GM.mp4,E04,Medial Rotation,P22,R,Right,FL,Full Light,M,69.5238,test,commercial_ok,11737075,15571884,ok,ok,ml/data/processed/mobiphysio_movenet/test/E04_P22_AR_VFL_GM.npz,248,0.6773
+E04_P22_AR_VLL_GM.mp4,E04,Medial Rotation,P22,R,Right,LL,Low Light,M,66.6667,test,commercial_ok,11737065,11900677,ok,ok,ml/data/processed/mobiphysio_movenet/test/E04_P22_AR_VLL_GM.npz,211,0.5701
+E04_P22_AR_VO_GM.mp4,E04,Medial Rotation,P22,R,Right,O,Occlusion,M,66.6667,test,commercial_ok,11737069,15775332,ok,ok,ml/data/processed/mobiphysio_movenet/test/E04_P22_AR_VO_GM.npz,222,0.5973
+E05_P02_AF_VFL_GM.mp4,E05,Circumduction,P02,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11738009,19659268,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P02_AF_VFL_GM.npz,197,0.6209
+E05_P02_AF_VLL_GM.mp4,E05,Circumduction,P02,F,Front,LL,Low Light,M,74.2857,train,commercial_ok,11771594,36179391,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P02_AF_VLL_GM.npz,139,0.5611
+E05_P02_AF_VO_GM.mp4,E05,Circumduction,P02,F,Front,O,Occlusion,M,74.2857,train,commercial_ok,11771576,24396590,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P02_AF_VO_GM.npz,199,0.5668
+E05_P02_AL_VFL_GM.mp4,E05,Circumduction,P02,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11771591,61003655,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P02_AL_VFL_GM.npz,184,0.6464
+E05_P02_AL_VLL_GM.mp4,E05,Circumduction,P02,L,Left,LL,Low Light,M,81.4286,train,commercial_ok,11771578,45565721,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P02_AL_VLL_GM.npz,138,0.6187
+E05_P02_AL_VO_GM.mp4,E05,Circumduction,P02,L,Left,O,Occlusion,M,72.8571,train,commercial_ok,11771598,62929952,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P02_AL_VO_GM.npz,190,0.5770
+E05_P02_AR_VFL_GM.mp4,E05,Circumduction,P02,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11771581,44061519,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P02_AR_VFL_GM.npz,188,0.4252
+E05_P02_AR_VLL_GM.mp4,E05,Circumduction,P02,R,Right,LL,Low Light,M,78.5714,train,commercial_ok,11771609,48498327,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P02_AR_VLL_GM.npz,144,0.4220
+E05_P02_AR_VO_GM.mp4,E05,Circumduction,P02,R,Right,O,Occlusion,M,74.2857,train,commercial_ok,11771605,63073875,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P02_AR_VO_GM.npz,201,0.3968
+E05_P04_AF_VFL_GM.mp4,E05,Circumduction,P04,F,Front,FL,Full Light,M,88.0952,train,commercial_ok,11738018,11970647,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P04_AF_VFL_GM.npz,170,0.7028
+E05_P04_AF_VLL_GM.mp4,E05,Circumduction,P04,F,Front,LL,Low Light,M,74.2857,train,commercial_ok,11771678,34376489,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P04_AF_VLL_GM.npz,155,0.6128
+E05_P04_AF_VO_GM.mp4,E05,Circumduction,P04,F,Front,O,Occlusion,M,77.1429,train,commercial_ok,11737952,13912168,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P04_AF_VO_GM.npz,149,0.6786
+E05_P04_AL_VFL_GM.mp4,E05,Circumduction,P04,L,Left,FL,Full Light,M,72.3810,train,commercial_ok,11771672,54296144,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P04_AL_VFL_GM.npz,164,0.5967
+E05_P04_AL_VLL_GM.mp4,E05,Circumduction,P04,L,Left,LL,Low Light,M,77.1429,train,commercial_ok,11714931,49101596,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P04_AL_VLL_GM.npz,149,0.5176
+E05_P04_AL_VO_GM.mp4,E05,Circumduction,P04,L,Left,O,Occlusion,M,77.1429,train,commercial_ok,11714909,47534042,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P04_AL_VO_GM.npz,144,0.5387
+E05_P04_AR_VFL_GM.mp4,E05,Circumduction,P04,R,Right,FL,Full Light,M,88.0952,train,commercial_ok,11714956,15053412,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P04_AR_VFL_GM.npz,172,0.6423
+E05_P04_AR_VLL_GM.mp4,E05,Circumduction,P04,R,Right,LL,Low Light,M,75.7143,train,commercial_ok,11714907,10066013,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P04_AR_VLL_GM.npz,139,0.6202
+E05_P04_AR_VO_GM.mp4,E05,Circumduction,P04,R,Right,O,Occlusion,M,92.8571,train,commercial_ok,11714951,20190175,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P04_AR_VO_GM.npz,144,0.6340
+E05_P05_AF_VFL_GM.mp4,E05,Circumduction,P05,F,Front,FL,Full Light,M,97.6190,train,commercial_ok,11714908,12565105,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P05_AF_VFL_GM.npz,201,0.6154
+E05_P05_AF_VLL_GM.mp4,E05,Circumduction,P05,F,Front,LL,Low Light,M,95.2381,train,commercial_ok,11771676,37247166,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P05_AF_VLL_GM.npz,186,0.5150
+E05_P05_AF_VO_GM.mp4,E05,Circumduction,P05,F,Front,O,Occlusion,M,92.8571,train,commercial_ok,11737995,17015742,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P05_AF_VO_GM.npz,172,0.5475
+E05_P05_AL_VFL_GM.mp4,E05,Circumduction,P05,L,Left,FL,Full Light,M,97.6190,train,commercial_ok,11771656,64295921,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P05_AL_VFL_GM.npz,195,0.4577
+E05_P05_AL_VLL_GM.mp4,E05,Circumduction,P05,L,Left,LL,Low Light,M,95.2381,train,commercial_ok,11771654,59465301,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P05_AL_VLL_GM.npz,180,0.5019
+E05_P05_AL_VO_GM.mp4,E05,Circumduction,P05,L,Left,O,Occlusion,M,92.8571,train,commercial_ok,11771649,55629615,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P05_AL_VO_GM.npz,169,0.4699
+E05_P05_AR_VFL_GM.mp4,E05,Circumduction,P05,R,Right,FL,Full Light,M,97.6190,train,commercial_ok,11737921,12594648,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P05_AR_VFL_GM.npz,197,0.5891
+E05_P05_AR_VLL_GM.mp4,E05,Circumduction,P05,R,Right,LL,Low Light,M,95.2381,train,commercial_ok,11738022,11100488,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P05_AR_VLL_GM.npz,177,0.5422
+E05_P05_AR_VO_GM.mp4,E05,Circumduction,P05,R,Right,O,Occlusion,M,92.8571,train,commercial_ok,11737948,17166863,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P05_AR_VO_GM.npz,160,0.5385
+E05_P07_AF_VFL_GM.mp4,E05,Circumduction,P07,F,Front,FL,Full Light,M,74.7619,train,commercial_ok,11771685,23160175,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P07_AF_VFL_GM.npz,220,0.5395
+E05_P07_AF_VLL_GM.mp4,E05,Circumduction,P07,F,Front,LL,Low Light,M,92.8571,train,commercial_ok,11771662,27063301,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P07_AF_VLL_GM.npz,166,0.5156
+E05_P07_AF_VO_GM.mp4,E05,Circumduction,P07,F,Front,O,Occlusion,M,71.4286,train,commercial_ok,11737962,18859349,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P07_AF_VO_GM.npz,160,0.5273
+E05_P07_AL_VFL_GM.mp4,E05,Circumduction,P07,L,Left,FL,Full Light,M,71.9048,train,commercial_ok,11771674,69883556,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P07_AL_VFL_GM.npz,211,0.6237
+E05_P07_AL_VLL_GM.mp4,E05,Circumduction,P07,L,Left,LL,Low Light,M,92.8571,train,commercial_ok,11771660,53069599,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P07_AL_VLL_GM.npz,161,0.5373
+E05_P07_AL_VO_GM.mp4,E05,Circumduction,P07,L,Left,O,Occlusion,M,75.7143,train,commercial_ok,11771658,54117535,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P07_AL_VO_GM.npz,164,0.4840
+E05_P07_AR_VFL_GM.mp4,E05,Circumduction,P07,R,Right,FL,Full Light,M,90.4762,train,commercial_ok,11771668,21732688,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P07_AR_VFL_GM.npz,219,0.6409
+E05_P07_AR_VLL_GM.mp4,E05,Circumduction,P07,R,Right,LL,Low Light,M,92.8571,train,commercial_ok,11737951,16081798,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P07_AR_VLL_GM.npz,169,0.5919
+E05_P07_AR_VO_GM.mp4,E05,Circumduction,P07,R,Right,O,Occlusion,M,77.1429,train,commercial_ok,11771651,20656662,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P07_AR_VO_GM.npz,157,0.5639
+E05_P08_AF_VFL_GM.mp4,E05,Circumduction,P08,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11738070,16142563,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P08_AF_VFL_GM.npz,235,0.6123
+E05_P08_AF_VLL_GM.mp4,E05,Circumduction,P08,F,Front,LL,Low Light,M,97.6190,train,commercial_ok,11771761,33545525,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P08_AF_VLL_GM.npz,171,0.4832
+E05_P08_AF_VO_GM.mp4,E05,Circumduction,P08,F,Front,O,Occlusion,M,95.2381,train,commercial_ok,11738038,17679410,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P08_AF_VO_GM.npz,176,0.5949
+E05_P08_AL_VFL_GM.mp4,E05,Circumduction,P08,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11771752,73271814,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P08_AL_VFL_GM.npz,222,0.6509
+E05_P08_AL_VO_GM.mp4,E05,Circumduction,P08,L,Left,O,Occlusion,M,95.2381,train,commercial_ok,11771724,56739661,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P08_AL_VO_GM.npz,172,0.5171
+E05_P08_AR_VFL_GM.mp4,E05,Circumduction,P08,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11737974,12323621,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P08_AR_VFL_GM.npz,230,0.6622
+E05_P08_AR_VLL_GM.mp4,E05,Circumduction,P08,R,Right,LL,Low Light,M,97.6190,train,commercial_ok,11737997,10436528,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P08_AR_VLL_GM.npz,173,0.5921
+E05_P08_AR_VO_GM.mp4,E05,Circumduction,P08,R,Right,O,Occlusion,M,95.2381,train,commercial_ok,11737931,19209511,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P08_AR_VO_GM.npz,167,0.6377
+E05_P09_AF_VFL_GF.mp4,E05,Circumduction,P09,F,Front,FL,Full Light,F,95.2381,train,commercial_ok,11771715,33785535,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P09_AF_VFL_GF.npz,318,0.4932
+E05_P09_AF_VLL_GF.mp4,E05,Circumduction,P09,F,Front,LL,Low Light,F,78.0952,train,commercial_ok,11771717,45809293,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P09_AF_VLL_GF.npz,202,0.4402
+E05_P09_AF_VO_GF.mp4,E05,Circumduction,P09,F,Front,O,Occlusion,F,100.0000,train,commercial_ok,11771742,24240180,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P09_AF_VO_GF.npz,202,0.4732
+E05_P09_AL_VFL_GF.mp4,E05,Circumduction,P09,L,Left,FL,Full Light,F,95.2381,train,commercial_ok,11771753,103781779,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P09_AL_VFL_GF.npz,314,0.4848
+E05_P09_AL_VLL_GF.mp4,E05,Circumduction,P09,L,Left,LL,Low Light,F,79.5238,train,commercial_ok,11771740,67378201,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P09_AL_VLL_GF.npz,204,0.4041
+E05_P09_AL_VO_GF.mp4,E05,Circumduction,P09,L,Left,O,Occlusion,F,100.0000,train,commercial_ok,11771743,65308760,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P09_AL_VO_GF.npz,198,0.4824
+E05_P09_AR_VFL_GF.mp4,E05,Circumduction,P09,R,Right,FL,Full Light,F,95.2381,train,commercial_ok,11771754,20517967,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P09_AR_VFL_GF.npz,318,0.4921
+E05_P09_AR_VLL_GF.mp4,E05,Circumduction,P09,R,Right,LL,Low Light,F,95.2381,train,commercial_ok,11737956,15177823,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P09_AR_VLL_GF.npz,202,0.4794
+E05_P09_AR_VO_GF.mp4,E05,Circumduction,P09,R,Right,O,Occlusion,F,100.0000,train,commercial_ok,11771767,21383019,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P09_AR_VO_GF.npz,198,0.4774
+E05_P10_AF_VFL_GF.mp4,E05,Circumduction,P10,F,Front,FL,Full Light,F,100.0000,train,commercial_ok,11771762,27944238,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P10_AF_VFL_GF.npz,238,0.3841
+E05_P10_AF_VLL_GF.mp4,E05,Circumduction,P10,F,Front,LL,Low Light,F,97.6190,train,commercial_ok,11771712,36475222,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P10_AF_VLL_GF.npz,175,0.3618
+E05_P10_AF_VO_GF.mp4,E05,Circumduction,P10,F,Front,O,Occlusion,F,100.0000,train,commercial_ok,11738003,19560365,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P10_AF_VO_GF.npz,191,0.4345
+E05_P10_AL_VFL_GF.mp4,E05,Circumduction,P10,L,Left,FL,Full Light,F,100.0000,train,commercial_ok,11771760,75185965,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P10_AL_VFL_GF.npz,228,0.4139
+E05_P10_AL_VLL_GF.mp4,E05,Circumduction,P10,L,Left,LL,Low Light,F,97.6190,train,commercial_ok,11771744,56885090,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P10_AL_VLL_GF.npz,172,0.3436
+E05_P10_AL_VO_GF.mp4,E05,Circumduction,P10,L,Left,O,Occlusion,F,100.0000,train,commercial_ok,11771721,60908046,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P10_AL_VO_GF.npz,185,0.3818
+E05_P10_AR_VFL_GF.mp4,E05,Circumduction,P10,R,Right,FL,Full Light,F,100.0000,train,commercial_ok,11771755,20550748,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P10_AR_VFL_GF.npz,221,0.4375
+E05_P10_AR_VLL_GF.mp4,E05,Circumduction,P10,R,Right,LL,Low Light,F,97.6190,train,commercial_ok,11771756,23330001,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P10_AR_VLL_GF.npz,172,0.4025
+E05_P10_AR_VO_GF.mp4,E05,Circumduction,P10,R,Right,O,Occlusion,F,100.0000,train,commercial_ok,11771711,26400333,ok,ok,ml/data/processed/mobiphysio_movenet/train/E05_P10_AR_VO_GF.npz,183,0.3656
+E05_P21_AF_VFL_GM.mp4,E05,Circumduction,P21,F,Front,FL,Full Light,M,88.0952,val,commercial_ok,11737916,17315527,ok,ok,ml/data/processed/mobiphysio_movenet/val/E05_P21_AF_VFL_GM.npz,203,0.5824
+E05_P21_AF_VLL_GM.mp4,E05,Circumduction,P21,F,Front,LL,Low Light,M,62.3810,val,commercial_ok,11771884,34993666,ok,ok,ml/data/processed/mobiphysio_movenet/val/E05_P21_AF_VLL_GM.npz,213,0.5189
+E05_P21_AF_VO_GM.mp4,E05,Circumduction,P21,F,Front,O,Occlusion,M,65.2381,val,commercial_ok,11737914,16041460,ok,ok,ml/data/processed/mobiphysio_movenet/val/E05_P21_AF_VO_GM.npz,212,0.5325
+E05_P21_AL_VFL_GM.mp4,E05,Circumduction,P21,L,Left,FL,Full Light,M,88.0952,val,commercial_ok,11771906,66295068,ok,ok,ml/data/processed/mobiphysio_movenet/val/E05_P21_AL_VFL_GM.npz,200,0.6008
+E05_P21_AL_VLL_GM.mp4,E05,Circumduction,P21,L,Left,LL,Low Light,M,65.2381,val,commercial_ok,11771925,68600014,ok,ok,ml/data/processed/mobiphysio_movenet/val/E05_P21_AL_VLL_GM.npz,207,0.5460
+E05_P21_AL_VO_GM.mp4,E05,Circumduction,P21,L,Left,O,Occlusion,M,63.8095,val,commercial_ok,11771891,62835869,ok,ok,ml/data/processed/mobiphysio_movenet/val/E05_P21_AL_VO_GM.npz,189,0.5273
+E05_P21_AR_VFL_GM.mp4,E05,Circumduction,P21,R,Right,FL,Full Light,M,88.0952,val,commercial_ok,11737971,16116282,ok,ok,ml/data/processed/mobiphysio_movenet/val/E05_P21_AR_VFL_GM.npz,202,0.6670
+E05_P21_AR_VLL_GM.mp4,E05,Circumduction,P21,R,Right,LL,Low Light,M,63.8095,val,commercial_ok,11771889,22000584,ok,ok,ml/data/processed/mobiphysio_movenet/val/E05_P21_AR_VLL_GM.npz,212,0.6193
+E05_P21_AR_VO_GM.mp4,E05,Circumduction,P21,R,Right,O,Occlusion,M,63.8095,val,commercial_ok,11738088,18549839,ok,ok,ml/data/processed/mobiphysio_movenet/val/E05_P21_AR_VO_GM.npz,198,0.6162
+E05_P22_AF_VFL_GM.mp4,E05,Circumduction,P22,F,Front,FL,Full Light,M,97.6190,test,commercial_ok,11771913,22981595,ok,ok,ml/data/processed/mobiphysio_movenet/test/E05_P22_AF_VFL_GM.npz,237,0.5532
+E05_P22_AF_VLL_GM.mp4,E05,Circumduction,P22,F,Front,LL,Low Light,M,79.5238,test,commercial_ok,11771897,38380440,ok,ok,ml/data/processed/mobiphysio_movenet/test/E05_P22_AF_VLL_GM.npz,226,0.5103
+E05_P22_AF_VO_GM.mp4,E05,Circumduction,P22,F,Front,O,Occlusion,M,75.7143,test,commercial_ok,11771929,25321461,ok,ok,ml/data/processed/mobiphysio_movenet/test/E05_P22_AF_VO_GM.npz,254,0.5527
+E05_P22_AL_VFL_GM.mp4,E05,Circumduction,P22,L,Left,FL,Full Light,M,97.6190,test,commercial_ok,11771890,76797955,ok,ok,ml/data/processed/mobiphysio_movenet/test/E05_P22_AL_VFL_GM.npz,232,0.6020
+E05_P22_AL_VLL_GM.mp4,E05,Circumduction,P22,L,Left,LL,Low Light,M,95.2381,test,commercial_ok,11771926,70577600,ok,ok,ml/data/processed/mobiphysio_movenet/test/E05_P22_AL_VLL_GM.npz,214,0.5441
+E05_P22_AL_VO_GM.mp4,E05,Circumduction,P22,L,Left,O,Occlusion,M,75.7143,test,commercial_ok,11771915,81022645,ok,ok,ml/data/processed/mobiphysio_movenet/test/E05_P22_AL_VO_GM.npz,245,0.5666
+E05_P22_AR_VFL_GM.mp4,E05,Circumduction,P22,R,Right,FL,Full Light,M,97.6190,test,commercial_ok,11737999,17192403,ok,ok,ml/data/processed/mobiphysio_movenet/test/E05_P22_AR_VFL_GM.npz,235,0.6537
+E05_P22_AR_VLL_GM.mp4,E05,Circumduction,P22,R,Right,LL,Low Light,M,79.5238,test,commercial_ok,11771912,21195588,ok,ok,ml/data/processed/mobiphysio_movenet/test/E05_P22_AR_VLL_GM.npz,216,0.6071
+E05_P22_AR_VO_GM.mp4,E05,Circumduction,P22,R,Right,O,Occlusion,M,74.2857,test,commercial_ok,11771922,29679352,ok,ok,ml/data/processed/mobiphysio_movenet/test/E05_P22_AR_VO_GM.npz,250,0.6375
+E06_P02_AF_VFL_GM.mp4,E06,Wrist Extension,P02,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11718230,9162639,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P02_AF_VFL_GM.npz,205,0.4728
+E06_P02_AF_VLL_GM.mp4,E06,Wrist Extension,P02,F,Front,LL,Low Light,M,100.0000,train,commercial_ok,11718254,48302257,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P02_AF_VLL_GM.npz,189,0.4539
+E06_P02_AF_VO_GM.mp4,E06,Wrist Extension,P02,F,Front,O,Occlusion,M,100.0000,train,commercial_ok,11718209,18132213,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P02_AF_VO_GM.npz,182,0.4761
+E06_P02_AL_VFL_GM.mp4,E06,Wrist Extension,P02,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11718176,64279475,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P02_AL_VFL_GM.npz,194,0.5440
+E06_P02_AL_VLL_GM.mp4,E06,Wrist Extension,P02,L,Left,LL,Low Light,M,100.0000,train,commercial_ok,11718198,62335487,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P02_AL_VLL_GM.npz,188,0.5416
+E06_P02_AL_VO_GM.mp4,E06,Wrist Extension,P02,L,Left,O,Occlusion,M,100.0000,train,commercial_ok,11718247,60302162,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P02_AL_VO_GM.npz,182,0.5567
+E06_P02_AR_VFL_GM.mp4,E06,Wrist Extension,P02,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11718228,13872591,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P02_AR_VFL_GM.npz,210,0.6141
+E06_P02_AR_VLL_GM.mp4,E06,Wrist Extension,P02,R,Right,LL,Low Light,M,100.0000,train,commercial_ok,11718174,34135359,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P02_AR_VLL_GM.npz,192,0.5969
+E06_P02_AR_VO_GM.mp4,E06,Wrist Extension,P02,R,Right,O,Occlusion,M,100.0000,train,commercial_ok,11718238,47143891,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P02_AR_VO_GM.npz,189,0.5831
+E06_P04_AF_VFL_GM.mp4,E06,Wrist Extension,P04,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11718186,17578843,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P04_AF_VFL_GM.npz,271,0.6406
+E06_P04_AF_VLL_GM.mp4,E06,Wrist Extension,P04,F,Front,LL,Low Light,M,100.0000,train,commercial_ok,11718219,46081037,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P04_AF_VLL_GM.npz,225,0.5400
+E06_P04_AF_VO_GM.mp4,E06,Wrist Extension,P04,F,Front,O,Occlusion,M,100.0000,train,commercial_ok,11718191,16995770,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P04_AF_VO_GM.npz,175,0.6031
+E06_P04_AL_VFL_GM.mp4,E06,Wrist Extension,P04,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11718242,87545944,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P04_AL_VFL_GM.npz,265,0.6099
+E06_P04_AL_VLL_GM.mp4,E06,Wrist Extension,P04,L,Left,LL,Low Light,M,100.0000,train,commercial_ok,11718197,73299702,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P04_AL_VLL_GM.npz,222,0.5640
+E06_P04_AL_VO_GM.mp4,E06,Wrist Extension,P04,L,Left,O,Occlusion,M,100.0000,train,commercial_ok,11718232,57941532,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P04_AL_VO_GM.npz,175,0.5711
+E06_P04_AR_VFL_GM.mp4,E06,Wrist Extension,P04,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11718250,22215901,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P04_AR_VFL_GM.npz,266,0.6895
+E06_P04_AR_VLL_GM.mp4,E06,Wrist Extension,P04,R,Right,LL,Low Light,M,100.0000,train,commercial_ok,11718239,14870519,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P04_AR_VLL_GM.npz,227,0.6289
+E06_P04_AR_VO_GM.mp4,E06,Wrist Extension,P04,R,Right,O,Occlusion,M,100.0000,train,commercial_ok,11718236,17076066,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P04_AR_VO_GM.npz,171,0.6573
+E06_P05_AF_VFL_GM.mp4,E06,Wrist Extension,P05,F,Front,FL,Full Light,M,97.6190,train,commercial_ok,11718192,19142003,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P05_AF_VFL_GM.npz,320,0.5820
+E06_P05_AF_VLL_GM.mp4,E06,Wrist Extension,P05,F,Front,LL,Low Light,M,100.0000,train,commercial_ok,11718245,39087006,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P05_AF_VLL_GM.npz,224,0.5219
+E06_P05_AF_VO_GM.mp4,E06,Wrist Extension,P05,F,Front,O,Occlusion,M,97.6190,train,commercial_ok,11718223,14286666,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P05_AF_VO_GM.npz,194,0.5461
+E06_P05_AL_VFL_GM.mp4,E06,Wrist Extension,P05,L,Left,FL,Full Light,M,97.6190,train,commercial_ok,11718255,104436308,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P05_AL_VFL_GM.npz,316,0.5122
+E06_P05_AL_VLL_GM.mp4,E06,Wrist Extension,P05,L,Left,LL,Low Light,M,100.0000,train,commercial_ok,11718226,72483469,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P05_AL_VLL_GM.npz,219,0.5446
+E06_P05_AL_VO_GM.mp4,E06,Wrist Extension,P05,L,Left,O,Occlusion,M,97.6190,train,commercial_ok,11718220,60484733,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P05_AL_VO_GM.npz,183,0.5502
+E06_P05_AR_VFL_GM.mp4,E06,Wrist Extension,P05,R,Right,FL,Full Light,M,97.6190,train,commercial_ok,11718222,16427656,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P05_AR_VFL_GM.npz,320,0.6398
+E06_P05_AR_VLL_GM.mp4,E06,Wrist Extension,P05,R,Right,LL,Low Light,M,100.0000,train,commercial_ok,11718229,12724349,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P05_AR_VLL_GM.npz,227,0.6048
+E06_P05_AR_VO_GM.mp4,E06,Wrist Extension,P05,R,Right,O,Occlusion,M,97.6190,train,commercial_ok,11718208,14228808,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P05_AR_VO_GM.npz,185,0.5889
+E06_P07_AF_VFL_GM.mp4,E06,Wrist Extension,P07,F,Front,FL,Full Light,M,95.2381,train,commercial_ok,11772036,15522871,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P07_AF_VFL_GM.npz,189,0.5014
+E06_P07_AF_VLL_GM.mp4,E06,Wrist Extension,P07,F,Front,LL,Low Light,M,85.7143,train,commercial_ok,11772077,28821849,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P07_AF_VLL_GM.npz,143,0.4462
+E06_P07_AF_VO_GM.mp4,E06,Wrist Extension,P07,F,Front,O,Occlusion,M,78.0952,train,commercial_ok,11772016,14246816,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P07_AF_VO_GM.npz,157,0.4857
+E06_P07_AL_VFL_GM.mp4,E06,Wrist Extension,P07,L,Left,FL,Full Light,M,95.2381,train,commercial_ok,11772024,58832371,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P07_AL_VFL_GM.npz,178,0.6409
+E06_P07_AL_VLL_GM.mp4,E06,Wrist Extension,P07,L,Left,LL,Low Light,M,85.7143,train,commercial_ok,11772072,44180987,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P07_AL_VLL_GM.npz,134,0.5294
+E06_P07_AL_VO_GM.mp4,E06,Wrist Extension,P07,L,Left,O,Occlusion,M,67.6190,train,commercial_ok,11772018,51010988,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P07_AL_VO_GM.npz,155,0.4842
+E06_P07_AR_VFL_GM.mp4,E06,Wrist Extension,P07,R,Right,FL,Full Light,M,95.2381,train,commercial_ok,11772084,13025944,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P07_AR_VFL_GM.npz,181,0.6223
+E06_P07_AR_VLL_GM.mp4,E06,Wrist Extension,P07,R,Right,LL,Low Light,M,85.7143,train,commercial_ok,11772051,12129499,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P07_AR_VLL_GM.npz,140,0.6107
+E06_P07_AR_VO_GM.mp4,E06,Wrist Extension,P07,R,Right,O,Occlusion,M,67.6190,train,commercial_ok,11772060,15551171,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P07_AR_VO_GM.npz,151,0.5943
+E06_P08_AF_VFL_GM.mp4,E06,Wrist Extension,P08,F,Front,FL,Full Light,M,95.2381,train,commercial_ok,11772038,14553087,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P08_AF_VFL_GM.npz,256,0.5811
+E06_P08_AF_VLL_GM.mp4,E06,Wrist Extension,P08,F,Front,LL,Low Light,M,84.2857,train,commercial_ok,11772078,32700365,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P08_AF_VLL_GM.npz,192,0.4988
+E06_P08_AF_VO_GM.mp4,E06,Wrist Extension,P08,F,Front,O,Occlusion,M,100.0000,train,commercial_ok,11772045,16545137,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P08_AF_VO_GM.npz,179,0.5839
+E06_P08_AL_VFL_GM.mp4,E06,Wrist Extension,P08,L,Left,FL,Full Light,M,95.2381,train,commercial_ok,11772026,83482844,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P08_AL_VFL_GM.npz,253,0.6214
+E06_P08_AL_VLL_GM.mp4,E06,Wrist Extension,P08,L,Left,LL,Low Light,M,84.2857,train,commercial_ok,11772068,60309381,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P08_AL_VLL_GM.npz,183,0.5386
+E06_P08_AL_VO_GM.mp4,E06,Wrist Extension,P08,L,Left,O,Occlusion,M,84.2857,train,commercial_ok,11772042,57755990,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P08_AL_VO_GM.npz,175,0.4850
+E06_P08_AR_VFL_GM.mp4,E06,Wrist Extension,P08,R,Right,FL,Full Light,M,95.2381,train,commercial_ok,11772059,12210525,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P08_AR_VFL_GM.npz,253,0.6760
+E06_P08_AR_VLL_GM.mp4,E06,Wrist Extension,P08,R,Right,LL,Low Light,M,84.2857,train,commercial_ok,11772089,11571028,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P08_AR_VLL_GM.npz,197,0.6253
+E06_P08_AR_VO_GM.mp4,E06,Wrist Extension,P08,R,Right,O,Occlusion,M,84.2857,train,commercial_ok,11772020,18954857,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P08_AR_VO_GM.npz,178,0.6625
+E06_P09_AF_VFL_GF.mp4,E06,Wrist Extension,P09,F,Front,FL,Full Light,F,100.0000,train,commercial_ok,11772101,27007027,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P09_AF_VFL_GF.npz,238,0.4370
+E06_P09_AF_VLL_GF.mp4,E06,Wrist Extension,P09,F,Front,LL,Low Light,F,100.0000,train,commercial_ok,11772066,41802846,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P09_AF_VLL_GF.npz,204,0.4300
+E06_P09_AF_VO_GF.mp4,E06,Wrist Extension,P09,F,Front,O,Occlusion,F,100.0000,train,commercial_ok,11772097,19545174,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P09_AF_VO_GF.npz,173,0.4448
+E06_P09_AL_VFL_GF.mp4,E06,Wrist Extension,P09,L,Left,FL,Full Light,F,100.0000,train,commercial_ok,11772028,78239074,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P09_AL_VFL_GF.npz,237,0.5517
+E06_P09_AL_VLL_GF.mp4,E06,Wrist Extension,P09,L,Left,LL,Low Light,F,100.0000,train,commercial_ok,11772087,65908030,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P09_AL_VLL_GF.npz,200,0.4050
+E06_P09_AL_VO_GF.mp4,E06,Wrist Extension,P09,L,Left,O,Occlusion,F,100.0000,train,commercial_ok,11772085,58267624,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P09_AL_VO_GF.npz,177,0.4482
+E06_P09_AR_VFL_GF.mp4,E06,Wrist Extension,P09,R,Right,FL,Full Light,F,100.0000,train,commercial_ok,11772094,19374271,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P09_AR_VFL_GF.npz,245,0.5617
+E06_P09_AR_VLL_GF.mp4,E06,Wrist Extension,P09,R,Right,LL,Low Light,F,100.0000,train,commercial_ok,11772015,21475444,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P09_AR_VLL_GF.npz,198,0.4724
+E06_P09_AR_VO_GF.mp4,E06,Wrist Extension,P09,R,Right,O,Occlusion,F,100.0000,train,commercial_ok,11772031,44089413,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P09_AR_VO_GF.npz,178,0.4548
+E06_P10_AF_VFL_GF.mp4,E06,Wrist Extension,P10,F,Front,FL,Full Light,F,100.0000,train,commercial_ok,11772099,20558321,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P10_AF_VFL_GF.npz,226,0.4000
+E06_P10_AF_VLL_GF.mp4,E06,Wrist Extension,P10,F,Front,LL,Low Light,F,95.2381,train,commercial_ok,11772034,36890845,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P10_AF_VLL_GF.npz,213,0.3961
+E06_P10_AF_VO_GF.mp4,E06,Wrist Extension,P10,F,Front,O,Occlusion,F,95.2381,train,commercial_ok,11772057,17038129,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P10_AF_VO_GF.npz,175,0.3709
+E06_P10_AL_VFL_GF.mp4,E06,Wrist Extension,P10,L,Left,FL,Full Light,F,100.0000,train,commercial_ok,11772040,72756517,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P10_AL_VFL_GF.npz,220,0.5097
+E06_P10_AL_VLL_GF.mp4,E06,Wrist Extension,P10,L,Left,LL,Low Light,F,79.5238,train,commercial_ok,11772065,65820046,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P10_AL_VLL_GF.npz,199,0.3097
+E06_P10_AL_VO_GF.mp4,E06,Wrist Extension,P10,L,Left,O,Occlusion,F,95.2381,train,commercial_ok,11772055,58319098,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P10_AL_VO_GF.npz,177,0.4574
+E06_P10_AR_VFL_GF.mp4,E06,Wrist Extension,P10,R,Right,FL,Full Light,F,100.0000,train,commercial_ok,11772049,14425315,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P10_AR_VFL_GF.npz,223,0.4598
+E06_P10_AR_VLL_GF.mp4,E06,Wrist Extension,P10,R,Right,LL,Low Light,F,95.2381,train,commercial_ok,11772102,30754377,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P10_AR_VLL_GF.npz,224,0.4364
+E06_P10_AR_VO_GF.mp4,E06,Wrist Extension,P10,R,Right,O,Occlusion,F,95.2381,train,commercial_ok,11772062,24368236,ok,ok,ml/data/processed/mobiphysio_movenet/train/E06_P10_AR_VO_GF.npz,183,0.4549
+E06_P21_AF_VFL_GM.mp4,E06,Wrist Extension,P21,F,Front,FL,Full Light,M,100.0000,val,commercial_ok,11788141,15305232,ok,ok,ml/data/processed/mobiphysio_movenet/val/E06_P21_AF_VFL_GM.npz,195,0.5258
+E06_P21_AF_VLL_GM.mp4,E06,Wrist Extension,P21,F,Front,LL,Low Light,M,90.4762,val,commercial_ok,11788134,30360810,ok,ok,ml/data/processed/mobiphysio_movenet/val/E06_P21_AF_VLL_GM.npz,183,0.4820
+E06_P21_AF_VO_GM.mp4,E06,Wrist Extension,P21,F,Front,O,Occlusion,M,83.3333,val,commercial_ok,11788101,15937392,ok,ok,ml/data/processed/mobiphysio_movenet/val/E06_P21_AF_VO_GM.npz,188,0.5145
+E06_P21_AL_VFL_GM.mp4,E06,Wrist Extension,P21,L,Left,FL,Full Light,M,100.0000,val,commercial_ok,11788150,62288427,ok,ok,ml/data/processed/mobiphysio_movenet/val/E06_P21_AL_VFL_GM.npz,188,0.6343
+E06_P21_AL_VLL_GM.mp4,E06,Wrist Extension,P21,L,Left,LL,Low Light,M,74.7619,val,commercial_ok,11788145,53871038,ok,ok,ml/data/processed/mobiphysio_movenet/val/E06_P21_AL_VLL_GM.npz,163,0.5975
+E06_P21_AL_VO_GM.mp4,E06,Wrist Extension,P21,L,Left,O,Occlusion,M,67.6190,val,commercial_ok,11788142,61600069,ok,ok,ml/data/processed/mobiphysio_movenet/val/E06_P21_AL_VO_GM.npz,187,0.5698
+E06_P21_AR_VFL_GM.mp4,E06,Wrist Extension,P21,R,Right,FL,Full Light,M,100.0000,val,commercial_ok,11788085,13149566,ok,ok,ml/data/processed/mobiphysio_movenet/val/E06_P21_AR_VFL_GM.npz,194,0.6418
+E06_P21_AR_VLL_GM.mp4,E06,Wrist Extension,P21,R,Right,LL,Low Light,M,90.4762,val,commercial_ok,11788104,12609268,ok,ok,ml/data/processed/mobiphysio_movenet/val/E06_P21_AR_VLL_GM.npz,179,0.6184
+E06_P21_AR_VO_GM.mp4,E06,Wrist Extension,P21,R,Right,O,Occlusion,M,83.3333,val,commercial_ok,11788099,14969419,ok,ok,ml/data/processed/mobiphysio_movenet/val/E06_P21_AR_VO_GM.npz,186,0.6127
+E06_P22_AF_VFL_GM.mp4,E06,Wrist Extension,P22,F,Front,FL,Full Light,M,100.0000,test,commercial_ok,11788539,21759551,ok,ok,ml/data/processed/mobiphysio_movenet/test/E06_P22_AF_VFL_GM.npz,269,0.5251
+E06_P22_AF_VLL_GM.mp4,E06,Wrist Extension,P22,F,Front,LL,Low Light,M,95.2381,test,commercial_ok,11788530,31902805,ok,ok,ml/data/processed/mobiphysio_movenet/test/E06_P22_AF_VLL_GM.npz,196,0.4585
+E06_P22_AF_VO_GM.mp4,E06,Wrist Extension,P22,F,Front,O,Occlusion,M,100.0000,test,commercial_ok,11788516,17453026,ok,ok,ml/data/processed/mobiphysio_movenet/test/E06_P22_AF_VO_GM.npz,187,0.5359
+E06_P22_AL_VFL_GM.mp4,E06,Wrist Extension,P22,L,Left,FL,Full Light,M,84.2857,test,commercial_ok,11788515,89692239,ok,ok,ml/data/processed/mobiphysio_movenet/test/E06_P22_AL_VFL_GM.npz,271,0.6182
+E06_P22_AL_VLL_GM.mp4,E06,Wrist Extension,P22,L,Left,LL,Low Light,M,79.5238,test,commercial_ok,11788514,59760603,ok,ok,ml/data/processed/mobiphysio_movenet/test/E06_P22_AL_VLL_GM.npz,181,0.5910
+E06_P22_AL_VO_GM.mp4,E06,Wrist Extension,P22,L,Left,O,Occlusion,M,84.2857,test,commercial_ok,11788517,61076200,ok,ok,ml/data/processed/mobiphysio_movenet/test/E06_P22_AL_VO_GM.npz,185,0.5856
+E06_P22_AR_VFL_GM.mp4,E06,Wrist Extension,P22,R,Right,FL,Full Light,M,100.0000,test,commercial_ok,11788513,18444863,ok,ok,ml/data/processed/mobiphysio_movenet/test/E06_P22_AR_VFL_GM.npz,271,0.6661
+E06_P22_AR_VLL_GM.mp4,E06,Wrist Extension,P22,R,Right,LL,Low Light,M,79.5238,test,commercial_ok,11788536,11367854,ok,ok,ml/data/processed/mobiphysio_movenet/test/E06_P22_AR_VLL_GM.npz,190,0.6044
+E06_P22_AR_VO_GM.mp4,E06,Wrist Extension,P22,R,Right,O,Occlusion,M,100.0000,test,commercial_ok,11788537,16324616,ok,ok,ml/data/processed/mobiphysio_movenet/test/E06_P22_AR_VO_GM.npz,176,0.6283
+E07_P02_AF_VFL_GM.mp4,E07,Hip Joint Flexion,P02,F,Front,FL,Full Light,M,80.9524,train,commercial_ok,11718308,12382556,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P02_AF_VFL_GM.npz,279,0.2331
+E07_P02_AF_VLL_GM.mp4,E07,Hip Joint Flexion,P02,F,Front,LL,Low Light,M,83.3333,train,commercial_ok,11718317,41495560,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P02_AF_VLL_GM.npz,284,0.2107
+E07_P02_AF_VO_GM.mp4,E07,Hip Joint Flexion,P02,F,Front,O,Occlusion,M,70.0000,train,commercial_ok,11718270,22288717,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P02_AF_VO_GM.npz,320,0.3194
+E07_P02_AL_VFL_GM.mp4,E07,Hip Joint Flexion,P02,L,Left,FL,Full Light,M,80.9524,train,commercial_ok,11718318,92581698,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P02_AL_VFL_GM.npz,280,0.2688
+E07_P02_AL_VLL_GM.mp4,E07,Hip Joint Flexion,P02,L,Left,LL,Low Light,M,83.3333,train,commercial_ok,11718313,94985322,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P02_AL_VLL_GM.npz,287,0.2164
+E07_P02_AL_VO_GM.mp4,E07,Hip Joint Flexion,P02,L,Left,O,Occlusion,M,70.0000,train,commercial_ok,11718257,104385019,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P02_AL_VO_GM.npz,316,0.2666
+E07_P02_AR_VFL_GM.mp4,E07,Hip Joint Flexion,P02,R,Right,FL,Full Light,M,80.9524,train,commercial_ok,11718300,13288100,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P02_AR_VFL_GM.npz,286,0.3715
+E07_P02_AR_VLL_GM.mp4,E07,Hip Joint Flexion,P02,R,Right,LL,Low Light,M,83.3333,train,commercial_ok,11718296,23654093,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P02_AR_VLL_GM.npz,287,0.3095
+E07_P02_AR_VO_GM.mp4,E07,Hip Joint Flexion,P02,R,Right,O,Occlusion,M,70.0000,train,commercial_ok,11718283,50245993,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P02_AR_VO_GM.npz,313,0.3555
+E07_P04_AF_VFL_GM.mp4,E07,Hip Joint Flexion,P04,F,Front,FL,Full Light,M,88.0952,train,commercial_ok,11718311,18758479,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P04_AF_VFL_GM.npz,320,0.3255
+E07_P04_AF_VLL_GM.mp4,E07,Hip Joint Flexion,P04,F,Front,LL,Low Light,M,88.0952,train,commercial_ok,11718301,69566458,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P04_AF_VLL_GM.npz,320,0.2451
+E07_P04_AF_VO_GM.mp4,E07,Hip Joint Flexion,P04,F,Front,O,Occlusion,M,88.0952,train,commercial_ok,11718262,21591889,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P04_AF_VO_GM.npz,267,0.3107
+E07_P04_AL_VFL_GM.mp4,E07,Hip Joint Flexion,P04,L,Left,FL,Full Light,M,88.0952,train,commercial_ok,11718279,106451074,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P04_AL_VFL_GM.npz,320,0.2728
+E07_P04_AL_VLL_GM.mp4,E07,Hip Joint Flexion,P04,L,Left,LL,Low Light,M,88.0952,train,commercial_ok,11718314,113027565,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P04_AL_VLL_GM.npz,320,0.1912
+E07_P04_AL_VO_GM.mp4,E07,Hip Joint Flexion,P04,L,Left,O,Occlusion,M,88.0952,train,commercial_ok,11718307,83586580,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P04_AL_VO_GM.npz,253,0.2897
+E07_P04_AR_VFL_GM.mp4,E07,Hip Joint Flexion,P04,R,Right,FL,Full Light,M,88.0952,train,commercial_ok,11718256,15124560,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P04_AR_VFL_GM.npz,320,0.3982
+E07_P04_AR_VLL_GM.mp4,E07,Hip Joint Flexion,P04,R,Right,LL,Low Light,M,88.0952,train,commercial_ok,11718263,21257701,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P04_AR_VLL_GM.npz,320,0.3337
+E07_P04_AR_VO_GM.mp4,E07,Hip Joint Flexion,P04,R,Right,O,Occlusion,M,66.6667,train,commercial_ok,11718272,13301612,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P04_AR_VO_GM.npz,123,0.3965
+E07_P05_AF_VFL_GM.mp4,E07,Hip Joint Flexion,P05,F,Front,FL,Full Light,M,92.8571,train,commercial_ok,11718275,17515373,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P05_AF_VFL_GM.npz,292,0.3488
+E07_P05_AF_VLL_GM.mp4,E07,Hip Joint Flexion,P05,F,Front,LL,Low Light,M,92.8571,train,commercial_ok,11718264,55192662,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P05_AF_VLL_GM.npz,258,0.3035
+E07_P05_AF_VO_GM.mp4,E07,Hip Joint Flexion,P05,F,Front,O,Occlusion,M,92.8571,train,commercial_ok,11718293,27102590,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P05_AF_VO_GM.npz,277,0.3601
+E07_P05_AL_VFL_GM.mp4,E07,Hip Joint Flexion,P05,L,Left,FL,Full Light,M,92.8571,train,commercial_ok,11718260,95318065,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P05_AL_VFL_GM.npz,288,0.2956
+E07_P05_AL_VLL_GM.mp4,E07,Hip Joint Flexion,P05,L,Left,LL,Low Light,M,92.8571,train,commercial_ok,11718281,86272802,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P05_AL_VLL_GM.npz,261,0.1840
+E07_P05_AL_VO_GM.mp4,E07,Hip Joint Flexion,P05,L,Left,O,Occlusion,M,92.8571,train,commercial_ok,11718299,90790193,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P05_AL_VO_GM.npz,275,0.2991
+E07_P05_AR_VFL_GM.mp4,E07,Hip Joint Flexion,P05,R,Right,FL,Full Light,M,92.8571,train,commercial_ok,11718290,15234903,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P05_AR_VFL_GM.npz,311,0.3900
+E07_P05_AR_VLL_GM.mp4,E07,Hip Joint Flexion,P05,R,Right,LL,Low Light,M,92.8571,train,commercial_ok,11788546,18159822,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P05_AR_VLL_GM.npz,257,0.4216
+E07_P05_AR_VO_GM.mp4,E07,Hip Joint Flexion,P05,R,Right,O,Occlusion,M,92.8571,train,commercial_ok,11788596,24514231,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P05_AR_VO_GM.npz,276,0.4163
+E07_P07_AF_VFL_GM.mp4,E07,Hip Joint Flexion,P07,F,Front,FL,Full Light,M,75.7143,train,commercial_ok,11788591,19599245,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P07_AF_VFL_GM.npz,320,0.2900
+E07_P07_AF_VLL_GM.mp4,E07,Hip Joint Flexion,P07,F,Front,LL,Low Light,M,60.4762,train,commercial_ok,11788564,59058093,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P07_AF_VLL_GM.npz,261,0.2293
+E07_P07_AF_VO_GM.mp4,E07,Hip Joint Flexion,P07,F,Front,O,Occlusion,M,84.2857,train,commercial_ok,11788549,36503125,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P07_AF_VO_GM.npz,320,0.3631
+E07_P07_AL_VFL_GM.mp4,E07,Hip Joint Flexion,P07,L,Left,FL,Full Light,M,75.7143,train,commercial_ok,11788603,103966521,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P07_AL_VFL_GM.npz,314,0.3109
+E07_P07_AL_VLL_GM.mp4,E07,Hip Joint Flexion,P07,L,Left,LL,Low Light,M,76.1905,train,commercial_ok,11788577,86502543,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P07_AL_VLL_GM.npz,262,0.1808
+E07_P07_AL_VO_GM.mp4,E07,Hip Joint Flexion,P07,L,Left,O,Occlusion,M,84.2857,train,commercial_ok,11788565,124158423,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P07_AL_VO_GM.npz,320,0.3071
+E07_P07_AR_VFL_GM.mp4,E07,Hip Joint Flexion,P07,R,Right,FL,Full Light,M,77.1429,train,commercial_ok,11788583,15592450,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P07_AR_VFL_GM.npz,320,0.4149
+E07_P07_AR_VLL_GM.mp4,E07,Hip Joint Flexion,P07,R,Right,LL,Low Light,M,76.1905,train,commercial_ok,11788604,19085230,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P07_AR_VLL_GM.npz,267,0.3739
+E07_P07_AR_VO_GM.mp4,E07,Hip Joint Flexion,P07,R,Right,O,Occlusion,M,84.2857,train,commercial_ok,11788593,37545058,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P07_AR_VO_GM.npz,320,0.4142
+E07_P08_AF_VFL_GM.mp4,E07,Hip Joint Flexion,P08,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11788558,22798846,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P08_AF_VFL_GM.npz,320,0.3506
+E07_P08_AF_VLL_GM.mp4,E07,Hip Joint Flexion,P08,F,Front,LL,Low Light,M,44.2857,train,commercial_ok,11788544,53904523,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P08_AF_VLL_GM.npz,289,0.2872
+E07_P08_AF_VO_GM.mp4,E07,Hip Joint Flexion,P08,F,Front,O,Occlusion,M,78.5714,train,commercial_ok,11788587,38360790,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P08_AF_VO_GM.npz,280,0.3072
+E07_P08_AL_VFL_GM.mp4,E07,Hip Joint Flexion,P08,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11788562,115833956,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P08_AL_VFL_GM.npz,320,0.3102
+E07_P08_AL_VLL_GM.mp4,E07,Hip Joint Flexion,P08,L,Left,LL,Low Light,M,45.7143,train,commercial_ok,11788556,96526669,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P08_AL_VLL_GM.npz,292,0.2253
+E07_P08_AL_VO_GM.mp4,E07,Hip Joint Flexion,P08,L,Left,O,Occlusion,M,78.5714,train,commercial_ok,11788567,91428830,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P08_AL_VO_GM.npz,277,0.3204
+E07_P08_AR_VFL_GM.mp4,E07,Hip Joint Flexion,P08,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11788578,17983424,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P08_AR_VFL_GM.npz,320,0.4317
+E07_P08_AR_VLL_GM.mp4,E07,Hip Joint Flexion,P08,R,Right,LL,Low Light,M,45.7143,train,commercial_ok,11788585,21052519,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P08_AR_VLL_GM.npz,295,0.3614
+E07_P08_AR_VO_GM.mp4,E07,Hip Joint Flexion,P08,R,Right,O,Occlusion,M,62.8571,train,commercial_ok,11788582,22028144,ok,ok,ml/data/processed/mobiphysio_movenet/train/E07_P08_AR_VO_GM.npz,270,0.4055
+E07_P21_AF_VFL_GM.mp4,E07,Hip Joint Flexion,P21,F,Front,FL,Full Light,M,65.7143,val,commercial_ok,11788706,19429610,ok,ok,ml/data/processed/mobiphysio_movenet/val/E07_P21_AF_VFL_GM.npz,273,0.3191
+E07_P21_AF_VLL_GM.mp4,E07,Hip Joint Flexion,P21,F,Front,LL,Low Light,M,70.0000,val,commercial_ok,11788683,29988714,ok,ok,ml/data/processed/mobiphysio_movenet/val/E07_P21_AF_VLL_GM.npz,294,0.2435
+E07_P21_AF_VO_GM.mp4,E07,Hip Joint Flexion,P21,F,Front,O,Occlusion,M,62.8571,val,commercial_ok,11788697,30704122,ok,ok,ml/data/processed/mobiphysio_movenet/val/E07_P21_AF_VO_GM.npz,301,0.3063
+E07_P21_AL_VFL_GM.mp4,E07,Hip Joint Flexion,P21,L,Left,FL,Full Light,M,65.7143,val,commercial_ok,11788699,89754970,ok,ok,ml/data/processed/mobiphysio_movenet/val/E07_P21_AL_VFL_GM.npz,271,0.3957
+E07_P21_AL_VLL_GM.mp4,E07,Hip Joint Flexion,P21,L,Left,LL,Low Light,M,85.7143,val,commercial_ok,11788672,96360568,ok,ok,ml/data/processed/mobiphysio_movenet/val/E07_P21_AL_VLL_GM.npz,291,0.3494
+E07_P21_AL_VO_GM.mp4,E07,Hip Joint Flexion,P21,L,Left,O,Occlusion,M,61.4286,val,commercial_ok,11788671,98514669,ok,ok,ml/data/processed/mobiphysio_movenet/val/E07_P21_AL_VO_GM.npz,297,0.3710
+E07_P21_AR_VFL_GM.mp4,E07,Hip Joint Flexion,P21,R,Right,FL,Full Light,M,65.7143,val,commercial_ok,11788687,26475118,ok,ok,ml/data/processed/mobiphysio_movenet/val/E07_P21_AR_VFL_GM.npz,268,0.2370
+E07_P21_AR_VLL_GM.mp4,E07,Hip Joint Flexion,P21,R,Right,LL,Low Light,M,85.7143,val,commercial_ok,11788703,53779465,ok,ok,ml/data/processed/mobiphysio_movenet/val/E07_P21_AR_VLL_GM.npz,294,0.2844
+E07_P21_AR_VO_GM.mp4,E07,Hip Joint Flexion,P21,R,Right,O,Occlusion,M,62.8571,val,commercial_ok,11788679,59388441,ok,ok,ml/data/processed/mobiphysio_movenet/val/E07_P21_AR_VO_GM.npz,300,0.3031
+E07_P22_AF_VFL_GM.mp4,E07,Hip Joint Flexion,P22,F,Front,FL,Full Light,M,66.1905,test,commercial_ok,11788689,14457401,ok,ok,ml/data/processed/mobiphysio_movenet/test/E07_P22_AF_VFL_GM.npz,281,0.2781
+E07_P22_AF_VLL_GM.mp4,E07,Hip Joint Flexion,P22,F,Front,LL,Low Light,M,67.1429,test,commercial_ok,11788682,37472515,ok,ok,ml/data/processed/mobiphysio_movenet/test/E07_P22_AF_VLL_GM.npz,279,0.1890
+E07_P22_AF_VO_GM.mp4,E07,Hip Joint Flexion,P22,F,Front,O,Occlusion,M,64.2857,test,commercial_ok,11788681,47603850,ok,ok,ml/data/processed/mobiphysio_movenet/test/E07_P22_AF_VO_GM.npz,305,0.3127
+E07_P22_AL_VFL_GM.mp4,E07,Hip Joint Flexion,P22,L,Left,FL,Full Light,M,67.6190,test,commercial_ok,11788704,88635928,ok,ok,ml/data/processed/mobiphysio_movenet/test/E07_P22_AL_VFL_GM.npz,268,0.2858
+E07_P22_AL_VLL_GM.mp4,E07,Hip Joint Flexion,P22,L,Left,LL,Low Light,M,64.2857,test,commercial_ok,11788658,90676071,ok,ok,ml/data/processed/mobiphysio_movenet/test/E07_P22_AL_VLL_GM.npz,274,0.2219
+E07_P22_AL_VO_GM.mp4,E07,Hip Joint Flexion,P22,L,Left,O,Occlusion,M,62.8571,test,commercial_ok,11788690,96815253,ok,ok,ml/data/processed/mobiphysio_movenet/test/E07_P22_AL_VO_GM.npz,293,0.3258
+E07_P22_AR_VFL_GM.mp4,E07,Hip Joint Flexion,P22,R,Right,FL,Full Light,M,63.3333,test,commercial_ok,11788698,21561876,ok,ok,ml/data/processed/mobiphysio_movenet/test/E07_P22_AR_VFL_GM.npz,261,0.3398
+E07_P22_AR_VLL_GM.mp4,E07,Hip Joint Flexion,P22,R,Right,LL,Low Light,M,62.8571,test,commercial_ok,11788670,33073034,ok,ok,ml/data/processed/mobiphysio_movenet/test/E07_P22_AR_VLL_GM.npz,279,0.2727
+E07_P22_AR_VO_GM.mp4,E07,Hip Joint Flexion,P22,R,Right,O,Occlusion,M,61.4286,test,commercial_ok,11788662,32099105,ok,ok,ml/data/processed/mobiphysio_movenet/test/E07_P22_AR_VO_GM.npz,298,0.3623
+E08_P02_AF_VFL_GM.mp4,E08,Both Leg Flexion,P02,F,Front,FL,Full Light,M,82.8571,train,commercial_ok,11720456,21055132,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P02_AF_VFL_GM.npz,320,0.2429
+E08_P02_AF_VLL_GM.mp4,E08,Both Leg Flexion,P02,F,Front,LL,Low Light,M,100.0000,train,commercial_ok,11720468,117817523,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P02_AF_VLL_GM.npz,320,0.1610
+E08_P02_AF_VO_GM.mp4,E08,Both Leg Flexion,P02,F,Front,O,Occlusion,M,100.0000,train,commercial_ok,11720480,24134744,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P02_AF_VO_GM.npz,320,0.3287
+E08_P02_AL_VFL_GM.mp4,E08,Both Leg Flexion,P02,L,Left,FL,Full Light,M,82.8571,train,commercial_ok,11720461,165039109,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P02_AL_VFL_GM.npz,320,0.2965
+E08_P02_AL_VLL_GM.mp4,E08,Both Leg Flexion,P02,L,Left,LL,Low Light,M,100.0000,train,commercial_ok,11720466,117588365,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P02_AL_VLL_GM.npz,320,0.2420
+E08_P02_AL_VO_GM.mp4,E08,Both Leg Flexion,P02,L,Left,O,Occlusion,M,100.0000,train,commercial_ok,11720485,108582876,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P02_AL_VO_GM.npz,320,0.3283
+E08_P02_AR_VFL_GM.mp4,E08,Both Leg Flexion,P02,R,Right,FL,Full Light,M,82.8571,train,commercial_ok,11720462,33533317,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P02_AR_VFL_GM.npz,320,0.2932
+E08_P02_AR_VLL_GM.mp4,E08,Both Leg Flexion,P02,R,Right,LL,Low Light,M,84.2857,train,commercial_ok,11720452,58239504,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P02_AR_VLL_GM.npz,320,0.2437
+E08_P02_AR_VO_GM.mp4,E08,Both Leg Flexion,P02,R,Right,O,Occlusion,M,100.0000,train,commercial_ok,11720471,59288508,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P02_AR_VO_GM.npz,320,0.3064
+E08_P04_AF_VFL_GM.mp4,E08,Both Leg Flexion,P04,F,Front,FL,Full Light,M,76.6667,train,commercial_ok,11720484,16828842,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P04_AF_VFL_GM.npz,314,0.3123
+E08_P04_AF_VLL_GM.mp4,E08,Both Leg Flexion,P04,F,Front,LL,Low Light,M,97.6190,train,commercial_ok,11720481,89878030,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P04_AF_VLL_GM.npz,320,0.2217
+E08_P04_AF_VO_GM.mp4,E08,Both Leg Flexion,P04,F,Front,O,Occlusion,M,97.6190,train,commercial_ok,11720453,39683905,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P04_AF_VO_GM.npz,320,0.2969
+E08_P04_AL_VFL_GM.mp4,E08,Both Leg Flexion,P04,L,Left,FL,Full Light,M,95.2381,train,commercial_ok,11720458,127408043,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P04_AL_VFL_GM.npz,320,0.2894
+E08_P04_AL_VLL_GM.mp4,E08,Both Leg Flexion,P04,L,Left,LL,Low Light,M,97.6190,train,commercial_ok,11720469,130122042,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P04_AL_VLL_GM.npz,320,0.1981
+E08_P04_AL_VO_GM.mp4,E08,Both Leg Flexion,P04,L,Left,O,Occlusion,M,97.6190,train,commercial_ok,11720454,108898133,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P04_AL_VO_GM.npz,320,0.3022
+E08_P04_AR_VFL_GM.mp4,E08,Both Leg Flexion,P04,R,Right,FL,Full Light,M,95.2381,train,commercial_ok,11720465,21344945,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P04_AR_VFL_GM.npz,320,0.3616
+E08_P04_AR_VLL_GM.mp4,E08,Both Leg Flexion,P04,R,Right,LL,Low Light,M,97.6190,train,commercial_ok,11788719,23992516,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P04_AR_VLL_GM.npz,320,0.2532
+E08_P04_AR_VO_GM.mp4,E08,Both Leg Flexion,P04,R,Right,O,Occlusion,M,97.6190,train,commercial_ok,11788758,36465378,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P04_AR_VO_GM.npz,320,0.3339
+E08_P05_AF_VFL_GM.mp4,E08,Both Leg Flexion,P05,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11788745,19454148,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P05_AF_VFL_GM.npz,320,0.3163
+E08_P05_AF_VLL_GM.mp4,E08,Both Leg Flexion,P05,F,Front,LL,Low Light,M,100.0000,train,commercial_ok,11788734,62533550,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P05_AF_VLL_GM.npz,303,0.2688
+E08_P05_AF_VO_GM.mp4,E08,Both Leg Flexion,P05,F,Front,O,Occlusion,M,100.0000,train,commercial_ok,11788754,32243820,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P05_AF_VO_GM.npz,320,0.3425
+E08_P05_AL_VFL_GM.mp4,E08,Both Leg Flexion,P05,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11788755,107924862,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P05_AL_VFL_GM.npz,320,0.2645
+E08_P05_AL_VLL_GM.mp4,E08,Both Leg Flexion,P05,L,Left,LL,Low Light,M,100.0000,train,commercial_ok,11788716,97738754,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P05_AL_VLL_GM.npz,296,0.2123
+E08_P05_AL_VO_GM.mp4,E08,Both Leg Flexion,P05,L,Left,O,Occlusion,M,100.0000,train,commercial_ok,11788736,108914490,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P05_AL_VO_GM.npz,320,0.3045
+E08_P05_AR_VFL_GM.mp4,E08,Both Leg Flexion,P05,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11788725,17896271,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P05_AR_VFL_GM.npz,320,0.3585
+E08_P05_AR_VLL_GM.mp4,E08,Both Leg Flexion,P05,R,Right,LL,Low Light,M,100.0000,train,commercial_ok,11788761,19276209,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P05_AR_VLL_GM.npz,297,0.3514
+E08_P05_AR_VO_GM.mp4,E08,Both Leg Flexion,P05,R,Right,O,Occlusion,M,100.0000,train,commercial_ok,11788744,24546425,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P05_AR_VO_GM.npz,320,0.3747
+E08_P07_AF_VFL_GM.mp4,E08,Both Leg Flexion,P07,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11788867,19935900,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P07_AF_VFL_GM.npz,320,0.2951
+E08_P07_AF_VLL_GM.mp4,E08,Both Leg Flexion,P07,F,Front,LL,Low Light,M,97.6190,train,commercial_ok,11788870,64889695,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P07_AF_VLL_GM.npz,296,0.2335
+E08_P07_AF_VO_GM.mp4,E08,Both Leg Flexion,P07,F,Front,O,Occlusion,M,84.2857,train,commercial_ok,11788866,34652967,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P07_AF_VO_GM.npz,320,0.3322
+E08_P07_AL_VFL_GM.mp4,E08,Both Leg Flexion,P07,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11788877,114025509,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P07_AL_VFL_GM.npz,320,0.2934
+E08_P07_AL_VLL_GM.mp4,E08,Both Leg Flexion,P07,L,Left,LL,Low Light,M,81.9048,train,commercial_ok,11788887,97087663,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P07_AL_VLL_GM.npz,294,0.2051
+E08_P07_AL_VO_GM.mp4,E08,Both Leg Flexion,P07,L,Left,O,Occlusion,M,100.0000,train,commercial_ok,11788895,119429305,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P07_AL_VO_GM.npz,320,0.3108
+E08_P07_AR_VFL_GM.mp4,E08,Both Leg Flexion,P07,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11788869,17979057,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P07_AR_VFL_GM.npz,320,0.3566
+E08_P07_AR_VLL_GM.mp4,E08,Both Leg Flexion,P07,R,Right,LL,Low Light,M,81.9048,train,commercial_ok,11788882,22066719,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P07_AR_VLL_GM.npz,296,0.2921
+E08_P07_AR_VO_GM.mp4,E08,Both Leg Flexion,P07,R,Right,O,Occlusion,M,100.0000,train,commercial_ok,11788868,40557478,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P07_AR_VO_GM.npz,320,0.3654
+E08_P08_AF_VFL_GM.mp4,E08,Both Leg Flexion,P08,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11788894,24778110,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P08_AF_VFL_GM.npz,320,0.3726
+E08_P08_AF_VLL_GM.mp4,E08,Both Leg Flexion,P08,F,Front,LL,Low Light,M,84.2857,train,commercial_ok,11788876,55373152,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P08_AF_VLL_GM.npz,300,0.2528
+E08_P08_AF_VO_GM.mp4,E08,Both Leg Flexion,P08,F,Front,O,Occlusion,M,100.0000,train,commercial_ok,11788860,41685775,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P08_AF_VO_GM.npz,300,0.3160
+E08_P08_AL_VFL_GM.mp4,E08,Both Leg Flexion,P08,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11788878,126849763,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P08_AL_VFL_GM.npz,320,0.3201
+E08_P08_AL_VLL_GM.mp4,E08,Both Leg Flexion,P08,L,Left,LL,Low Light,M,84.2857,train,commercial_ok,11788928,95763566,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P08_AL_VLL_GM.npz,290,0.2464
+E08_P08_AL_VO_GM.mp4,E08,Both Leg Flexion,P08,L,Left,O,Occlusion,M,84.2857,train,commercial_ok,11788881,94175619,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P08_AL_VO_GM.npz,285,0.3462
+E08_P08_AR_VFL_GM.mp4,E08,Both Leg Flexion,P08,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11788929,21654602,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P08_AR_VFL_GM.npz,320,0.4086
+E08_P08_AR_VLL_GM.mp4,E08,Both Leg Flexion,P08,R,Right,LL,Low Light,M,84.2857,train,commercial_ok,11788927,18842986,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P08_AR_VLL_GM.npz,294,0.2849
+E08_P08_AR_VO_GM.mp4,E08,Both Leg Flexion,P08,R,Right,O,Occlusion,M,100.0000,train,commercial_ok,11788938,17182058,ok,ok,ml/data/processed/mobiphysio_movenet/train/E08_P08_AR_VO_GM.npz,302,0.3668
+E08_P21_AF_VFL_GM.mp4,E08,Both Leg Flexion,P21,F,Front,FL,Full Light,M,67.1429,val,commercial_ok,11798532,20318600,ok,ok,ml/data/processed/mobiphysio_movenet/val/E08_P21_AF_VFL_GM.npz,296,0.3221
+E08_P21_AF_VLL_GM.mp4,E08,Both Leg Flexion,P21,F,Front,LL,Low Light,M,82.8571,val,commercial_ok,11798513,28984291,ok,ok,ml/data/processed/mobiphysio_movenet/val/E08_P21_AF_VLL_GM.npz,305,0.2455
+E08_P21_AF_VO_GM.mp4,E08,Both Leg Flexion,P21,F,Front,O,Occlusion,M,100.0000,val,commercial_ok,11798492,30260430,ok,ok,ml/data/processed/mobiphysio_movenet/val/E08_P21_AF_VO_GM.npz,320,0.3434
+E08_P21_AL_VFL_GM.mp4,E08,Both Leg Flexion,P21,L,Left,FL,Full Light,M,67.1429,val,commercial_ok,11798503,97270324,ok,ok,ml/data/processed/mobiphysio_movenet/val/E08_P21_AL_VFL_GM.npz,293,0.3810
+E08_P21_AL_VLL_GM.mp4,E08,Both Leg Flexion,P21,L,Left,LL,Low Light,M,82.8571,val,commercial_ok,11798533,99758083,ok,ok,ml/data/processed/mobiphysio_movenet/val/E08_P21_AL_VLL_GM.npz,302,0.3791
+E08_P21_AL_VO_GM.mp4,E08,Both Leg Flexion,P21,L,Left,O,Occlusion,M,84.2857,val,commercial_ok,11798491,105565375,ok,ok,ml/data/processed/mobiphysio_movenet/val/E08_P21_AL_VO_GM.npz,319,0.3660
+E08_P21_AR_VFL_GM.mp4,E08,Both Leg Flexion,P21,R,Right,FL,Full Light,M,65.7143,val,commercial_ok,11798498,28277948,ok,ok,ml/data/processed/mobiphysio_movenet/val/E08_P21_AR_VFL_GM.npz,289,0.3289
+E08_P21_AR_VLL_GM.mp4,E08,Both Leg Flexion,P21,R,Right,LL,Low Light,M,84.2857,val,commercial_ok,11798507,53492881,ok,ok,ml/data/processed/mobiphysio_movenet/val/E08_P21_AR_VLL_GM.npz,310,0.2697
+E08_P21_AR_VO_GM.mp4,E08,Both Leg Flexion,P21,R,Right,O,Occlusion,M,100.0000,val,commercial_ok,11798530,39740796,ok,ok,ml/data/processed/mobiphysio_movenet/val/E08_P21_AR_VO_GM.npz,320,0.3400
+E08_P22_AF_VFL_GM.mp4,E08,Both Leg Flexion,P22,F,Front,FL,Full Light,M,70.0000,test,commercial_ok,11798499,13107923,ok,ok,ml/data/processed/mobiphysio_movenet/test/E08_P22_AF_VFL_GM.npz,289,0.2976
+E08_P22_AF_VLL_GM.mp4,E08,Both Leg Flexion,P22,F,Front,LL,Low Light,M,80.0000,test,commercial_ok,11798524,30187803,ok,ok,ml/data/processed/mobiphysio_movenet/test/E08_P22_AF_VLL_GM.npz,201,0.1981
+E08_P22_AF_VO_GM.mp4,E08,Both Leg Flexion,P22,F,Front,O,Occlusion,M,97.6190,test,commercial_ok,11798497,47028021,ok,ok,ml/data/processed/mobiphysio_movenet/test/E08_P22_AF_VO_GM.npz,313,0.3028
+E08_P22_AL_VFL_GM.mp4,E08,Both Leg Flexion,P22,L,Left,FL,Full Light,M,70.0000,test,commercial_ok,11798508,95432668,ok,ok,ml/data/processed/mobiphysio_movenet/test/E08_P22_AL_VFL_GM.npz,289,0.3395
+E08_P22_AL_VLL_GM.mp4,E08,Both Leg Flexion,P22,L,Left,LL,Low Light,M,78.5714,test,commercial_ok,11798520,63368363,ok,ok,ml/data/processed/mobiphysio_movenet/test/E08_P22_AL_VLL_GM.npz,192,0.2357
+E08_P22_AL_VO_GM.mp4,E08,Both Leg Flexion,P22,L,Left,O,Occlusion,M,97.6190,test,commercial_ok,11798521,101536330,ok,ok,ml/data/processed/mobiphysio_movenet/test/E08_P22_AL_VO_GM.npz,307,0.3411
+E08_P22_AR_VFL_GM.mp4,E08,Both Leg Flexion,P22,R,Right,FL,Full Light,M,70.0000,test,commercial_ok,11798488,21773261,ok,ok,ml/data/processed/mobiphysio_movenet/test/E08_P22_AR_VFL_GM.npz,289,0.2968
+E08_P22_AR_VLL_GM.mp4,E08,Both Leg Flexion,P22,R,Right,LL,Low Light,M,80.0000,test,commercial_ok,11798496,25874812,ok,ok,ml/data/processed/mobiphysio_movenet/test/E08_P22_AR_VLL_GM.npz,193,0.2524
+E08_P22_AR_VO_GM.mp4,E08,Both Leg Flexion,P22,R,Right,O,Occlusion,M,97.6190,test,commercial_ok,11798529,31477309,ok,ok,ml/data/processed/mobiphysio_movenet/test/E08_P22_AR_VO_GM.npz,313,0.3508
+E09_P02_AF_VFL_GM.mp4,E09,Back Extension,P02,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11798591,16391253,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P02_AF_VFL_GM.npz,320,0.3908
+E09_P02_AF_VLL_GM.mp4,E09,Back Extension,P02,F,Front,LL,Low Light,M,68.5714,train,commercial_ok,11798550,82666324,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P02_AF_VLL_GM.npz,267,0.2249
+E09_P02_AF_VO_GM.mp4,E09,Back Extension,P02,F,Front,O,Occlusion,M,83.3333,train,commercial_ok,11798559,20018997,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P02_AF_VO_GM.npz,238,0.4419
+E09_P02_AL_VFL_GM.mp4,E09,Back Extension,P02,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11798539,125414004,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P02_AL_VFL_GM.npz,320,0.3152
+E09_P02_AL_VLL_GM.mp4,E09,Back Extension,P02,L,Left,LL,Low Light,M,67.1429,train,commercial_ok,11798544,85226408,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P02_AL_VLL_GM.npz,258,0.2557
+E09_P02_AL_VO_GM.mp4,E09,Back Extension,P02,L,Left,O,Occlusion,M,83.3333,train,commercial_ok,11798555,77272171,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P02_AL_VO_GM.npz,233,0.3519
+E09_P02_AR_VFL_GM.mp4,E09,Back Extension,P02,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11798560,29906176,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P02_AR_VFL_GM.npz,320,0.4831
+E09_P02_AR_VLL_GM.mp4,E09,Back Extension,P02,R,Right,LL,Low Light,M,68.5714,train,commercial_ok,11798553,42565550,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P02_AR_VLL_GM.npz,259,0.4521
+E09_P02_AR_VO_GM.mp4,E09,Back Extension,P02,R,Right,O,Occlusion,M,83.3333,train,commercial_ok,11798551,52658354,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P02_AR_VO_GM.npz,267,0.4595
+E09_P04_AF_VFL_GM.mp4,E09,Back Extension,P04,F,Front,FL,Full Light,M,83.3333,train,commercial_ok,11798561,13567146,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P04_AF_VFL_GM.npz,248,0.4033
+E09_P04_AF_VLL_GM.mp4,E09,Back Extension,P04,F,Front,LL,Low Light,M,65.2381,train,commercial_ok,11798571,21153844,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P04_AF_VLL_GM.npz,169,0.2178
+E09_P04_AF_VO_GM.mp4,E09,Back Extension,P04,F,Front,O,Occlusion,M,83.3333,train,commercial_ok,11798538,23329404,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P04_AF_VO_GM.npz,214,0.3495
+E09_P04_AL_VFL_GM.mp4,E09,Back Extension,P04,L,Left,FL,Full Light,M,83.3333,train,commercial_ok,11798585,82624842,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P04_AL_VFL_GM.npz,250,0.4062
+E09_P04_AL_VLL_GM.mp4,E09,Back Extension,P04,L,Left,LL,Low Light,M,80.9524,train,commercial_ok,11798572,58402382,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P04_AL_VLL_GM.npz,176,0.3117
+E09_P04_AL_VO_GM.mp4,E09,Back Extension,P04,L,Left,O,Occlusion,M,83.3333,train,commercial_ok,11798568,71846514,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P04_AL_VO_GM.npz,218,0.3565
+E09_P04_AR_VFL_GM.mp4,E09,Back Extension,P04,R,Right,FL,Full Light,M,83.3333,train,commercial_ok,11798563,16725768,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P04_AR_VFL_GM.npz,251,0.4805
+E09_P04_AR_VLL_GM.mp4,E09,Back Extension,P04,R,Right,LL,Low Light,M,65.2381,train,commercial_ok,11798586,9908497,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P04_AR_VLL_GM.npz,170,0.4243
+E09_P04_AR_VO_GM.mp4,E09,Back Extension,P04,R,Right,O,Occlusion,M,83.3333,train,commercial_ok,11798549,25291156,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P04_AR_VO_GM.npz,209,0.4609
+E09_P05_AF_VFL_GM.mp4,E09,Back Extension,P05,F,Front,FL,Full Light,M,71.4286,train,commercial_ok,11798642,30243258,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P05_AF_VFL_GM.npz,320,0.3704
+E09_P05_AF_VLL_GM.mp4,E09,Back Extension,P05,F,Front,LL,Low Light,M,85.7143,train,commercial_ok,11798592,61311965,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P05_AF_VLL_GM.npz,320,0.2914
+E09_P05_AF_VO_GM.mp4,E09,Back Extension,P05,F,Front,O,Occlusion,M,85.7143,train,commercial_ok,11798621,25588735,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P05_AF_VO_GM.npz,313,0.3674
+E09_P05_AL_VFL_GM.mp4,E09,Back Extension,P05,L,Left,FL,Full Light,M,71.4286,train,commercial_ok,11798593,132640910,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P05_AL_VFL_GM.npz,320,0.3008
+E09_P05_AL_VLL_GM.mp4,E09,Back Extension,P05,L,Left,LL,Low Light,M,85.7143,train,commercial_ok,11798624,114853329,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P05_AL_VLL_GM.npz,320,0.1990
+E09_P05_AL_VO_GM.mp4,E09,Back Extension,P05,L,Left,O,Occlusion,M,85.7143,train,commercial_ok,11798651,103079315,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P05_AL_VO_GM.npz,312,0.3048
+E09_P05_AR_VFL_GM.mp4,E09,Back Extension,P05,R,Right,FL,Full Light,M,71.4286,train,commercial_ok,11798616,23145528,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P05_AR_VFL_GM.npz,320,0.5018
+E09_P05_AR_VLL_GM.mp4,E09,Back Extension,P05,R,Right,LL,Low Light,M,85.7143,train,commercial_ok,11798634,25100266,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P05_AR_VLL_GM.npz,320,0.4322
+E09_P05_AR_VO_GM.mp4,E09,Back Extension,P05,R,Right,O,Occlusion,M,85.7143,train,commercial_ok,11798606,27175867,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P05_AR_VO_GM.npz,309,0.4457
+E09_P07_AF_VFL_GM.mp4,E09,Back Extension,P07,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11798614,22712338,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P07_AF_VFL_GM.npz,320,0.3588
+E09_P07_AF_VLL_GM.mp4,E09,Back Extension,P07,F,Front,LL,Low Light,M,50.9524,train,commercial_ok,11798655,52177714,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P07_AF_VLL_GM.npz,267,0.2429
+E09_P07_AF_VO_GM.mp4,E09,Back Extension,P07,F,Front,O,Occlusion,M,97.6190,train,commercial_ok,11798650,38606684,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P07_AF_VO_GM.npz,320,0.3527
+E09_P07_AL_VFL_GM.mp4,E09,Back Extension,P07,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11798620,105826612,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P07_AL_VFL_GM.npz,320,0.2851
+E09_P07_AL_VLL_GM.mp4,E09,Back Extension,P07,L,Left,LL,Low Light,M,50.9524,train,commercial_ok,11798611,89085907,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P07_AL_VLL_GM.npz,270,0.2291
+E09_P07_AL_VO_GM.mp4,E09,Back Extension,P07,L,Left,O,Occlusion,M,81.9048,train,commercial_ok,11799349,131756467,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P07_AL_VO_GM.npz,320,0.3451
+E09_P07_AR_VFL_GM.mp4,E09,Back Extension,P07,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11799344,27805669,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P07_AR_VFL_GM.npz,320,0.4215
+E09_P07_AR_VLL_GM.mp4,E09,Back Extension,P07,R,Right,LL,Low Light,M,50.9524,train,commercial_ok,11799341,25407624,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P07_AR_VLL_GM.npz,272,0.3672
+E09_P07_AR_VO_GM.mp4,E09,Back Extension,P07,R,Right,O,Occlusion,M,81.9048,train,commercial_ok,11799355,38495987,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P07_AR_VO_GM.npz,320,0.4113
+E09_P08_AF_VFL_GM.mp4,E09,Back Extension,P08,F,Front,FL,Full Light,M,100.0000,train,commercial_ok,11799350,40937356,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P08_AF_VFL_GM.npz,320,0.3746
+E09_P08_AF_VLL_GM.mp4,E09,Back Extension,P08,F,Front,LL,Low Light,M,100.0000,train,commercial_ok,11799358,65337931,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P08_AF_VLL_GM.npz,265,0.2142
+E09_P08_AF_VO_GM.mp4,E09,Back Extension,P08,F,Front,O,Occlusion,M,85.7143,train,commercial_ok,11799343,29673238,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P08_AF_VO_GM.npz,225,0.3698
+E09_P08_AL_VFL_GM.mp4,E09,Back Extension,P08,L,Left,FL,Full Light,M,100.0000,train,commercial_ok,11799360,133032224,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P08_AL_VFL_GM.npz,320,0.3227
+E09_P08_AL_VLL_GM.mp4,E09,Back Extension,P08,L,Left,LL,Low Light,M,100.0000,train,commercial_ok,11799362,86423113,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P08_AL_VLL_GM.npz,262,0.2673
+E09_P08_AL_VO_GM.mp4,E09,Back Extension,P08,L,Left,O,Occlusion,M,85.7143,train,commercial_ok,11799340,78552840,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P08_AL_VO_GM.npz,238,0.3971
+E09_P08_AR_VFL_GM.mp4,E09,Back Extension,P08,R,Right,FL,Full Light,M,100.0000,train,commercial_ok,11799363,40609762,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P08_AR_VFL_GM.npz,320,0.5256
+E09_P08_AR_VLL_GM.mp4,E09,Back Extension,P08,R,Right,LL,Low Light,M,100.0000,train,commercial_ok,11799347,33692895,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P08_AR_VLL_GM.npz,265,0.4537
+E09_P08_AR_VO_GM.mp4,E09,Back Extension,P08,R,Right,O,Occlusion,M,85.7143,train,commercial_ok,11799359,24479937,ok,ok,ml/data/processed/mobiphysio_movenet/train/E09_P08_AR_VO_GM.npz,231,0.4791
+E09_P21_AF_VFL_GM.mp4,E09,Back Extension,P21,F,Front,FL,Full Light,M,54.7619,val,commercial_ok,11799430,24962899,ok,ok,ml/data/processed/mobiphysio_movenet/val/E09_P21_AF_VFL_GM.npz,320,0.4093
+E09_P21_AF_VLL_GM.mp4,E09,Back Extension,P21,F,Front,LL,Low Light,M,42.8571,val,commercial_ok,11799439,30050062,ok,ok,ml/data/processed/mobiphysio_movenet/val/E09_P21_AF_VLL_GM.npz,320,0.2938
+E09_P21_AF_VO_GM.mp4,E09,Back Extension,P21,F,Front,O,Occlusion,M,54.7619,val,commercial_ok,11799437,34232219,ok,ok,ml/data/processed/mobiphysio_movenet/val/E09_P21_AF_VO_GM.npz,320,0.3647
+E09_P21_AL_VFL_GM.mp4,E09,Back Extension,P21,L,Left,FL,Full Light,M,54.7619,val,commercial_ok,11799432,138161070,ok,ok,ml/data/processed/mobiphysio_movenet/val/E09_P21_AL_VFL_GM.npz,320,0.4522
+E09_P21_AL_VLL_GM.mp4,E09,Back Extension,P21,L,Left,LL,Low Light,M,42.8571,val,commercial_ok,11799431,114804778,ok,ok,ml/data/processed/mobiphysio_movenet/val/E09_P21_AL_VLL_GM.npz,320,0.4337
+E09_P21_AL_VO_GM.mp4,E09,Back Extension,P21,L,Left,O,Occlusion,M,54.7619,val,commercial_ok,11799428,116928153,ok,ok,ml/data/processed/mobiphysio_movenet/val/E09_P21_AL_VO_GM.npz,320,0.4233
+E09_P21_AR_VFL_GM.mp4,E09,Back Extension,P21,R,Right,FL,Full Light,M,54.7619,val,commercial_ok,11799435,26805011,ok,ok,ml/data/processed/mobiphysio_movenet/val/E09_P21_AR_VFL_GM.npz,320,0.3676
+E09_P21_AR_VLL_GM.mp4,E09,Back Extension,P21,R,Right,LL,Low Light,M,42.8571,val,commercial_ok,11799424,53826525,ok,ok,ml/data/processed/mobiphysio_movenet/val/E09_P21_AR_VLL_GM.npz,320,0.3965
+E09_P21_AR_VO_GM.mp4,E09,Back Extension,P21,R,Right,O,Occlusion,M,54.7619,val,commercial_ok,11799426,25244777,ok,ok,ml/data/processed/mobiphysio_movenet/val/E09_P21_AR_VO_GM.npz,320,0.4070
+E09_P22_AF_VFL_GM.mp4,E09,Back Extension,P22,F,Front,FL,Full Light,M,80.0000,test,commercial_ok,11799472,22538691,ok,ok,ml/data/processed/mobiphysio_movenet/test/E09_P22_AF_VFL_GM.npz,314,0.4300
+E09_P22_AF_VLL_GM.mp4,E09,Back Extension,P22,F,Front,LL,Low Light,M,64.2857,test,commercial_ok,11799487,38982250,ok,ok,ml/data/processed/mobiphysio_movenet/test/E09_P22_AF_VLL_GM.npz,299,0.3066
+E09_P22_AF_VO_GM.mp4,E09,Back Extension,P22,F,Front,O,Occlusion,M,100.0000,test,commercial_ok,11799477,47111573,ok,ok,ml/data/processed/mobiphysio_movenet/test/E09_P22_AF_VO_GM.npz,320,0.3605
+E09_P22_AL_VFL_GM.mp4,E09,Back Extension,P22,L,Left,FL,Full Light,M,80.0000,test,commercial_ok,11799486,101151369,ok,ok,ml/data/processed/mobiphysio_movenet/test/E09_P22_AL_VFL_GM.npz,306,0.4604
+E09_P22_AL_VLL_GM.mp4,E09,Back Extension,P22,L,Left,LL,Low Light,M,64.2857,test,commercial_ok,11799478,97828942,ok,ok,ml/data/processed/mobiphysio_movenet/test/E09_P22_AL_VLL_GM.npz,296,0.4366
+E09_P22_AL_VO_GM.mp4,E09,Back Extension,P22,L,Left,O,Occlusion,M,100.0000,test,commercial_ok,11799482,115802124,ok,ok,ml/data/processed/mobiphysio_movenet/test/E09_P22_AL_VO_GM.npz,320,0.4100
+E09_P22_AR_VFL_GM.mp4,E09,Back Extension,P22,R,Right,FL,Full Light,M,80.0000,test,commercial_ok,11799483,22635429,ok,ok,ml/data/processed/mobiphysio_movenet/test/E09_P22_AR_VFL_GM.npz,312,0.4399
+E09_P22_AR_VLL_GM.mp4,E09,Back Extension,P22,R,Right,LL,Low Light,M,65.7143,test,commercial_ok,11799475,31369283,ok,ok,ml/data/processed/mobiphysio_movenet/test/E09_P22_AR_VLL_GM.npz,297,0.4182
+E09_P22_AR_VO_GM.mp4,E09,Back Extension,P22,R,Right,O,Occlusion,M,100.0000,test,commercial_ok,11799489,41941643,ok,ok,ml/data/processed/mobiphysio_movenet/test/E09_P22_AR_VO_GM.npz,320,0.3905

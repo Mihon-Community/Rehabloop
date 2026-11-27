@@ -63,6 +63,10 @@ skills-lock.json
 checkpoints/
 weights/
 models/
+# ...except ml/'s own provenance/tracking docs (markdown only, never weights)
+!ml/models/
+ml/models/*
+!ml/models/*.md
 
 # Raw video / patient media — never commit
 *.mp4
@@ -84,3 +88,12 @@ fixtures/approved_test_frames/*
 *.sqlite3
 *.db
 SETUP_NOTES.md
+
+# ML: downloaded third-party datasets and derived features/sequences —
+# never committed, regardless of license. Manifests/reports/docs directly
+# under ml/data/ (not raw/ or processed/) stay tracked.
+ml/data/raw/
+ml/data/processed/
+ml/data/annotations/
+ml/experiments/*/checkpoints/
+.playwright-mcp/

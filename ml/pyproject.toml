@@ -1,0 +1,28 @@
+[project]
+name = "rehabloop-ml"
+version = "0.1.0"
+requires-python = ">=3.12"
+description = "Offline dataset acquisition, pose-feature extraction, and CPU-only exercise-recognition baselines."
+# Phase 2 adds classical-ML training on the Phase 1 features. CPU only -
+# scikit-learn tree ensembles; no torch, no GPU/CUDA dependency.
+dependencies = [
+    "numpy>=2.0",
+    "opencv-python-headless>=4.10",
+    "scikit-learn>=1.5",
+    "joblib>=1.4",
+    "tqdm>=4.66",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+warn_unused_configs = true
+disallow_untyped_defs = true

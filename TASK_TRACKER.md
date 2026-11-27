@@ -35,6 +35,30 @@ detailed validation log this is summarized from; update both together.
   → WebSocket stream → complete → summary) against the actually-running
   Docker stack, twice (before/after the two bug fixes below).
 
+## ML/exercise-recognition work (started 2026-11-27, see OVERNIGHT_ML_STATUS.md)
+
+- **Phase 1 done**: MobiPhysio dataset (CC0, `commercial_ok`) — 674/674
+  planned videos downloaded and MD5-verified (28.17 GB), 674/674 keypoint
+  sequences extracted via a new `ml/src/pose_estimation/` module that
+  reuses `vision_service/app/movenet_runner.py`'s `MoveNetRunner` directly
+  (read-only, nothing under `vision_service/app/` touched). Participant-
+  disjoint train/val/test split (val=P21, test=P22, both held out
+  entirely). Full detail in `ml/data/dataset_report.md`.
+- **Phase 2 done 2026-11-27**: first trained model in this repo — a 9-class
+  exercise-recognition baseline over MobiPhysio's own annotated categories
+  (E01–E09). **Test-set result: 61.7% accuracy / 0.597 macro F1** on the
+  held-out participant P22 (81 clips, 9 per class), vs 11.1% majority-class
+  and 18.5% stratified-random floors. Validation (P21) was 81.5%.
+  scikit-learn `HistGradientBoostingClassifier` on 148 confidence-weighted,
+  body-centric pose-summary features; chosen from 16 candidates on val
+  only, test scored once. CPU, ~10 s train, no GPU/PyTorch. Code in
+  `ml/src/training/` + `ml/src/evaluation/`; reports in `ml/experiments/`;
+  lineage and checkpoint hash in `ml/models/MODEL_PROVENANCE.md`.
+  Caveats stated in full there, the important one being that val and test
+  are **one participant each**, so the 20-point val/test gap means neither
+  number is a generalisation estimate. Checkpoint is research-only,
+  gitignored, **not wired into the backend/API and not production-cleared**.
+
 ## Fixed 2026-11-26 (committed in c9fee94)
 
 - `MAPPING_VERSION_MISMATCH` on every fixture-mode frame — fixture output
@@ -55,30 +79,34 @@ detailed validation log this is summarized from; update both together.
 - Real Supabase write path not re-verified since the credential exposure
   (deliberately tested via the in-memory repository instead this session).
   Re-verify live once rotated.
-- No real movement footage exists yet — MoveNet has only been proven
-  against a static synthetic pose. Rep-counting accuracy on real
-  knee-extension movement is unverified. Needs a consenting volunteer's
-  footage or your own recorded clip (never real patient footage).
+- **Partially resolved 2026-11-27**: MoveNet has now been run against real
+  (non-synthetic) human footage for the first time in this repo — 674
+  MobiPhysio clips, 149,401 real pose frames (see "ML/exercise-recognition
+  work" below). But MobiPhysio has no knee-extension exercise, so this does
+  **not** verify RehabLoop's actual rep-counting/angle accuracy on
+  knee-extension movement specifically — that still needs a consenting
+  volunteer's own knee-extension footage (never real patient footage).
+  What it does newly confirm: MoveNet Lightning's measured keypoint
+  confidence on real people in non-ideal framing (wide, full-room
+  smartphone shots) averages 0.487 and drops below 0.40 on 173/674 clips —
+  a real input-framing sensitivity worth knowing before relying on similar
+  framing for knee-extension sessions.
 - Clinical validation, DPIA, and legal review (Kenya DPA 2019 s.46) remain
   pending before any real-patient use — see `docs/backend_guide.md` §10.
 - `docker-compose*.yml` and `docs/api_contract.md` changes still need
   Steve's review before merge.
-- `AGENTS.md` has an **uncommitted** working-tree edit (as of 2026-11-26
-  evening) that would permit exercise-recognition/movement-deviation
-  classifiers built from permitted dataset annotations. Not yet treated as
-  authorization — see "Explicitly not planned" below. Needs an explicit
-  confirmation (and a commit) that this is the final, intended wording
-  before any classifier work starts on the strength of it.
+- ~~`AGENTS.md` uncommitted edit~~ — **resolved 2026-11-26 23:59** (commit
+  `c4a22a9`, by Lennox). Exercise-recognition/movement-deviation
+  classifiers built from permitted dataset annotations are now explicitly
+  in scope — see `AGENTS.md`'s "Safety and data handling" section for the
+  exact, controlling wording. `CLAUDE.md`'s "Dataset and model-handling
+  rules" updated to match.
 
 ## Explicitly not planned
 
-- No patient-movement classification/diagnosis/recovery model, still, as
-  of 2026-11-26 night. `CLAUDE.md`'s "Dataset and model-handling rules"
-  says this needs an actual `AGENTS.md` change the project's stakeholders
-  agree to, not an inline decision made mid-task — a chat instruction to
-  "just start working" while heading to sleep doesn't satisfy that, even
-  though an uncommitted edit loosening this exact rule is sitting in the
-  working tree (see "Outstanding"). Resume this the moment that edit is
-  confirmed as intentional and committed.
+- Still no model that infers injury, danger, clinical status, recovery,
+  prognosis, or progression, or that recommends treatment/exercise targets
+  — `AGENTS.md`'s new wording explicitly keeps this line even though
+  exercise-recognition/movement-pattern classifiers are now permitted.
 - No frontend work from Claude in this project until the user lifts that
   boundary.

@@ -1,18 +1,23 @@
 # Rehabilitation dataset landscape — research only
 
-Owner: Lennox. **No data from this page has been downloaded, and no training
-pipeline exists or is planned on the back of it.** This is licensing/access
-research only, kept on record for if/when the project's stakeholders decide
-to revisit `AGENTS.md`'s current rule against building a movement
-classification/recovery model (see `CLAUDE.md`). Several of these datasets
-are real rehabilitation participants' movement data; using any of them for
-RehabLoop would need the DPIA and legal review `docs/backend_guide.md` §10
-already requires before any real-movement-data pipeline — that hasn't
-happened, and researching licenses isn't the same as clearing that bar.
+Owner: Lennox. Originally licensing/access research only. As of the
+`AGENTS.md` change committed 2026-11-26 (`c4a22a9`), exercise-recognition
+and movement-category/deviation classifiers built from permitted dataset
+annotations are in scope (see `CLAUDE.md`) — **MobiPhysio is now actually
+being downloaded and processed**; see `ml/data/` (`dataset_manifest.csv`,
+`dataset_report.md`, `license_review.md`, `download_log.md`) for the live,
+authoritative state of that work, not this table. This page stays the
+license/access reference for all six datasets; it is not re-verified every
+time `ml/data/` changes. Several of these datasets are real research
+participants' movement data (not RehabLoop patients) — see `CLAUDE.md`'s
+"Dataset and model-handling rules" for exactly which gate applies to which
+kind of data (the §10 DPIA/legal-review gate is scoped to a real-patient
+pilot specifically, not to using an already-licensed third-party research
+dataset within its own stated scope).
 
 | Dataset | License | Commercial use | Contents | Notes |
 |---|---|---|---|---|
-| WLU Rehabilitation Posture (Kaggle) | MIT (per the dataset's Kaggle license field, linking to `mit.edu/~amini/LICENSE.md`) | Yes, with attribution (MIT terms) | 339 files, 877.74 MB, blurred videos (privacy-preserving by design) across 6 folders: Arm Raise Correct (51)/Incorrect (55), Knee Extension Correct (44)/Incorrect (62), Sit To Stand Correct (79)/Incorrect (48) | Verified 2026-11-26 via rendered page (Kaggle's license sidebar needs JS rendering — plain fetch undercounts it). Author's description: "created to support research on exercise verification and repetition count tracking... post-stroke rehabilitation"; videos intentionally blurred while preserving motion detail. Directly relevant to the knee-extension workflow, labelled correct/incorrect, and the "Code (1)" tab has a related notebook from a collaborator — not inspected here |
+| WLU Rehabilitation Posture (Kaggle) | MIT (per the dataset's Kaggle license field, linking to `mit.edu/~amini/LICENSE.md`) | Yes, with attribution (MIT terms) | 339 files, 877.74 MB, blurred videos (privacy-preserving by design) across 6 folders: Arm Raise Correct (51)/Incorrect (55), Knee Extension Correct (44)/Incorrect (62), Sit To Stand Correct (79)/Incorrect (48) | **Download blocked**: license is clear (MIT), but Kaggle's dataset-download API/UI requires an authenticated account/API token not available in this environment (confirmed 2026-11-26 night: an unauthenticated request to `kaggle.com/api/v1/datasets/download/...` 302-redirects to login). Not worked around, per the rule against bypassing account/login requirements. Otherwise directly relevant to the knee-extension workflow, labelled correct/incorrect — worth revisiting if a Kaggle account/API token is ever provided. The "Code (1)" tab has a related notebook from a collaborator — not inspected here |
 | REHAB24-6 (Zenodo) | CC BY-NC 4.0 | **No** — explicitly "academic or non-profit noncommercial research use only"; commercial licensing would need to be separately negotiated (contact listed: info@visioncraft.ai) | RGB video (2 synced cameras), 2D/3D skeleton joints (26/frame), 2D/3D mocap markers (41), 1,072 annotated repetitions with temporal segmentation, binary correct/incorrect labels, exercise direction + lighting annotations | Rules this out for a commercial product without separate licensing, regardless of the AGENTS.md question |
 | MobiPhysio (Harvard Dataverse) | CC0 1.0 Universal (public domain dedication) | Yes, no attribution legally required (though good practice to credit the authors) | 3,688 files (v3.0), physiotherapy exercise videos (MPEG-4, ~24–76 MB each) from multiple camera angles per clip (filenames encode exercise/participant/angle, e.g. `E01_P01_AF_VFL_GM.mp4`) and multiple participants; description states each video is "labeled and categorized by exercise type, with expert guidance from certified physiotherapists" | Verified 2026-11-26 via rendered page (citation page needs JS rendering too). Authors: Iqbal, Mostafa, Ahmed, Fahim, Ahmed, Ahamad, Islam, Ryu, Song, Hossain (2025). Terms/Metadata tabs not yet opened — assessment-label detail and exact camera-angle/participant counts need a follow-up pass before any ingestion |
 | Upper Limb Stroke Rehabilitation Dataset (Mendeley) | CC BY 4.0 | Yes, with attribution (Nair, Nandana, Thenmozhi Dharshini, Viswanathan — Amrita Vishwa Vidyapeetham) | 491 videos, 4 upper-limb strengthening exercises, "complete"/"incomplete" execution labels | Upper-limb, not knee-extension — would need a separate model/mapping, never merged into a knee-extension classifier per the rules in the original mission doc |

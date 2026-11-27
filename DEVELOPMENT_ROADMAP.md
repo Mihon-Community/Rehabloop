@@ -30,12 +30,21 @@ engine + constrained LLM summary — no PyTorch, no training pipeline; see
 7. Frontend integration and end-to-end UI testing (Steve's area) — out of
    scope for Claude work in this project until explicitly authorized.
 
-## Explicitly out of scope unless the project's rules change
+## Updated 2026-11-26 night: exercise-recognition scope now permitted
 
-- Any model that classifies, diagnoses, or predicts a patient's
-  recovery/progress from movement data. This conflicts with `AGENTS.md`
-  today; changing that is a project-governance decision, not a roadmap
-  item to schedule around.
+`AGENTS.md` commit `c4a22a9` explicitly permits exercise-recognition,
+repetition segmentation/counting, and movement-category/deviation
+classifiers trained on **permitted dataset annotations**. See
+`docs/rehab_dataset_landscape.md` for which datasets qualify
+(WLU Rehabilitation Posture and MobiPhysio are commercial-clear; REHAB24-6
+is research-only). `ml/` work starts from this roadmap item onward.
+
+## Still explicitly out of scope
+
+- Any model that infers injury, danger, a patient's clinical status,
+  recovery, prognosis, or progression, or that recommends treatment or
+  prescribes exercise targets — unchanged by the above, per `AGENTS.md`'s
+  own wording.
 
 ## Process
 
