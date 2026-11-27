@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { SafetyBanner } from '../../components/SafetyBanner';
+import { Camera, LockKeyhole } from 'lucide-react';
+import { useDemo } from '../../app/demoStore';
+import { SimulatedBadge } from '../../components/SimulatedBadge';
+import { StateMessage } from '../../components/StateMessage';
+import { StatusPill } from '../../components/StatusPill';
+import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert';
+import { Button } from '../../components/ui/button';
 import { ApiError, api } from '../../lib/api';
 import {
   createCameraConsent,
@@ -9,21 +15,48 @@ import {
 } from '../../lib/camera';
 import type { Profile, Protocol } from '../../types';
 
+type CameraStatus = 'idle' | 'requesting' | 'ready' | 'denied' | 'unsupported';
+type ChecklistKey = 'side' | 'legVisible' | 'stable' | 'light' | 'onePerson';
+
+const checklist: { key: ChecklistKey; label: string }[] = [
+  { key: 'side', label: 'Camera is approximately side-on' },
+  { key: 'legVisible', label: 'Hip, knee and ankle of the selected leg are in frame' },
+  { key: 'stable', label: 'Camera is stable (not handheld)' },
+  { key: 'light', label: 'Lighting is even and the leg is not backlit' },
+  { key: 'onePerson', label: 'Only one person is in frame' },
+];
+
+const emptyChecks: Record<ChecklistKey, boolean> = {
+  side: false,
+  legVisible: false,
+  stable: false,
+  light: false,
+  onePerson: false,
+};
+
+/** Screen 4 — consent, camera preview, framing checklist and non-camera path. */
 export function CameraSetupScreen() {
   const navigate = useNavigate();
+  const { setConsentGiven, setSessionId, setCameraMode } = useDemo();
   const videoRef = useRef<HTMLVideoElement>(null);
   const keepStreamOnUnmount = useRef(false);
+
   const [profile, setProfile] = useState<Profile | null>(null);
   const [protocols, setProtocols] = useState<Protocol[]>([]);
   const [selectedProtocolId, setSelectedProtocolId] = useState('');
-  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
-  const [consentAccepted, setConsentAccepted] = useState(false);
-  const [consentRecordId, setConsentRecordId] = useState('');
-  const [legVisible, setLegVisible] = useState(false);
-  const [cameraPositioned, setCameraPositioned] = useState(false);
-  const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [loadError, setLoadError] = useState('');
+
+  const [cameraStatus, setCameraStatus] = useState<CameraStatus>('idle');
+  const [cameraError, setCameraError] = useState('');
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const [consent, setConsent] = useState(false);
+  const [consentRecordId, setConsentRecordId] = useState('');
+  const [checks, setChecks] = useState<Record<ChecklistKey, boolean>>(emptyChecks);
+  const [service, setService] = useState<'unknown' | 'checking' | 'available' | 'unavailable'>(
+    'unknown',
+  );
+  const [busy, setBusy] = useState(false);
   const [draftSessionId, setDraftSessionId] = useState('');
 
   const selectedProtocol = useMemo(
@@ -31,7 +64,14 @@ export function CameraSetupScreen() {
     [protocols, selectedProtocolId],
   );
   const protocolSide = selectedProtocol?.parameters.side;
-  const checksPassed = Boolean(cameraStream && legVisible && cameraPositioned);
+  const checksPassed = Object.values(checks).every(Boolean);
+  const canStart =
+    consent &&
+    checksPassed &&
+    cameraStatus === 'ready' &&
+    service !== 'unavailable' &&
+    Boolean(selectedProtocol) &&
+    Boolean(consentRecordId);
 
   useEffect(() => {
     let mounted = true;
@@ -42,14 +82,16 @@ export function CameraSetupScreen() {
         setProtocols(assignedProtocols);
         setSelectedProtocolId(assignedProtocols[0]?.id ?? '');
         if (currentProfile.role !== 'patient') {
-          setError('Camera sessions can only be started from a patient account.');
+          setLoadError('Camera sessions can only be started from a patient account.');
         } else if (assignedProtocols.length === 0) {
-          setError('There is no active clinician-approved protocol assigned to this account yet.');
+          setLoadError(
+            'There is no active clinician-approved protocol assigned to this account yet.',
+          );
         }
       })
       .catch((cause: unknown) => {
         if (!mounted) return;
-        setError(
+        setLoadError(
           cause instanceof ApiError && cause.status === 401
             ? 'Sign in before setting up a camera session.'
             : cause instanceof Error
@@ -75,25 +117,33 @@ export function CameraSetupScreen() {
     setDraftSessionId('');
   }, [selectedProtocolId]);
 
-  async function enableCamera() {
-    setBusy(true);
-    setError('');
-    try {
-      const secureContext =
-        window.isSecureContext || ['localhost', '127.0.0.1'].includes(window.location.hostname);
-      if (!secureContext) {
-        throw new Error('Camera access needs HTTPS or a local address such as http://localhost.');
-      }
-      if (!navigator.mediaDevices?.getUserMedia) {
-        throw new Error(
-          'This browser does not provide camera access. Try a current browser on HTTPS or localhost.',
-        );
-      }
-      if (!profile || profile.role !== 'patient' || !selectedProtocol) {
-        throw new Error('A patient account with an assigned active protocol is required.');
-      }
-      if (!consentAccepted) throw new Error('Read and accept the camera-processing notice first.');
+  async function requestCamera() {
+    setCameraError('');
+    const secureContext =
+      window.isSecureContext || ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    if (!secureContext) {
+      setCameraStatus('unsupported');
+      setCameraError('Camera access needs HTTPS or a local address such as http://localhost.');
+      return;
+    }
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraStatus('unsupported');
+      setCameraError(
+        'This browser does not provide camera access. Try a current browser on HTTPS or localhost.',
+      );
+      return;
+    }
+    if (!profile || profile.role !== 'patient' || !selectedProtocol) {
+      setCameraError('A patient account with an assigned active protocol is required.');
+      return;
+    }
+    if (!consent) {
+      setCameraError('Read and accept the camera-processing notice first.');
+      return;
+    }
 
+    setCameraStatus('requesting');
+    try {
       const savedConsentId = consentRecordId || (await createCameraConsent(profile.id));
       setConsentRecordId(savedConsentId);
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -106,12 +156,20 @@ export function CameraSetupScreen() {
       });
       setActiveCameraStream(stream);
       setCameraStream(stream);
-      setLegVisible(false);
-      setCameraPositioned(false);
+      setCameraStatus('ready');
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Camera permission was not granted.');
-    } finally {
-      setBusy(false);
+      setCameraStatus('denied');
+      setCameraError(cause instanceof Error ? cause.message : 'Camera permission was not granted.');
+    }
+  }
+
+  async function checkService() {
+    setService('checking');
+    try {
+      await api.health();
+      setService('available');
+    } catch {
+      setService('unavailable');
     }
   }
 
@@ -119,16 +177,18 @@ export function CameraSetupScreen() {
     keepStreamOnUnmount.current = false;
     stopActiveCameraStream();
     setCameraStream(null);
-    setConsentAccepted(false);
-    setLegVisible(false);
-    setCameraPositioned(false);
+    setCameraStatus('idle');
+    setConsent(false);
+    setConsentGiven(false);
+    setChecks(emptyChecks);
+    setCameraMode('review');
     navigate('/home');
   }
 
   async function startSession() {
     if (!selectedProtocol || !consentRecordId || !checksPassed) return;
     setBusy(true);
-    setError('');
+    setCameraError('');
     try {
       const draft = draftSessionId
         ? { session_id: draftSessionId }
@@ -139,6 +199,7 @@ export function CameraSetupScreen() {
         throw new Error('The server did not return a session stream token.');
 
       keepStreamOnUnmount.current = true;
+      setSessionId(started.session_id);
       navigate(`/sessions/${started.session_id}/live`, {
         state: {
           streamToken: started.stream_token,
@@ -147,38 +208,46 @@ export function CameraSetupScreen() {
         },
       });
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not start the session.');
+      setCameraError(cause instanceof Error ? cause.message : 'Could not start the session.');
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <section className="card" aria-labelledby="camera-setup-heading">
-      <h1 id="camera-setup-heading">Camera setup</h1>
-      <SafetyBanner />
-      <p>
-        Review the assigned protocol and camera notice. The browser will not request camera access
-        until you accept the notice and choose to enable the preview.
+    <section className="card" aria-labelledby="setup-heading">
+      <div className="screen-title-row">
+        <h1 id="setup-heading">4. Camera setup</h1>
+        <SimulatedBadge source="simulated" />
+      </div>
+      <p className="screen-intro">
+        A few quick checks help the camera see your full leg. You are in control throughout, and you
+        can review saved information without using a camera.
       </p>
 
       {loading ? (
-        <p role="status">Loading your assigned protocol…</p>
-      ) : error && !profile ? (
-        <div className="notice" role="alert">
-          <p>{error}</p>
-          <Link to="/">Go to sign in</Link>
-        </div>
+        <StateMessage kind="loading" title="Loading your assigned protocol…" />
+      ) : loadError && !profile ? (
+        <StateMessage kind="error" title="Could not load your profile">
+          {loadError}
+          <div className="meta">
+            <Link to="/sign-in">Go to sign in</Link>
+          </div>
+        </StateMessage>
       ) : profile?.role !== 'patient' ? (
-        <div className="notice" role="alert">
-          <p>{error || 'Camera sessions are for patient accounts.'}</p>
-          <Link to="/home">Return to patient home</Link>
-        </div>
+        <StateMessage kind="error" title="Patient account required">
+          {loadError || 'Camera sessions are for patient accounts.'}
+          <div className="meta">
+            <Link to="/home">Return to patient home</Link>
+          </div>
+        </StateMessage>
       ) : protocols.length === 0 ? (
-        <div className="notice" role="status">
-          <p>{error || 'No active protocol is assigned yet.'}</p>
-          <Link to="/home">Return to patient home</Link>
-        </div>
+        <StateMessage kind="empty" title="No active protocol assigned">
+          {loadError || 'No active protocol is assigned yet.'}
+          <div className="meta">
+            <Link to="/home">Return to patient home</Link>
+          </div>
+        </StateMessage>
       ) : (
         <>
           <div className="form-stack">
@@ -187,7 +256,7 @@ export function CameraSetupScreen() {
               id="assigned-protocol"
               value={selectedProtocolId}
               onChange={(event) => setSelectedProtocolId(event.target.value)}
-              disabled={Boolean(cameraStream)}
+              disabled={cameraStatus === 'ready'}
             >
               {protocols.map((protocol) => (
                 <option key={protocol.id} value={protocol.id}>
@@ -211,96 +280,127 @@ export function CameraSetupScreen() {
             </div>
           )}
 
-          <section className="consent-panel" aria-labelledby="camera-consent-heading">
-            <h2 id="camera-consent-heading">Camera-processing consent</h2>
+          <h2 className="flex items-center gap-2">
+            <Camera className="size-5 text-primary" aria-hidden="true" /> Privacy first
+          </h2>
+          <Alert variant="info" icon={<LockKeyhole className="size-5" />}>
+            <AlertTitle>Your frames stay with this session</AlertTitle>
+            <AlertDescription>
+              Frames are sampled only while measurement runs. Raw video is not stored by default,
+              and no value is shown unless it passes the quality checks.
+            </AlertDescription>
+          </Alert>
+
+          <h2>Consent before camera access</h2>
+          <p>
+            If you continue, your camera frames will be sent live to RehabLoop's private vision
+            service to estimate movement for this session. Frames are processed transiently and are
+            not stored as video. Camera access is optional.
+          </p>
+          <label className="confirm-check">
+            <input
+              type="checkbox"
+              checked={consent}
+              disabled={cameraStatus === 'ready'}
+              onChange={(event) => {
+                setConsent(event.target.checked);
+                setConsentGiven(event.target.checked);
+              }}
+            />
+            I consent to camera frames being processed for this measurement session.
+          </label>
+
+          <h2>Live preview</h2>
+          <div className="camera-preview">
+            <video ref={videoRef} autoPlay playsInline muted aria-label="Camera preview" />
+            {cameraStatus !== 'ready' ? (
+              <div className="camera-placeholder">
+                <span aria-hidden="true">▣</span>
+                <p>No camera preview. Framing guide below.</p>
+              </div>
+            ) : null}
+          </div>
+          <div className="button-row">
+            <button
+              type="button"
+              onClick={requestCamera}
+              disabled={!consent || cameraStatus === 'requesting' || cameraStatus === 'ready'}
+            >
+              {cameraStatus === 'requesting' ? 'Requesting camera…' : 'Allow camera'}
+            </button>
+            <button type="button" onClick={checkService}>
+              Check measurement service
+            </button>
+          </div>
+          {cameraStatus === 'denied' || cameraStatus === 'unsupported' ? (
+            <StateMessage kind="error" title="Camera unavailable — plain-language help">
+              {cameraError}
+            </StateMessage>
+          ) : null}
+          {cameraStatus === 'ready' ? (
+            <StatusPill tone="good">Camera preview active</StatusPill>
+          ) : null}
+          {service === 'checking' ? (
+            <StateMessage kind="loading" title="Checking measurement service…" />
+          ) : null}
+          {service === 'available' ? (
+            <StatusPill tone="good">Measurement service available</StatusPill>
+          ) : null}
+          {service === 'unavailable' ? (
+            <StateMessage kind="error" title="Measurement service unavailable">
+              Live measurement cannot start. You can review saved reports without a camera, or retry
+              after the service is restored. No value is invented.
+            </StateMessage>
+          ) : null}
+
+          <h2>Framing checklist</h2>
+          <p className="meta">
+            Confirm each item before starting. Errors are shown as instructions, not codes.
+          </p>
+          <ul className="checklist motion-stagger">
+            {checklist.map((item) => (
+              <li key={item.key}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={checks[item.key]}
+                    onChange={(event) => setChecks({ ...checks, [item.key]: event.target.checked })}
+                  />
+                  {item.label}
+                </label>
+              </li>
+            ))}
+          </ul>
+          {consent && !checksPassed ? (
             <p className="meta">
-              Prototype notice for testing; production terms and consent wording need review before
-              rollout.
+              Move back until your full leg is visible; then re-check the list.
             </p>
-            <p>
-              If you continue, your camera frames will be sent live to RehabLoop’s private vision
-              service to estimate movement for this session. Frames are processed transiently and
-              are not stored as video. Numeric session results may be saved according to the
-              configured service. This prototype does not diagnose, treat, or provide medical
-              advice. Camera use is optional, and you can stop the session at any time.
-            </p>
-            <label className="checkbox-row">
-              <input
-                type="checkbox"
-                checked={consentAccepted}
-                onChange={(event) => setConsentAccepted(event.target.checked)}
-                disabled={Boolean(cameraStream)}
-              />
-              <span>I have read this notice and agree to camera processing for this session.</span>
-            </label>
-            <div className="button-row">
-              <button
-                className="primary"
-                disabled={!consentAccepted || busy || Boolean(cameraStream)}
-                onClick={enableCamera}
-                type="button"
-              >
-                {busy && !cameraStream ? 'Preparing camera…' : 'Accept and enable camera'}
-              </button>
-              <button onClick={declineCamera} type="button">
-                Decline and return
-              </button>
-            </div>
-          </section>
+          ) : null}
 
-          {cameraStream && (
-            <section className="camera-preview" aria-labelledby="preview-heading">
-              <div className="section-heading-row">
-                <h2 id="preview-heading">Camera preview</h2>
-                <span className="status-pill status-good">Camera on</span>
-              </div>
-              <video ref={videoRef} autoPlay muted playsInline aria-label="Live camera preview" />
-              <p className="meta">
-                Use a stable side view with one person in frame and the full selected leg visible.
-                This app cannot verify framing automatically.
-              </p>
-              <div className="checklist">
-                <label className="checkbox-row">
-                  <input
-                    type="checkbox"
-                    checked={legVisible}
-                    onChange={(event) => setLegVisible(event.target.checked)}
-                  />
-                  <span>The hip, knee, and ankle on the selected side are visible.</span>
-                </label>
-                <label className="checkbox-row">
-                  <input
-                    type="checkbox"
-                    checked={cameraPositioned}
-                    onChange={(event) => setCameraPositioned(event.target.checked)}
-                  />
-                  <span>
-                    The camera is steady, approximately side-on, and only one person is in view.
-                  </span>
-                </label>
-              </div>
-              <div className="button-row">
-                <button
-                  className="primary"
-                  disabled={!checksPassed || busy}
-                  onClick={startSession}
-                  type="button"
-                >
-                  {busy ? 'Starting session…' : 'Start live session'}
-                </button>
-                <button onClick={declineCamera} type="button">
-                  Turn off camera
-                </button>
-              </div>
-            </section>
+          {cameraError && cameraStatus === 'ready' && (
+            <p className="error-message" role="alert">
+              {cameraError}
+            </p>
           )}
-        </>
-      )}
 
-      {error && profile && (
-        <p className="error-message" role="alert">
-          {error}
-        </p>
+          <div className="button-row">
+            <Button type="button" disabled={!canStart || busy} onClick={startSession}>
+              {busy ? 'Starting session…' : 'Start measurement session'}
+            </Button>
+            <button type="button" onClick={declineCamera}>
+              Continue without camera — review saved report
+            </button>
+            <Link className="button-link" to="/home">
+              Cancel
+            </Link>
+          </div>
+          {!canStart && consent ? (
+            <p className="meta">
+              Start requires consent, an active camera preview, all framing checks and an available
+              measurement service.
+            </p>
+          ) : null}
+        </>
       )}
     </section>
   );

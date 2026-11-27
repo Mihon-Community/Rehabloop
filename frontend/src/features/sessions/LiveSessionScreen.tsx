@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { SafetyBanner } from '../../components/SafetyBanner';
+import { Radio } from 'lucide-react';
+import { SimulatedBadge } from '../../components/SimulatedBadge';
+import { StateMessage } from '../../components/StateMessage';
+import { StatusPill } from '../../components/StatusPill';
 import { api, sessionStreamUrl } from '../../lib/api';
 import {
   getActiveCameraStream,
   setActiveCameraStream,
   stopActiveCameraStream,
 } from '../../lib/camera';
+import { initialStreamState, reduceStreamEvent, type StreamState } from '../../lib/stream';
 import type { MeasurementEvent, QualityWarningEvent, StreamErrorEvent } from '../../types';
 
 type LiveRouteState = {
@@ -23,6 +27,7 @@ const FRAME_RATE = Number.isFinite(configuredFrameRate)
   : 8;
 let cameraDisposalTimer: number | undefined;
 
+/** Screen 5 — live metrics from the session WebSocket, with pause/end and quality states. */
 export function LiveSessionScreen() {
   const { id: sessionId } = useParams();
   const location = useLocation();
@@ -33,6 +38,7 @@ export function LiveSessionScreen() {
   const sequenceRef = useRef(0);
   const sessionStartAtRef = useRef(Date.now());
   const manualCloseRef = useRef(false);
+
   const [streamToken, setStreamToken] = useState(routeState.streamToken ?? '');
   const [consentRecordId] = useState(routeState.consentRecordId ?? '');
   const [protocolName] = useState(routeState.protocolName ?? 'Assigned protocol');
@@ -42,9 +48,10 @@ export function LiveSessionScreen() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [qualityMessage, setQualityMessage] = useState('Waiting for the first frame…');
-  const [latestMeasurement, setLatestMeasurement] = useState<MeasurementEvent | null>(null);
-  const [repetitionCount, setRepetitionCount] = useState(0);
+  const [stream, setStream] = useState<StreamState>(initialStreamState);
   const [simulated, setSimulated] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(true);
+  const [received, setReceived] = useState(0);
 
   useEffect(() => {
     if (videoRef.current && cameraStream) {
@@ -112,9 +119,9 @@ export function LiveSessionScreen() {
       socket.onmessage = (message) => {
         try {
           const event = JSON.parse(String(message.data)) as SessionEvent;
+          setReceived((count) => count + 1);
           if (event.type === 'measurement') {
-            setLatestMeasurement(event);
-            setRepetitionCount(event.rep_count);
+            setStream((current) => reduceStreamEvent(current, event));
             setSimulated(Boolean(event.simulated));
             setQualityMessage(
               event.quality.usable
@@ -122,10 +129,9 @@ export function LiveSessionScreen() {
                 : event.quality.reason || 'Measurement unavailable for this frame.',
             );
           } else if (event.type === 'quality_warning') {
-            setRepetitionCount(event.rep_count);
+            setStream((current) => reduceStreamEvent(current, event));
             setSimulated(Boolean(event.simulated));
             setQualityMessage(event.message);
-            setLatestMeasurement(null);
           } else if (event.type === 'error') {
             setError(`${event.code}: ${event.message}`);
           }
@@ -215,7 +221,6 @@ export function LiveSessionScreen() {
       setCameraStream(newStream);
       setStreamToken(started.stream_token);
       setPaused(false);
-      setLatestMeasurement(null);
       setQualityMessage('Resuming camera stream…');
       newStream = null;
     } catch (cause) {
@@ -258,9 +263,11 @@ export function LiveSessionScreen() {
 
   if (!sessionId || !routeState.streamToken) {
     return (
-      <section className="card" aria-labelledby="live-session-heading">
-        <h1 id="live-session-heading">Live session</h1>
-        <p className="notice">Start a session from Camera Setup to open a protected live stream.</p>
+      <section className="card" aria-labelledby="live-heading">
+        <h1 id="live-heading">Live session</h1>
+        <StateMessage kind="empty" title="No active session">
+          Start a session from Camera Setup to open a protected live stream.
+        </StateMessage>
         <Link className="button-link" to="/setup">
           Go to Camera Setup
         </Link>
@@ -268,89 +275,155 @@ export function LiveSessionScreen() {
     );
   }
 
+  const latest = stream.latest;
+  // Live display rounds to whole degrees; the stored session result keeps one decimal place.
+  const angle = latest ? Math.round(latest.projected_knee_angle_deg) : null;
+  const sessionPhase = paused ? 'paused' : connected ? 'streaming' : 'connecting';
+
   return (
-    <section className="card" aria-labelledby="live-session-heading">
-      <div className="section-heading-row">
-        <div>
-          <h1 id="live-session-heading">Live session</h1>
-          <p className="meta">{protocolName}</p>
-        </div>
-        <span className={`status-pill ${connected ? 'status-good' : 'status-waiting'}`}>
-          {connected ? 'Streaming' : paused ? 'Paused' : 'Connecting'}
-        </span>
+    <section className="card" aria-labelledby="live-heading">
+      <div className="screen-title-row">
+        <h1 id="live-heading">5. Live session</h1>
+        <SimulatedBadge source={simulated ? 'simulated' : 'live'} />
       </div>
-      <SafetyBanner />
+      <p className="screen-intro">
+        Watch the live measurement state, repetitions and data quality. Angles are projected 2D
+        estimates — never a clinical measurement.
+      </p>
+      <div className="mb-2 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card p-3">
+        <Radio className="size-5 text-primary" aria-hidden="true" />
+        <span className="text-sm font-semibold">Session state:</span>
+        <StatusPill
+          tone={
+            sessionPhase === 'paused' ? 'warn' : sessionPhase === 'streaming' ? 'good' : 'neutral'
+          }
+        >
+          {sessionPhase === 'streaming'
+            ? 'Streaming'
+            : sessionPhase === 'paused'
+              ? 'Paused'
+              : 'Connecting'}
+        </StatusPill>
+        <span className="text-sm font-semibold">Quality:</span>
+        {latest?.quality.usable ? (
+          <StatusPill tone="good">usable frame</StatusPill>
+        ) : (
+          <StatusPill tone="neutral">not measured yet</StatusPill>
+        )}
+      </div>
+      <p className="meta">
+        Session {sessionId} · {protocolName}
+      </p>
 
-      <div className="live-layout">
-        <div className="camera-preview live-preview">
-          {cameraStream ? (
-            <video ref={videoRef} autoPlay muted playsInline aria-label="Live camera preview" />
-          ) : (
-            <div className="camera-off" role="status">
-              Camera is off while this session is paused.
-            </div>
-          )}
+      {error ? (
+        <StateMessage kind="error" title="Vision service issue">
+          {error}
+        </StateMessage>
+      ) : null}
+
+      <div className="live-grid motion-stagger">
+        <div>
+          <div className="camera-preview">
+            {cameraStream ? (
+              <video ref={videoRef} autoPlay muted playsInline aria-label="Live camera preview" />
+            ) : (
+              <div className="camera-placeholder">Camera is off while this session is paused.</div>
+            )}
+            {showOverlay && latest ? (
+              <svg className="pose-overlay" viewBox="0 0 200 200" aria-hidden="true">
+                <circle cx="60" cy="45" r="9" />
+                <line x1="60" y1="54" x2="65" y2="110" />
+                <circle cx="65" cy="110" r="8" />
+                <line x1="65" y1="110" x2={70 + (angle ?? 72) / 3} y2={165 - (angle ?? 72) / 8} />
+                <circle cx={70 + (angle ?? 72) / 3} cy={165 - (angle ?? 72) / 8} r="7" />
+                <text x="6" y="194">
+                  schematic overlay
+                </text>
+              </svg>
+            ) : null}
+          </div>
           <p className="meta">
-            Live preview only. The current API does not return pose landmarks for a skeleton
-            overlay.
+            Live preview only. The current API does not return pose landmarks, so this overlay is a
+            schematic approximation driven by the projected angle, not a real skeleton trace.
           </p>
+          <div className="button-row">
+            <button
+              type="button"
+              onClick={() => setShowOverlay((value) => !value)}
+              aria-pressed={!showOverlay}
+            >
+              {showOverlay ? 'Hide pose overlay' : 'Show pose overlay'}
+            </button>
+          </div>
         </div>
 
-        <div className="metric-panel">
+        <div className="live-metrics" aria-live="polite">
           <div className="metric-card">
-            <span>Repetitions</span>
-            <strong aria-live="polite">{repetitionCount}</strong>
+            <span className="metric-label">Repetitions counted</span>
+            <span className="metric-value">{latest?.rep_count ?? 0}</span>
           </div>
           <div className="metric-card">
-            <span>Movement state</span>
-            <strong className="movement-state" aria-live="polite">
-              {latestMeasurement?.quality.usable ? latestMeasurement.state.replace(/_/g, ' ') : '—'}
-            </strong>
+            <span className="metric-label">Movement state</span>
+            <span className="metric-value">
+              {latest?.quality.usable ? latest.state.replace(/_/g, ' ') : '—'}
+            </span>
           </div>
           <div className="metric-card">
-            <span>Projected 2D knee angle estimate</span>
-            <strong aria-live="polite">
-              {latestMeasurement?.quality.usable
-                ? `${Math.round(latestMeasurement.projected_knee_angle_deg)}°`
-                : '—'}
-            </strong>
+            <span className="metric-label">Projected knee angle estimate</span>
+            <span className="metric-value">
+              {latest?.quality.usable && angle !== null ? angle : '—'}
+              <small>°</small>
+            </span>
+            <span className="meta">2D estimate from one camera view — not a clinical angle</span>
           </div>
           <div className="notice quality-status" role="status">
             <strong>Movement quality</strong>
             <span>{qualityMessage}</span>
-            {latestMeasurement?.quality.usable && latestMeasurement.quality.confidence !== null && (
+            {latest?.quality.usable && latest.quality.confidence !== null && (
               <span className="meta">
-                Landmark confidence: {Math.round(latestMeasurement.quality.confidence * 100)}%
+                Landmark confidence: {Math.round(latest.quality.confidence * 100)}%
               </span>
             )}
           </div>
           {simulated && <p className="simulated-label">SIMULATED fixture inference</p>}
+          {stream.warnings.length ? (
+            <div className="warning-list" role="status">
+              {stream.warnings.slice(-3).map((warning) => (
+                <p key={warning.sequence}>
+                  <StatusPill tone="warn">Quality warning</StatusPill> {warning.message} (seq{' '}
+                  {warning.sequence})
+                </p>
+              ))}
+            </div>
+          ) : null}
+          <p className="meta">
+            Frames are sampled at up to {FRAME_RATE} per second and sent for live processing. Raw
+            video is not stored. Events received: {received} · last accepted sequence:{' '}
+            {stream.lastSequence}
+          </p>
+
+          <div className="button-row session-controls">
+            {paused ? (
+              <button className="primary" disabled={busy} onClick={resumeSession} type="button">
+                {busy ? 'Reconnecting…' : 'Resume session'}
+              </button>
+            ) : (
+              <button disabled={busy} onClick={pauseSession} type="button">
+                Pause session
+              </button>
+            )}
+            <button disabled={busy} onClick={endSession} type="button">
+              {busy ? 'Saving…' : 'End session'}
+            </button>
+          </div>
+          {paused ? (
+            <p className="meta">
+              <StatusPill tone="warn">Paused</StatusPill> Resume is a deliberate user action; no
+              frames are processed while paused.
+            </p>
+          ) : null}
         </div>
       </div>
-
-      {error && (
-        <p className="error-message" role="alert">
-          {error}
-        </p>
-      )}
-      <div className="button-row session-controls">
-        {paused ? (
-          <button className="primary" disabled={busy} onClick={resumeSession} type="button">
-            {busy ? 'Reconnecting…' : 'Resume session'}
-          </button>
-        ) : (
-          <button disabled={busy} onClick={pauseSession} type="button">
-            Pause session
-          </button>
-        )}
-        <button disabled={busy} onClick={endSession} type="button">
-          {busy ? 'Saving…' : 'End session'}
-        </button>
-      </div>
-      <p className="meta">
-        Frames are sampled at up to {FRAME_RATE} per second and sent for live processing. Raw video
-        is not stored.
-      </p>
     </section>
   );
 }

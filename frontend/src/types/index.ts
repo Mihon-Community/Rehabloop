@@ -102,3 +102,63 @@ export interface ApiErrorBody {
   detail: string;
   code?: string;
 }
+
+export type Role = 'patient' | 'clinician';
+
+/**
+ * Display-only protocol shape used by demo fixtures and placeholder screens
+ * that have not yet been wired to the real `Protocol` contract above.
+ */
+export interface DemoProtocol {
+  id: string;
+  name: string;
+  clinician_name: string;
+  side: 'left' | 'right';
+  target_reps: number;
+  target_angle_min_deg: number;
+  target_angle_max_deg: number;
+  hold_duration_seconds?: number;
+  instructions: string;
+  stop_instructions: string;
+  version: number;
+  approved: boolean;
+  camera_view: 'side';
+  notes?: string;
+}
+
+export interface SessionRecord {
+  id: string;
+  protocol_id: string;
+  protocol_version: number;
+  started_at: string;
+  status: SessionStatus;
+  completed_reps?: number;
+  usable_frame_pct?: number;
+  projected_range_deg?: number;
+  quality_flags: string[];
+}
+
+export interface AngleSample {
+  timestamp_ms: number;
+  angle_deg: number | null;
+  usable: boolean;
+  rep_count: number;
+  state: 'REST' | 'EXTENDING' | 'RETURNING';
+}
+
+export type SessionEvent = MeasurementEvent | QualityWarningEvent;
+
+/** GET /sessions/{id} plus the recorded angle trace used by the Recovery Twin. */
+export interface SessionDetail extends SessionSummary {
+  angle_trace: AngleSample[];
+  events: SessionEvent[];
+  simulated?: boolean;
+}
+
+/** Where a screen's data came from — drives the SIMULATED badge. */
+export type DataSource = 'live' | 'simulated';
+
+export interface DataResult<T> {
+  data: T;
+  source: DataSource;
+}

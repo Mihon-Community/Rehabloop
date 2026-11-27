@@ -1,8 +1,13 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+  },
   // Docker mounts node_modules as a read-only dependency volume. Keep Vite's
   // optimizer cache in the writable source mount instead.
   cacheDir: process.env.VITE_CACHE_DIR ?? '.vite-cache',

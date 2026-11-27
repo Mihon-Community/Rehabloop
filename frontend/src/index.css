@@ -1,12 +1,294 @@
+@import 'tailwindcss';
+
+/* Calm, healthcare-oriented token layer. Legacy aliases remain so unchanged
+   screens keep their styling; new shadcn-style primitives use the mapped names. */
 :root {
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    sans-serif;
-  color: #10243a;
-  background: #f5f7fa;
-  margin: 0;
+  --radius: 0.875rem;
+  --card-shadow:
+    0 1px 2px rgb(23 48 67 / 0.05),
+    0 10px 28px -6px rgb(23 48 67 / 0.07);
+  --card-shadow-hover:
+    0 2px 4px rgb(23 48 67 / 0.07),
+    0 20px 44px -8px rgb(23 48 67 / 0.14);
+  --camera-surface: #122634;
+  --camera-point: #5eead4;
+  --camera-text: #d6e6ef;
+  --background: #f6f9fa;
+  --foreground: #173043;
+  --card: #ffffff;
+  --card-foreground: #173043;
+  --popover: #ffffff;
+  --popover-foreground: #173043;
+  --primary: #0f766e;
+  --primary-foreground: #ffffff;
+  --primary-hover: #0b5f59;
+  --secondary: #eef4f5;
+  --secondary-foreground: #1f4050;
+  --muted-bg: #eef3f6;
+  --muted-foreground: #5d7284;
+  --accent: #e6f4f1;
+  --accent-foreground: #0b534d;
+  --destructive: #b42318;
+  --destructive-foreground: #ffffff;
+  --border: #dce7ec;
+  --input: #cfdce3;
+  --ring: #0f766e;
+  --chart-1: #0f766e;
+  --chart-2: #3b82a6;
+  --chart-3: #8a6fb3;
+  --chart-4: #c08552;
+  --chart-5: #6b8f71;
+  --success: #14663f;
+  --success-soft: #e8f5ee;
+  --warning: #8a5a12;
+  --warning-soft: #fff5e3;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --info-soft: #e9f3f7;
+  --simulated-bg: #efe8fb;
+  --simulated-fg: #5b21b6;
+  --sidebar: #16323b;
+  --sidebar-foreground: #eef7f8;
+  --sidebar-accent: #24515b;
+  --sidebar-border: #2c5a64;
+  --sidebar-primary: #5eead4;
+
+  /* Legacy aliases used by existing components. */
+  --ink: var(--foreground);
+  --muted: var(--muted-foreground);
+  --line: var(--border);
+  --surface: var(--card);
+  --accent-soft: var(--accent);
+  --good: var(--success);
+  --good-soft: var(--success-soft);
+  --warn: var(--warning);
+  --warn-soft: var(--warning-soft);
+  --bad: var(--danger);
+  --bad-soft: var(--danger-soft);
+  --chart-line: var(--chart-1);
+}
+
+/* Six named themes. Only CSS custom properties change; data, routes and
+   safety copy are untouched. --simulated-* keeps fixture labels distinct. */
+[data-theme='clinical-teal'] {
+  --background: #f6f9fa;
+  --primary: #0f766e;
+  --primary-hover: #0b5f59;
+}
+
+[data-theme='ocean-blue'] {
+  --background: #f3f7fc;
+  --foreground: #102a43;
+  --card: #ffffff;
+  --card-foreground: #102a43;
+  --popover: #ffffff;
+  --popover-foreground: #102a43;
+  --primary: #1d4ed8;
+  --primary-foreground: #ffffff;
+  --primary-hover: #1742b4;
+  --secondary: #e8f0fb;
+  --secondary-foreground: #173b63;
+  --muted-bg: #eaf1f8;
+  --muted-foreground: #556d85;
+  --accent: #e3efff;
+  --accent-foreground: #173b63;
+  --destructive: #b42318;
+  --border: #d4e2f0;
+  --input: #c5d7e8;
+  --ring: #1d4ed8;
+  --chart-1: #2563eb;
+  --chart-2: #0891b2;
+  --chart-3: #7c3aed;
+  --chart-4: #d97706;
+  --chart-5: #0f766e;
+  --info-soft: #e8f1fb;
+  --simulated-bg: #ede8fb;
+  --simulated-fg: #5b21b6;
+  --sidebar: #12233b;
+  --sidebar-foreground: #eef5fb;
+  --sidebar-accent: #1d3555;
+  --sidebar-border: #2a4262;
+  --sidebar-primary: #60a5fa;
+}
+
+[data-theme='sage-green'] {
+  --background: #f6f8f4;
+  --foreground: #24352a;
+  --card: #ffffff;
+  --card-foreground: #24352a;
+  --popover: #ffffff;
+  --popover-foreground: #24352a;
+  --primary: #3f6f52;
+  --primary-foreground: #ffffff;
+  --primary-hover: #345c44;
+  --secondary: #eaf1e8;
+  --secondary-foreground: #2e4d38;
+  --muted-bg: #edf2eb;
+  --muted-foreground: #5f7163;
+  --accent: #e5f0e3;
+  --accent-foreground: #2e4d38;
+  --destructive: #b42318;
+  --border: #d9e4d7;
+  --input: #c9d9c6;
+  --ring: #3f6f52;
+  --chart-1: #4d7c5f;
+  --chart-2: #6b8f71;
+  --chart-3: #8a6fb3;
+  --chart-4: #c08552;
+  --chart-5: #3b82a6;
+  --info-soft: #eaf3ea;
+  --simulated-bg: #efe8fb;
+  --simulated-fg: #5b21b6;
+  --sidebar: #1e3327;
+  --sidebar-foreground: #f1f7f1;
+  --sidebar-accent: #2c4a37;
+  --sidebar-border: #3a5a46;
+  --sidebar-primary: #86c39c;
+}
+
+[data-theme='lavender-calm'] {
+  --background: #f7f5fb;
+  --foreground: #2c2440;
+  --card: #ffffff;
+  --card-foreground: #2c2440;
+  --popover: #ffffff;
+  --popover-foreground: #2c2440;
+  --primary: #4f61b0;
+  --primary-foreground: #ffffff;
+  --primary-hover: #3f4f93;
+  --secondary: #f0ebfa;
+  --secondary-foreground: #3d3159;
+  --muted-bg: #f0ecf7;
+  --muted-foreground: #6b6280;
+  --accent: #eee7fb;
+  --accent-foreground: #3d3159;
+  --destructive: #b42318;
+  --border: #e1daf0;
+  --input: #d4cae8;
+  --ring: #4f61b0;
+  --chart-1: #4f61b0;
+  --chart-2: #8b9fe0;
+  --chart-3: #3b82a6;
+  --chart-4: #0f766e;
+  --chart-5: #c08552;
+  --info-soft: #f0ebfa;
+  --simulated-bg: #e8e0fb;
+  --simulated-fg: #5b21b6;
+  --sidebar: #2a2142;
+  --sidebar-foreground: #f5f1fb;
+  --sidebar-accent: #3b2f5b;
+  --sidebar-border: #4a3d6d;
+  --sidebar-primary: #9aa8e6;
+}
+
+[data-theme='warm-sand'] {
+  --background: #faf6f0;
+  --foreground: #382c24;
+  --card: #ffffff;
+  --card-foreground: #382c24;
+  --popover: #ffffff;
+  --popover-foreground: #382c24;
+  --primary: #a85d3f;
+  --primary-foreground: #ffffff;
+  --primary-hover: #8c4a32;
+  --secondary: #f4ebe0;
+  --secondary-foreground: #4c3b30;
+  --muted-bg: #f3ece3;
+  --muted-foreground: #77685c;
+  --accent: #f6e8dc;
+  --accent-foreground: #4c3b30;
+  --destructive: #b42318;
+  --border: #e8dacb;
+  --input: #dac8b6;
+  --ring: #a85d3f;
+  --chart-1: #a85d3f;
+  --chart-2: #d2996c;
+  --chart-3: #8a6fb3;
+  --chart-4: #0f766e;
+  --chart-5: #3b82a6;
+  --info-soft: #f6ece1;
+  --simulated-bg: #efe8fb;
+  --simulated-fg: #5b21b6;
+  --sidebar: #3a2b22;
+  --sidebar-foreground: #faf3ea;
+  --sidebar-accent: #50392d;
+  --sidebar-border: #63493b;
+  --sidebar-primary: #dca07c;
+}
+
+[data-theme='midnight'] {
+  --card-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
+  --card-shadow-hover: 0 18px 44px rgb(0 0 0 / 0.5);
+  --background: #0b1622;
+  --foreground: #e6f1f5;
+  --card: #122334;
+  --card-foreground: #e6f1f5;
+  --popover: #16293b;
+  --popover-foreground: #e6f1f5;
+  --primary: #2dd4bf;
+  --primary-foreground: #04211f;
+  --primary-hover: #5eead4;
+  --secondary: #1a2f42;
+  --secondary-foreground: #dcebf2;
+  --muted-bg: #172b3d;
+  --muted-foreground: #a9c0ce;
+  --accent: #173a3d;
+  --accent-foreground: #99f6e4;
+  --destructive: #f87171;
+  --destructive-foreground: #2a0b0b;
+  --border: #25415a;
+  --input: #33536e;
+  --ring: #2dd4bf;
+  --chart-1: #2dd4bf;
+  --chart-2: #60a5fa;
+  --chart-3: #c084fc;
+  --chart-4: #fbbf24;
+  --chart-5: #f472b6;
+  --success: #4ade80;
+  --success-soft: #10352a;
+  --warning: #fbbf24;
+  --warning-soft: #3a2b12;
+  --danger: #f87171;
+  --danger-soft: #3d1a1a;
+  --info-soft: #12313b;
+  --simulated-bg: #2e2450;
+  --simulated-fg: #d8b4fe;
+  --sidebar: #091623;
+  --sidebar-foreground: #e6f1f5;
+  --sidebar-accent: #153047;
+  --sidebar-border: #1e3a53;
+  --sidebar-primary: #2dd4bf;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted-bg);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 }
 
 * {
@@ -16,96 +298,1211 @@
 body {
   margin: 0;
   min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+  font-weight: 700;
+}
+h2 {
+  font-size: 1.15rem;
+  line-height: 1.3;
+  margin: 1.6rem 0 0.65rem;
+  font-weight: 650;
+}
+h3 {
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem;
+  font-weight: 650;
+}
+p {
+  line-height: 1.6;
+}
+@layer base {
+  a {
+    color: var(--primary);
+    text-decoration-color: color-mix(in srgb, var(--primary) 40%, transparent);
+    text-underline-offset: 2px;
+  }
+  a:hover {
+    text-decoration-color: var(--primary);
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0.5rem;
+  z-index: 100;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+}
+.skip-link:focus {
+  left: 1rem;
 }
 
 .app-shell {
-  max-width: 1060px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 4rem;
 }
 
 .app-header {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0 1rem;
+}
+.app-title {
+  font-size: 1.6rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--foreground);
+}
+.app-subtitle {
+  margin: 0.25rem 0 0;
+  color: var(--muted-foreground);
+  font-size: 0.92rem;
+}
+
+.header-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.role-badge,
+.simulated-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.role-badge {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+}
+.simulated-badge {
+  background: var(--simulated-bg);
+  color: var(--simulated-fg);
 }
 
 .app-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin: 1rem 0 1.5rem;
+  gap: 0.35rem;
+  margin: 0.5rem 0 1.25rem;
+  padding: 0.35rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: fit-content;
+  max-width: 100%;
 }
-.app-nav a {
-  color: #155e75;
-  text-decoration: none;
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  font-size: 0.88rem;
   font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
 }
-.app-nav a:hover {
-  text-decoration: underline;
+.nav-link:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  text-decoration: none;
+}
+.nav-link.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: 0 1px 3px rgb(15 118 110 / 0.3);
 }
 
-.card {
-  background: #fff;
-  border: 1px solid #d7dee8;
-  border-radius: 10px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
+/* App topbar: a frosted bar rather than a flat one, consistent with the
+   landing header's own backdrop-blur. A faint primary-tinted hairline (rather
+   than a flat border) reads as "lit from the active theme" in every theme. */
+.app-topbar {
+  position: relative;
+  background-color: color-mix(in srgb, var(--card) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 1px 0 var(--border),
+    0 8px 20px -18px rgb(15 23 42 / 0.25);
 }
-.card h2 {
-  margin-top: 0;
+.app-topbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--primary) 35%, transparent) 20%,
+    color-mix(in srgb, var(--primary) 35%, transparent) 80%,
+    transparent
+  );
+}
+
+/* Groups the topbar's right-hand icon actions into one cohesive toolbar
+   instead of loose floating buttons — a thin shared surface with a divider
+   before the identity (role/demo) badges. */
+.topbar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--muted-bg) 65%, transparent);
+  border: 1px solid var(--border);
+}
+.topbar-toolbar .icon-btn {
+  border-color: transparent;
+  background: transparent;
+}
+.topbar-toolbar .icon-btn:hover {
+  background: var(--accent);
+  border-color: var(--primary);
+}
+.topbar-divider {
+  width: 1px;
+  align-self: stretch;
+  margin: 0.25rem 0.15rem;
+  background: var(--border);
+}
+
+/* Shared chrome-button treatment for navbar icon buttons (hamburger,
+   notifications, theme picker, sign out) — a small lift plus a themed focus
+   ring, so keyboard users get the same affordance as mouse hover. */
+.icon-btn {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 160ms ease;
+}
+.icon-btn:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: var(--card-shadow-hover);
+}
+.icon-btn:active {
+  transform: translateY(0);
+}
+.icon-btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Notification badge: a soft repeating ring to draw the eye toward unread
+   items — chrome, not clinical data, so it's exempt from the "no idle motion
+   implying measurement" rule the rest of this file follows; still killed by
+   the prefers-reduced-motion block below like every other animation here. */
+.notif-badge {
+  animation: notif-pulse 2s ease-in-out infinite;
+}
+@keyframes notif-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--destructive) 55%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--destructive) 0%, transparent);
+  }
+}
+
+/* Animated hamburger: three bars that morph into an X, driven purely by the
+   .is-open class so it works with any button that toggles it. Colour comes
+   from currentColor, matching whatever text colour the host button sets. */
+.hamburger {
+  position: relative;
+  display: inline-block;
+  width: 18px;
+  height: 14px;
+}
+.hamburger-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 180ms ease,
+    top 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hamburger-line:nth-child(1) {
+  top: 0;
+}
+.hamburger-line:nth-child(2) {
+  top: 6px;
+}
+.hamburger-line:nth-child(3) {
+  top: 12px;
+}
+.hamburger.is-open .hamburger-line:nth-child(1) {
+  top: 6px;
+  transform: rotate(45deg);
+}
+.hamburger.is-open .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.is-open .hamburger-line:nth-child(3) {
+  top: 6px;
+  transform: rotate(-45deg);
 }
 
 .safety-banner {
-  background: #fff8e1;
-  border-left: 5px solid #b45309;
-  padding: 0.85rem 1rem;
-  border-radius: 6px;
-}
-.simulated-badge {
-  display: inline-block;
-  background: #4c1d95;
-  color: #fff;
-  border-radius: 4px;
-  padding: 0.15rem 0.45rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-.state-list {
   display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  background: var(--info-soft);
+  border: 1px solid color-mix(in srgb, var(--primary) 22%, var(--border));
+  border-left: 4px solid var(--primary);
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  font-size: 0.92rem;
+  color: var(--foreground);
+}
+.safety-banner svg {
+  flex: none;
+  margin-top: 0.1rem;
+  color: var(--primary);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  /* A thin inner top highlight reads as a soft "glass" edge in every theme —
+     mixed from --foreground rather than literal white, so light and dark
+     themes both get a believable, subtle amount of it. */
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent),
+    var(--card-shadow);
+}
+.card > h2:first-child,
+.card > h1:first-child {
+  margin-top: 0;
+}
+.card h2,
+.card h3 {
+  color: var(--card-foreground);
+}
+/* Interactive card elevation. The lift is decorative: the global
+   prefers-reduced-motion rule drops the transition, and the block at the end of
+   this file also drops the transform so reduced-motion users get no jump. */
+.card-interactive {
+  position: relative;
+  isolation: isolate;
+  transition:
+    border-color 180ms ease,
+    box-shadow 220ms ease,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Token-driven sheen; inset exactly so no overflow clipping is needed. */
+.card-interactive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  /* Tint comes from opacity rather than color-mix: the browsers that lack
+     color-mix would otherwise fall back to a solid primary wash. */
+  opacity: 0;
+  background: linear-gradient(135deg, var(--primary), transparent 62%);
+  transition: opacity 220ms ease;
+}
+.card-interactive:hover {
+  border-color: var(--primary);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent),
+    var(--card-shadow-hover);
+  transform: translateY(-4px);
+}
+.card-interactive:hover::after,
+.card-interactive:focus-within::after {
+  opacity: 0.09;
+}
+.card-interactive:focus-within {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+.card-accent-left {
+  border-left: 4px solid var(--primary);
+}
+.screen-stack {
+  display: grid;
+  gap: 1rem;
+}
+.screen-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  list-style: none;
-  padding: 0;
+  margin-bottom: 0.5rem;
 }
-.state-list li {
-  background: #e8eef6;
-  border-radius: 4px;
-  padding: 0.25rem 0.55rem;
-  font-size: 0.85rem;
+.section-kicker {
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 0.35rem;
 }
-button {
+.screen-intro {
+  color: var(--muted-foreground);
+  max-width: 70ch;
+  margin: 0.25rem 0 1.25rem;
+}
+
+.meta {
+  color: var(--muted-foreground);
+  font-size: 0.86rem;
+  margin: 0.4rem 0;
+}
+.app-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+button,
+.button-link {
   font: inherit;
-  padding: 0.55rem 0.9rem;
-  border-radius: 6px;
-  border: 1px solid #94a3b8;
-  background: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 9px;
+  border: 1px solid var(--input);
+  background: var(--card);
+  color: var(--foreground);
   cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+button:hover:not(:disabled),
+.button-link:hover {
+  background: var(--accent);
+  border-color: var(--primary);
+  color: var(--accent-foreground);
+  text-decoration: none;
 }
 button:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
-button.primary {
-  background: #155e75;
-  border-color: #155e75;
+/* Icon-only square buttons (navbar bell/sign-out/hamburger, notification
+   dismiss) need zero padding so a fixed-size flex box doesn't crush its
+   icon. Tailwind's utility classes (e.g. `p-0`) live in a cascade layer that
+   loses to this unlayered sheet, so the override has to live here instead. */
+.icon-btn-flush {
+  padding: 0;
+}
+button.primary,
+.button-link.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+button.primary:hover:not(:disabled),
+.button-link.primary:hover {
+  background: #0b5f59;
   color: #fff;
 }
-.meta {
-  color: #475569;
-  font-size: 0.9rem;
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-right: 0.3rem;
+}
+.status-good {
+  background: var(--success-soft);
+  color: var(--success);
+}
+.status-warn {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+.status-bad {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.status-neutral {
+  background: var(--muted-bg);
+  color: var(--secondary-foreground);
+}
+
+.state-message {
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  margin: 0.9rem 0;
+  border: 1px solid var(--border);
+}
+.state-message p {
+  margin: 0.35rem 0;
+}
+.state-loading {
+  background: var(--info-soft);
+  border-color: color-mix(in srgb, var(--primary) 20%, var(--border));
+}
+.state-empty {
+  background: var(--muted-bg);
+}
+.state-error {
+  background: var(--danger-soft);
+  border-color: color-mix(in srgb, var(--danger) 30%, var(--border));
+}
+
+.confirm-check {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  margin: 1rem 0;
+  line-height: 1.55;
+  background: var(--muted-bg);
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+}
+.confirm-check input {
+  margin-top: 0.2rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--primary);
+}
+
+.detail-list {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.35fr) 1fr;
+  gap: 0.65rem 1.25rem;
+  background: var(--muted-bg);
+  padding: 1.25rem;
+  border-radius: 12px;
+}
+.detail-list dt {
+  font-weight: 650;
+  color: var(--muted-foreground);
+}
+.detail-list dd {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.item-list,
+.checklist {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+.list-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  background: var(--card);
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease;
+}
+.list-card:hover {
+  border-color: var(--primary);
+  background: var(--accent);
+}
+.checklist li label {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  line-height: 1.5;
+}
+.checklist input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--primary);
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+  gap: 0.85rem;
+}
+.metric-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.35rem;
+}
+.metric-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.metric-label {
+  font-size: 0.82rem;
+  color: var(--muted-foreground);
+}
+.metric-value {
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+.metric-value small {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-left: 0.2rem;
+  color: var(--muted-foreground);
+}
+.metric-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.metric-trend-up {
+  color: var(--success);
+}
+.metric-trend-down {
+  color: var(--danger);
+}
+.metric-trend-flat {
+  color: var(--muted-foreground);
+}
+
+/* Small tinted icon slot shared by metric cards, chart headers and step
+   cards — a consistent "chip" so an icon never floats unframed. */
+.icon-chip {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--primary);
+}
+.icon-chip-lg {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 12px;
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.role-picker {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+.role-picker label,
+.form-grid label {
+  display: grid;
+  gap: 0.35rem;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.9rem;
+}
+.form-grid .full-width,
+.full-width {
+  grid-column: 1 / -1;
+}
+input[type='number'],
+input[type='text'],
+textarea,
+select {
+  font: inherit;
+  padding: 0.6rem;
+  border: 1px solid var(--input);
+  border-radius: 8px;
+  max-width: 100%;
+  background: var(--card);
+  color: var(--foreground);
+}
+input[type='range'] {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.camera-preview {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 4 / 3;
+  background: var(--camera-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+.camera-preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.camera-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  color: var(--camera-text);
+  font-size: 0.92rem;
+  padding: 1rem;
+}
+.camera-placeholder span {
+  font-size: 2.2rem;
+}
+.pose-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  stroke: var(--camera-text);
+  fill: var(--camera-point);
+}
+.pose-overlay text {
+  fill: var(--camera-text);
+  stroke: none;
+  font-size: 10px;
+}
+
+.live-grid,
+.twin-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
+  gap: 1.5rem;
+}
+.live-metrics {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+.warning-list {
+  background: var(--warning-soft);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+}
+
+.chart-empty {
+  border: 1px dashed var(--input);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  margin: 0.9rem 0;
+}
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.55rem;
+  border-bottom: 1px solid var(--border);
+}
+.data-table caption {
+  text-align: left;
+  color: var(--muted-foreground);
+  font-size: 0.82rem;
+  padding-bottom: 0.5rem;
+}
+
+.twin-canvas {
+  height: 280px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--muted-bg);
+  transition: border-color 180ms ease;
+}
+.twin-canvas:hover {
+  border-color: var(--primary);
+}
+/* Only the WebGL canvas is draggable; the 2D fallback keeps a normal cursor. */
+.twin-canvas canvas {
+  cursor: grab;
+  touch-action: pan-y;
+}
+.twin-canvas canvas:active {
+  cursor: grabbing;
+}
+.twin-skeleton {
+  height: 280px;
+  display: grid;
+  place-content: center;
+  border: 1px dashed var(--input);
+  border-radius: 12px;
+}
+
+/* Recharts inherits tokens: axes, legend and tooltip stay legible. */
+.recharts-cartesian-axis-tick-value {
+  fill: var(--muted-foreground);
+  font-size: 12px;
+}
+.recharts-legend-item-text {
+  color: var(--foreground) !important;
+}
+.recharts-default-tooltip {
+  border-radius: 10px !important;
+  border: 1px solid var(--border) !important;
+  background: var(--popover) !important;
+}
+.recharts-tooltip-label,
+.recharts-tooltip-item {
+  color: var(--popover-foreground) !important;
+}
+.recharts-cartesian-grid line {
+  stroke: var(--border);
+}
+
+/* Branded tooltip for ChartTooltip (TrendChart) — same popover surface as the
+   theme picker / notifications panel, so charts read as one system. */
+.chart-tooltip {
+  min-width: 10rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--popover);
+  color: var(--popover-foreground);
+  padding: 0.6rem 0.75rem;
+  box-shadow: var(--card-shadow-hover);
+  font-size: 0.82rem;
+}
+.chart-tooltip-label {
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+.chart-tooltip-row {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.chart-tooltip-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* Sidebar stays visually separate from content and marks the active route with more than colour. */
+.sidebar-shell {
+  background-image: linear-gradient(
+    180deg,
+    var(--sidebar),
+    color-mix(in oklab, var(--sidebar) 88%, black)
+  );
+  box-shadow: inset -1px 0 0 color-mix(in srgb, var(--sidebar-primary) 8%, transparent);
+}
+/* Soft radial wash behind the logo header — a quiet premium touch, not a spotlight. */
+.sidebar-glow {
+  position: absolute;
+  inset: -20% 0 auto 0;
+  height: 220px;
+  pointer-events: none;
+  background: radial-gradient(
+    120px 120px at 54px 20px,
+    color-mix(in srgb, var(--sidebar-primary) 16%, transparent),
+    transparent 70%
+  );
+  z-index: 0;
+}
+
+/* Floating collapse toggle — straddles the sidebar's edge rather than taking a
+   full-width row, so it reads as chrome, not navigation. */
+.sidebar-collapse-toggle {
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 200ms ease;
+}
+.sidebar-collapse-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: scale(1.08);
+  box-shadow: var(--card-shadow-hover);
+}
+.sidebar-collapse-toggle:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.app-sidebar-link {
+  position: relative;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.app-sidebar-link:hover {
+  transform: translateX(2px);
+}
+.app-sidebar-link[aria-current='page'] {
+  background: var(--sidebar-accent);
+  color: var(--sidebar-foreground);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sidebar-primary) 25%, transparent);
+}
+.app-sidebar-link[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--sidebar-primary);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--sidebar-primary) 70%, transparent);
+}
+
+/* Logo badge: a soft halo instead of a flat chip. */
+.sidebar-logo-badge {
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--sidebar-primary) 16%, transparent),
+    0 4px 10px -4px color-mix(in srgb, var(--sidebar-primary) 55%, transparent);
+}
+
+/* Sidebar's own chrome buttons (collapse toggle, drawer close) — same nudge
+   language as the nav links, tuned for the dark sidebar surface rather than
+   .icon-btn's light-surface tokens. */
+.sidebar-action {
+  transition:
+    background-color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sidebar-action:hover {
+  transform: translateX(2px);
+}
+.sidebar-action:focus-visible {
+  outline: 2px solid var(--sidebar-primary);
+  outline-offset: 2px;
+}
+
+/* Metric tiles: lift plus a top accent bar that wipes in from the left.
+   The measured number itself never moves or re-animates — only the chrome. */
+.metric-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color 180ms ease,
+    box-shadow 220ms ease,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.metric-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    color-mix(in srgb, var(--primary) 35%, transparent)
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.metric-card:hover {
+  border-color: var(--primary);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent),
+    var(--card-shadow-hover);
+  transform: translateY(-3px);
+}
+.metric-card:hover::before {
+  transform: scaleX(1);
+}
+
+.drawer-backdrop {
+  animation: fade-in 160ms ease-out both;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.drawer-panel {
+  animation: drawer-in 180ms ease-out both;
+}
+/* Rounded on the open edge only — scoped to the drawer's own copy of the
+   sidebar, not the permanent desktop <aside>, which stays flush with the page
+   edge. Rounding the sidebar's own background (rather than clipping the
+   panel with overflow:hidden) keeps focus rings near the edges uncropped. */
+.drawer-panel .sidebar-shell {
+  border-radius: 0 20px 20px 0;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes drawer-in {
+  from {
+    opacity: 0.8;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.chart-card {
+  transition:
+    border-color 180ms ease,
+    box-shadow 220ms ease,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.chart-card:hover {
+  border-color: var(--primary);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent),
+    var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.list-card {
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 220ms ease,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.list-card:hover {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent),
+    var(--card-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* Lightweight medical illustrations used as masked backgrounds — they follow the active theme. */
+.medical-bg {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.medical-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--primary);
+  opacity: 0.12;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: cover;
+  z-index: 0;
+}
+.medical-bg > * {
+  position: relative;
+  z-index: 1;
+}
+.medical-bg-wave::before {
+  mask-image: url('/landing/medical-wave.svg');
+  -webkit-mask-image: url('/landing/medical-wave.svg');
+}
+.medical-bg-grid::before {
+  mask-image: url('/landing/medical-grid.svg');
+  -webkit-mask-image: url('/landing/medical-grid.svg');
+  opacity: 0.08;
+}
+
+/* App page and card entrance motion — one-shot, never looping. */
+.page-enter {
+  animation: page-in 320ms ease-out both;
+}
+@keyframes page-in {
+  from {
+    opacity: 0.75;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.motion-stagger > * {
+  animation: reveal-in 420ms ease-out both;
+}
+.motion-stagger > *:nth-child(2) {
+  animation-delay: 70ms;
+}
+.motion-stagger > *:nth-child(3) {
+  animation-delay: 140ms;
+}
+.motion-stagger > *:nth-child(n + 4) {
+  animation-delay: 190ms;
+}
+
+/* Landing motion — decorative only; reduced-motion users see final state. */
+.reveal {
+  opacity: 1;
+}
+.reveal.is-visible {
+  animation: reveal-in 500ms ease-out both;
+}
+@keyframes reveal-in {
+  from {
+    opacity: 0.85;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.landing-section {
+  scroll-margin-top: 5rem;
+}
+.hero-pulse {
+  opacity: 1;
+  animation: hero-pulse 2.4s ease-in-out infinite;
+}
+@keyframes hero-pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.landing-twin .twin-canvas {
+  height: 140px;
+}
+
+/* Compact 3D preview used wherever a screen illustrates one specific recorded
+   or configured angle inline with its other content (session result, protocol
+   detail) — distinct from .landing-twin, which is sized for the marketing page. */
+.twin-preview {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+.twin-preview .twin-canvas {
+  height: 190px;
+}
+@media (min-width: 640px) {
+  .twin-preview {
+    grid-template-columns: minmax(200px, 260px) 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    padding: 1rem 1rem 3rem;
+  }
+  .app-nav {
+    border-radius: 16px;
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .live-grid,
+  .twin-grid {
+    grid-template-columns: 1fr;
+  }
+  .detail-list {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  .detail-list dt {
+    margin-top: 0.5rem;
+  }
+  .card {
+    padding: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  /* Without a transition a hover lift would snap, which is exactly the jolt
+     these users asked to avoid. Keep the colour cues, drop the movement. */
+  .card-interactive:hover,
+  .metric-card:hover,
+  .chart-card:hover,
+  .list-card:hover {
+    transform: none !important;
+  }
+  .metric-card::before {
+    display: none !important;
+  }
 }
 
 input,

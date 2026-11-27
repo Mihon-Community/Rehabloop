@@ -1,106 +1,252 @@
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { SafetyBanner } from '../../components/SafetyBanner';
-import { ApiError, api } from '../../lib/api';
-import type { SessionSummary } from '../../types';
+import { ArrowRight, ListChecks } from 'lucide-react';
+import { MetricCard } from '../../components/MetricCard';
+import { SimulatedBadge } from '../../components/SimulatedBadge';
+import { StateMessage } from '../../components/StateMessage';
+import { StatusPill } from '../../components/StatusPill';
+import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert';
+import { Button } from '../../components/ui/button';
+import { loadSession, loadSummary, type SummaryResult } from '../../lib/data';
+import { useAsync } from '../../lib/useAsync';
+import type { SessionDetail } from '../../types';
 
+const TwinAvatar = lazy(() => import('../recovery-twin/TwinAvatar'));
+
+/** Screen 6 — canonical stored numbers first, AI explanation beside them. */
 export function SessionResultScreen() {
   const { id } = useParams();
-  const [session, setSession] = useState<SessionSummary | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const sessionState = useAsync(() => loadSession(id ?? 'session-demo-1'), [id]);
+  const [summary, setSummary] = useState<SummaryResult | null>(null);
 
   useEffect(() => {
-    if (!id) {
-      setError('A session ID is required to view results.');
-      setLoading(false);
-      return;
-    }
-    let mounted = true;
-    api
-      .getSession(id)
+    let cancelled = false;
+    if (!sessionState.data) return;
+    setSummary(null);
+    loadSummary(sessionState.data as SessionDetail)
       .then((result) => {
-        if (mounted) setSession(result);
+        if (!cancelled) setSummary(result);
       })
-      .catch((cause: unknown) => {
-        if (!mounted) return;
-        setError(
-          cause instanceof ApiError && cause.status === 401
-            ? 'Sign in to view this session.'
-            : cause instanceof Error
-              ? cause.message
-              : 'Could not load the session results.',
-        );
-      })
-      .finally(() => {
-        if (mounted) setLoading(false);
+      .catch(() => {
+        if (!cancelled) setSummary(null);
       });
     return () => {
-      mounted = false;
+      cancelled = true;
     };
-  }, [id]);
+  }, [sessionState.data]);
 
-  const metrics = session?.metrics;
+  const session = sessionState.data;
 
   return (
-    <section className="card" aria-labelledby="session-result-heading">
-      <h1 id="session-result-heading">Session result</h1>
-      <SafetyBanner />
-      {loading && <p role="status">Loading saved session values…</p>}
-      {error && (
-        <p className="error-message" role="alert">
-          {error}
+    <div className="screen-stack">
+      <section className="card" aria-labelledby="result-heading">
+        <div className="screen-title-row">
+          <h1 id="result-heading">6. Session result</h1>
+          <SimulatedBadge source={sessionState.source ?? 'simulated'} />
+        </div>
+        <p className="screen-intro">
+          The recorded numbers come first. The plain-language explanation sits beside them and never
+          replaces them.
         </p>
-      )}
-      {session && metrics && (
-        <>
-          <p>
-            Status: <strong>{session.status.replace(/_/g, ' ')}</strong>
-            {' · '}
-            {session.persisted === false
-              ? 'In-memory session; not saved for later.'
-              : 'Stored session values.'}
-          </p>
-          <div className="result-grid">
-            <div className="metric-card">
-              <span>Completed repetitions</span>
-              <strong>{metrics.completed_reps}</strong>
+        {sessionState.status === 'loading' ? (
+          <StateMessage kind="loading" title="Loading session record…" />
+        ) : null}
+        {sessionState.status === 'error' ? (
+          <StateMessage
+            kind="error"
+            title="Session could not be loaded"
+            action={<button onClick={sessionState.reload}>Retry</button>}
+          >
+            {sessionState.error}
+          </StateMessage>
+        ) : null}
+        {sessionState.status === 'ready' && !session ? (
+          <StateMessage kind="empty" title="No session available" />
+        ) : null}
+        {session ? (
+          <>
+            <p className="meta">
+              Session {session.session_id} · protocol version {session.protocol_version} · status{' '}
+              {session.status} · model {session.model_version} · mapping{' '}
+              {session.keypoint_mapping_version}
+            </p>
+            <h2>Recorded measurements</h2>
+            <p className="meta">
+              These are the canonical stored values. All angles are projected knee angle estimates
+              from one camera view, not validated anatomical measurements.
+            </p>
+            <div className="metric-grid motion-stagger">
+              <MetricCard
+                label="Completed repetitions"
+                value={session.metrics.completed_reps}
+                unit="/ target"
+                hint={`Target: ${session.metrics.target_reps}`}
+              />
+              <MetricCard
+                label="Projected knee angle estimate — min"
+                value={session.metrics.projected_knee_angle_min_deg}
+                unit="°"
+              />
+              <MetricCard
+                label="Projected knee angle estimate — max"
+                value={session.metrics.projected_knee_angle_max_deg}
+                unit="°"
+              />
+              <MetricCard
+                label="Projected range estimate"
+                value={session.metrics.projected_range_deg}
+                unit="°"
+              />
+              <MetricCard
+                label="Target range hits"
+                value={session.metrics.target_range_hit_count}
+                unit="times"
+              />
+              <MetricCard
+                label="Median repetition duration"
+                value={session.metrics.median_rep_duration_seconds}
+                unit="s"
+                hint="Timing cue only, not clinical tempo"
+              />
+              <MetricCard label="Usable frames" value={session.metrics.usable_frame_pct} unit="%" />
             </div>
-            <div className="metric-card">
-              <span>Protocol target repetitions</span>
-              <strong>{metrics.target_reps}</strong>
+
+            <div className="twin-preview">
+              <Suspense
+                fallback={
+                  <p className="meta" role="status">
+                    Loading schematic preview…
+                  </p>
+                }
+              >
+                <TwinAvatar
+                  angle={session.metrics.projected_knee_angle_max_deg}
+                  variant="primary"
+                />
+              </Suspense>
+              <div>
+                <p className="meta" style={{ marginTop: 0 }}>
+                  Schematic replay at this session&rsquo;s peak projected knee angle estimate — the
+                  same number shown above, not an additional measurement.
+                </p>
+              </div>
             </div>
-            <div className="metric-card">
-              <span>Projected knee-angle range</span>
-              <strong>
-                {Math.round(metrics.projected_knee_angle_min_deg)}°–
-                {Math.round(metrics.projected_knee_angle_max_deg)}°
-              </strong>
-            </div>
-            <div className="metric-card">
-              <span>Frames passing quality checks</span>
-              <strong>{Math.round(metrics.usable_frame_pct)}%</strong>
-            </div>
-          </div>
-          <p className="meta">
-            These are projected movement estimates from one camera view, not clinical measurements.
-            Raw video stored: no.
-          </p>
-          {session.quality_flags.length > 0 && (
-            <div className="notice">
-              <strong>Session quality notes</strong>
+
+            <p>
+              Data-quality flags:{' '}
+              {session.quality_flags.length ? (
+                session.quality_flags.map((flag) => (
+                  <StatusPill key={flag} tone="warn">
+                    {flag}
+                  </StatusPill>
+                ))
+              ) : (
+                <StatusPill tone="good">No quality flags recorded</StatusPill>
+              )}
+            </p>
+            <p className="meta">Raw video stored: no ({String(session.raw_video_stored)})</p>
+          </>
+        ) : null}
+      </section>
+
+      {session ? (
+        <section className="card" aria-labelledby="explanation-heading">
+          <h2 id="explanation-heading">AI-generated explanation of recorded measurements</h2>
+          <SimulatedBadge source={summary?.source ?? sessionState.source ?? 'simulated'} />
+          {!summary ? (
+            <StateMessage kind="loading" title="Preparing explanation…">
+              Requesting a constrained summary; numbers below come only from the stored session.
+            </StateMessage>
+          ) : null}
+          {summary ? (
+            <>
+              {summary.fallback ? (
+                <StateMessage
+                  kind="empty"
+                  title="Language model unavailable — deterministic fallback used"
+                >
+                  {summary.reason ?? 'Unavailable'}. The text below is generated from the stored
+                  numbers by a fixed template, not by a language model.
+                </StateMessage>
+              ) : null}
+              <h3>{summary.data.headline}</h3>
+              <p>{summary.data.what_was_measured}</p>
               <ul>
-                {session.quality_flags.map((flag) => (
-                  <li key={flag}>{flag.replace(/_/g, ' ')}</li>
+                {summary.data.observed_values.map((value) => (
+                  <li key={value}>{value}</li>
                 ))}
               </ul>
-            </div>
-          )}
-        </>
-      )}
-      <Link className="button-link" to="/home">
-        Return to patient home
-      </Link>
-    </section>
+              <p className="meta">Data quality: {summary.data.data_quality_note}</p>
+              <p className="meta">Clinician review: {summary.data.clinician_review_note}</p>
+              <p className="meta">
+                <StatusPill tone="warn">No clinical advice</StatusPill> This explanation does not
+                diagnose, prescribe or say whether an exercise is safe.
+              </p>
+            </>
+          ) : null}
+        </section>
+      ) : null}
+
+      {session?.events.length ? (
+        <section className="card" aria-labelledby="events-heading">
+          <h2 id="events-heading">Recorded events</h2>
+          <SimulatedBadge source="simulated" />
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th scope="col">Sequence</th>
+                <th scope="col">Time (ms)</th>
+                <th scope="col">Event</th>
+                <th scope="col">Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              {session.events.map((event) => (
+                <tr key={`${event.type}-${event.sequence}`}>
+                  <td>{event.sequence}</td>
+                  <td>{event.type === 'measurement' ? event.timestamp_ms : '—'}</td>
+                  <td>{event.type === 'measurement' ? 'measurement' : 'quality_warning'}</td>
+                  <td>
+                    {event.type === 'measurement'
+                      ? `${event.state} · ${Math.round(event.projected_knee_angle_deg * 10) / 10}° projected · ${event.quality.usable ? 'usable' : 'not usable'}`
+                      : event.message}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      ) : null}
+
+      {session ? (
+        <Alert variant="info" icon={<ListChecks className="size-5" />}>
+          <AlertTitle>What to do next</AlertTitle>
+          <AlertDescription>
+            Share this record with your physiotherapist at your next visit. They decide what any
+            result means for your care plan — this app does not change it.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      <div className="button-row">
+        <Button asChild>
+          <Link to="/home">
+            Save and return home <ArrowRight aria-hidden="true" />
+          </Link>
+        </Button>
+        <Button
+          variant="outline"
+          type="button"
+          onClick={() =>
+            window.alert('Report prepared for the assigned physiotherapist to review.')
+          }
+        >
+          Share with assigned clinician
+        </Button>
+        <Button variant="ghost" asChild>
+          <Link to="/twin">View Recovery Twin</Link>
+        </Button>
+      </div>
+    </div>
   );
 }

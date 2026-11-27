@@ -159,7 +159,9 @@ describe('LiveSessionScreen', () => {
       model_version: 'fixture-simulated',
       simulated: true,
     });
-    expect(await screen.findByText('84°')).toBeInTheDocument();
+    expect(
+      await screen.findByText((_, element) => element?.textContent === '84°'),
+    ).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
     expect(screen.getByText('SIMULATED fixture inference')).toBeInTheDocument();
 
