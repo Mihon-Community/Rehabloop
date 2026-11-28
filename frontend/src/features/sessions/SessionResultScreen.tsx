@@ -1,50 +1,48 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+﻿import { Suspense, lazy, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowRight, ListChecks } from 'lucide-react';
 import { MetricCard } from '../../components/MetricCard';
 import { SimulatedBadge } from '../../components/SimulatedBadge';
 import { StateMessage } from '../../components/StateMessage';
 import { StatusPill } from '../../components/StatusPill';
-import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert';
-import { Button } from '../../components/ui/button';
 import { ApiError } from '../../lib/api';
 import { loadSession, loadSummary, type SummaryResult } from '../../lib/data';
 import { useAsync } from '../../lib/useAsync';
 import type { SessionDetail } from '../../types';
+import {
+  ArrowLeftRight,
+  ArrowRight,
+  Box,
+  CheckCircle2,
+  ClipboardCheck,
+  Gauge,
+  ListChecks,
+  MessageCircle,
+  Repeat,
+  TableProperties,
+  Timer,
+  Video,
+} from '@/components/icon';
+import { Alert, AlertDescription, AlertTitle, Badge, Button, Card } from '@/components/base';
 
 const TwinAvatar = lazy(() => import('../recovery-twin/TwinAvatar'));
 
-/**
- * Exactly one of these holds at any time, so a failed request can never be
- * mistaken for one still in flight. Collapsing failure back into "no summary
- * yet" is what previously left this screen showing "Preparing explanation…"
- * forever whenever the summary call rejected.
- */
 type SummaryState =
   | { phase: 'loading' }
   | { phase: 'ready'; result: SummaryResult }
   | { phase: 'error'; message: string };
 
-/**
- * Stored metrics are null for a session that never produced usable frames, so
- * the declared `number` on SessionSummary.metrics does not hold for real rows.
- * Render a dash rather than letting `undefined` reach a patient as a value.
- */
 function metricValue(value: number | null | undefined): number | string {
-  return value ?? '—';
+  return value ?? 'Not recorded';
 }
 
 function summaryErrorMessage(error: unknown): string {
   if (error instanceof ApiError) {
-    // 409 is the backend refusing to summarise a session that is not
-    // completed — a different situation from the summary layer being down,
-    // so it deliberately does not fall back to the deterministic template.
     if (error.status === 409) {
-      return 'This session was never completed, so there are no final measurements to explain. Record and finish a session first.';
+      return 'This session was not completed, so final measurements are unavailable.';
     }
-    return error.body.detail ?? `The explanation request failed (${error.status}).`;
+    return error.body.detail ?? `The summary request failed (${error.status}).`;
   }
-  return 'The explanation request could not be completed.';
+  return 'The summary request could not be completed.';
 }
 
 /** Screen 6 — canonical stored numbers first, AI explanation beside them. */
@@ -71,18 +69,27 @@ export function SessionResultScreen() {
 
   const session = sessionState.data;
   const summary = summaryState.phase === 'ready' ? summaryState.result : null;
+  const peakAngle = session?.metrics.projected_knee_angle_max_deg;
 
   return (
     <div className="screen-stack">
       <section className="card" aria-labelledby="result-heading">
-        <div className="screen-title-row">
-          <h1 id="result-heading">6. Session result</h1>
-          <SimulatedBadge source={sessionState.source ?? 'simulated'} />
-        </div>
-        <p className="screen-intro">
-          The recorded numbers come first. The plain-language explanation sits beside them and never
-          replaces them.
-        </p>
+        <header className="mb-4 flex flex-wrap items-start gap-3">
+          <span className="icon-chip icon-chip-lg mt-0.5" aria-hidden="true">
+            <ClipboardCheck className="size-5" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="section-kicker">Capture pipeline · result</p>
+            <div className="screen-title-row">
+              <h1 id="result-heading">6. Session result</h1>
+              <SimulatedBadge source={sessionState.source ?? 'simulated'} />
+            </div>
+            <p className="screen-intro mb-0">
+              The recorded numbers come first. The plain-language explanation sits beside them and
+              never replaces them.
+            </p>
+          </div>
+        </header>
         {sessionState.status === 'loading' ? (
           <StateMessage kind="loading" title="Loading session record…" />
         ) : null}
@@ -90,7 +97,11 @@ export function SessionResultScreen() {
           <StateMessage
             kind="error"
             title="Session could not be loaded"
-            action={<button onClick={sessionState.reload}>Retry</button>}
+            action={
+              <Button variant="outline" size="sm" onClick={sessionState.reload}>
+                Retry
+              </Button>
+            }
           >
             {sessionState.error}
           </StateMessage>
@@ -99,84 +110,102 @@ export function SessionResultScreen() {
           <StateMessage kind="empty" title="No session available" />
         ) : null}
         {session ? (
-          <>
-            <p className="meta">
-              Session {session.session_id} · protocol version {session.protocol_version} · status{' '}
-              {session.status} · model {session.model_version} · mapping{' '}
-              {session.keypoint_mapping_version}
-            </p>
-            <h2>Recorded measurements</h2>
-            <p className="meta">
-              These are the canonical stored values. All angles are projected knee angle estimates
-              from one camera view, not validated anatomical measurements.
-            </p>
-            <div className="metric-grid motion-stagger">
-              <MetricCard
-                label="Completed repetitions"
-                value={metricValue(session.metrics.completed_reps)}
-                unit="/ target"
-                hint={
-                  session.metrics.target_reps == null
-                    ? 'Target not recorded'
-                    : `Target: ${session.metrics.target_reps}`
-                }
-              />
-              <MetricCard
-                label="Projected knee angle estimate — min"
-                value={metricValue(session.metrics.projected_knee_angle_min_deg)}
-                unit="°"
-              />
-              <MetricCard
-                label="Projected knee angle estimate — max"
-                value={metricValue(session.metrics.projected_knee_angle_max_deg)}
-                unit="°"
-              />
-              <MetricCard
-                label="Projected range estimate"
-                value={metricValue(session.metrics.projected_range_deg)}
-                unit="°"
-              />
-              <MetricCard
-                label="Target range hits"
-                value={metricValue(session.metrics.target_range_hit_count)}
-                unit="times"
-              />
-              <MetricCard
-                label="Median repetition duration"
-                value={metricValue(session.metrics.median_rep_duration_seconds)}
-                unit="s"
-                hint="Timing cue only, not clinical tempo"
-              />
-              <MetricCard
-                label="Usable frames"
-                value={metricValue(session.metrics.usable_frame_pct)}
-                unit="%"
-              />
-            </div>
+          /* The record header a clinical screen carries: which session, which
+             protocol version and which model produced these numbers, as
+             labelled fields rather than one run of text. The identifiers are
+             record badges so a transcribed reference reads as a reference. */
+          <div className="patient-banner">
+            <span className="patient-banner-name">Session record</span>
+            <Badge variant="record">{session.session_id}</Badge>
+            <span className="patient-banner-field">
+              Protocol version <strong>{session.protocol_version}</strong>
+            </span>
+            <StatusPill tone={session.status === 'completed' ? 'good' : 'neutral'}>
+              {session.status}
+            </StatusPill>
+            <span className="patient-banner-field">
+              Model <Badge variant="record">{session.model_version}</Badge>
+            </span>
+            <span className="patient-banner-field">
+              Keypoint mapping <Badge variant="record">{session.keypoint_mapping_version}</Badge>
+            </span>
+          </div>
+        ) : null}
+      </section>
 
-            <div className="twin-preview">
-              <Suspense
-                fallback={
-                  <p className="meta" role="status">
-                    Loading schematic preview…
-                  </p>
-                }
-              >
-                <TwinAvatar
-                  angle={session.metrics.projected_knee_angle_max_deg}
-                  variant="primary"
-                />
-              </Suspense>
-              <div>
-                <p className="meta" style={{ marginTop: 0 }}>
-                  Schematic replay at this session&rsquo;s peak projected knee angle estimate — the
-                  same number shown above, not an additional measurement.
-                </p>
-              </div>
+      {session ? (
+        /* The canonical numbers, on the ECG-paper surface reserved for panels
+           whose subject is a measurement — and ahead of any explanation. */
+        <Card surface="paper">
+          <div className="card-chart-head">
+            <span className="icon-chip" aria-hidden="true">
+              <Gauge className="size-4" />
+            </span>
+            <div className="min-w-0">
+              <p className="section-kicker mb-0">Stored values, first</p>
+              <h2 className="card-chart-title">Recorded measurements</h2>
+              <p className="card-chart-meta">
+                These are the canonical stored values. All angles are projected knee angle estimates
+                from one camera view, not validated anatomical measurements.
+              </p>
             </div>
+          </div>
+          <div className="metric-grid motion-stagger">
+            <MetricCard
+              label="Completed repetitions"
+              value={metricValue(session.metrics.completed_reps)}
+              unit="/ target"
+              hint={
+                session.metrics.target_reps == null
+                  ? 'Target not recorded'
+                  : `Target: ${session.metrics.target_reps}`
+              }
+              icon={<Repeat className="size-4" aria-hidden="true" />}
+            />
+            <MetricCard
+              label="Projected knee angle estimate — min"
+              value={metricValue(session.metrics.projected_knee_angle_min_deg)}
+              unit="°"
+              icon={<Gauge className="size-4" aria-hidden="true" />}
+            />
+            <MetricCard
+              label="Projected knee angle estimate — max"
+              value={metricValue(session.metrics.projected_knee_angle_max_deg)}
+              unit="°"
+              icon={<Gauge className="size-4" aria-hidden="true" />}
+            />
+            <MetricCard
+              label="Projected range estimate"
+              value={metricValue(session.metrics.projected_range_deg)}
+              unit="°"
+              icon={<ArrowLeftRight className="size-4" aria-hidden="true" />}
+            />
+            <MetricCard
+              label="Target range hits"
+              value={metricValue(session.metrics.target_range_hit_count)}
+              unit="times"
+              icon={<CheckCircle2 className="size-4" aria-hidden="true" />}
+            />
+            <MetricCard
+              label="Median repetition duration"
+              value={metricValue(session.metrics.median_rep_duration_seconds)}
+              unit="s"
+              hint="Timing cue only, not clinical tempo"
+              icon={<Timer className="size-4" aria-hidden="true" />}
+            />
+            <MetricCard
+              label="Usable frames"
+              value={metricValue(session.metrics.usable_frame_pct)}
+              unit="%"
+              icon={<Video className="size-4" aria-hidden="true" />}
+            />
+          </div>
 
-            <p>
-              Data-quality flags:{' '}
+          {/* Provenance of the readings above, as record fields: a flag is a
+              stated condition of the data, not a footnote. */}
+          <dl className="detail-list mt-4">
+            <dt>Data-quality flags</dt>
+            <dd className="flex flex-wrap gap-1">
               {session.quality_flags.length ? (
                 session.quality_flags.map((flag) => (
                   <StatusPill key={flag} tone="warn">
@@ -186,16 +215,64 @@ export function SessionResultScreen() {
               ) : (
                 <StatusPill tone="good">No quality flags recorded</StatusPill>
               )}
-            </p>
-            <p className="meta">Raw video stored: no ({String(session.raw_video_stored)})</p>
-          </>
-        ) : null}
-      </section>
+            </dd>
+            <dt>Raw video stored</dt>
+            <dd>no ({String(session.raw_video_stored)})</dd>
+          </dl>
+        </Card>
+      ) : null}
+
+      {session ? (
+        <section className="card">
+          <div className="card-chart-head">
+            <span className="icon-chip" aria-hidden="true">
+              <Box className="size-4" />
+            </span>
+            <div className="min-w-0">
+              <h2 className="card-chart-title">Schematic replay</h2>
+              <p className="card-chart-meta">
+                A drawing of one number already recorded above — not a second reading.
+              </p>
+            </div>
+          </div>
+          <div className="twin-preview">
+            <Suspense
+              fallback={
+                <p className="meta" role="status">
+                  Loading schematic preview…
+                </p>
+              }
+            >
+            {peakAngle == null ? (
+              <p className="meta">A schematic preview is unavailable because no valid angle was recorded.</p>
+            ) : (
+              <TwinAvatar angle={peakAngle} variant="primary" />
+            )}
+            </Suspense>
+            {peakAngle != null ? (
+              <p className="meta" style={{ marginTop: 0 }}>
+                Schematic replay at this session&rsquo;s peak projected knee angle estimate — the
+                same number shown above, not an additional measurement.
+              </p>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
 
       {session ? (
         <section className="card" aria-labelledby="explanation-heading">
-          <h2 id="explanation-heading">AI-generated explanation of recorded measurements</h2>
-          <SimulatedBadge source={summary?.source ?? sessionState.source ?? 'simulated'} />
+          <div className="card-chart-head">
+            <span className="icon-chip" aria-hidden="true">
+              <MessageCircle className="size-4" />
+            </span>
+            <div className="min-w-0">
+              <p className="section-kicker mb-0">Explanation, second</p>
+              <h2 id="explanation-heading" className="card-chart-title">
+                AI-generated explanation of recorded measurements
+              </h2>
+            </div>
+            <SimulatedBadge source={summary?.source ?? sessionState.source ?? 'simulated'} />
+          </div>
           {summaryState.phase === 'loading' ? (
             <StateMessage kind="loading" title="Preparing explanation…">
               Requesting a constrained summary; numbers below come only from the stored session.
@@ -237,32 +314,51 @@ export function SessionResultScreen() {
 
       {session?.events.length ? (
         <section className="card" aria-labelledby="events-heading">
-          <h2 id="events-heading">Recorded events</h2>
-          <SimulatedBadge source="simulated" />
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th scope="col">Sequence</th>
-                <th scope="col">Time (ms)</th>
-                <th scope="col">Event</th>
-                <th scope="col">Detail</th>
-              </tr>
-            </thead>
-            <tbody>
-              {session.events.map((event) => (
-                <tr key={`${event.type}-${event.sequence}`}>
-                  <td>{event.sequence}</td>
-                  <td>{event.type === 'measurement' ? event.timestamp_ms : '—'}</td>
-                  <td>{event.type === 'measurement' ? 'measurement' : 'quality_warning'}</td>
-                  <td>
-                    {event.type === 'measurement'
-                      ? `${event.state} · ${Math.round(event.projected_knee_angle_deg * 10) / 10}° projected · ${event.quality.usable ? 'usable' : 'not usable'}`
-                      : event.message}
-                  </td>
+          <div className="card-chart-head">
+            <span className="icon-chip" aria-hidden="true">
+              <TableProperties className="size-4" />
+            </span>
+            <div className="min-w-0">
+              <h2 id="events-heading" className="card-chart-title">
+                Recorded events
+              </h2>
+              <p className="card-chart-meta">
+                {session.events.length} stored events, in sequence order
+              </p>
+            </div>
+            <SimulatedBadge source="simulated" />
+          </div>
+          {/* Four columns of readings cannot be squeezed onto a phone without
+              becoming unreadable, so the table scrolls sideways in the card. */}
+          <div className="overflow-x-auto">
+            <table className="data-table">
+              <caption>
+                Measurement and quality-warning events stored for this session, oldest first.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Sequence</th>
+                  <th scope="col">Time (ms)</th>
+                  <th scope="col">Event</th>
+                  <th scope="col">Detail</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {session.events.map((event) => (
+                  <tr key={`${event.type}-${event.sequence}`}>
+                    <td>{event.sequence}</td>
+                    <td>{event.type === 'measurement' ? event.timestamp_ms : '—'}</td>
+                    <td>{event.type === 'measurement' ? 'measurement' : 'quality_warning'}</td>
+                    <td>
+                      {event.type === 'measurement'
+                        ? `${event.state} · ${Math.round(event.projected_knee_angle_deg * 10) / 10}° projected · ${event.quality.usable ? 'usable' : 'not usable'}`
+                        : event.message}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       ) : null}
 
@@ -277,13 +373,14 @@ export function SessionResultScreen() {
       ) : null}
 
       <div className="button-row">
-        <Button asChild>
+        <Button size="lg" asChild>
           <Link to="/home">
-            Save and return home <ArrowRight aria-hidden="true" />
+            Return home <ArrowRight aria-hidden="true" />
           </Link>
         </Button>
         <Button
           variant="outline"
+          size="lg"
           type="button"
           onClick={() =>
             window.alert('Report prepared for the assigned physiotherapist to review.')
@@ -291,7 +388,7 @@ export function SessionResultScreen() {
         >
           Share with assigned clinician
         </Button>
-        <Button variant="ghost" asChild>
+        <Button variant="ghost" size="lg" asChild>
           <Link to="/twin">View Recovery Twin</Link>
         </Button>
       </div>

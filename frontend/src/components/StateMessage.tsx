@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { AlertCircle, CheckCircle2, LoaderCircle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle, CheckCircle2, LoaderCircle } from '@/components/icon';
+import { Alert, AlertDescription, AlertTitle } from '@/components/base';
 
 interface Props {
   kind: 'loading' | 'empty' | 'error' | 'success';

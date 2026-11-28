@@ -2,13 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { SafetyBanner } from '@/components/SafetyBanner';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
-import { cn } from '@/lib/utils';
+import { MobileNav } from './MobileNav';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 
 /** Responsive shell: permanent desktop sidebar, drawer + hamburger below lg. */
 export function AppShell() {
-  const [collapsed, setCollapsed] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { pathname } = useLocation();
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -27,12 +26,9 @@ export function AppShell() {
 
       <aside
         id="app-sidebar"
-        className={cn(
-          'fixed inset-y-0 left-0 z-40 hidden border-r border-[var(--sidebar-border)] lg:block',
-          collapsed ? 'w-[76px]' : 'w-[264px]',
-        )}
+        className="fixed inset-y-0 left-0 z-40 hidden w-[264px] border-r border-[var(--sidebar-border)] lg:block"
       >
-        <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((value) => !value)} />
+        <Sidebar />
       </aside>
 
       {drawerOpen ? (
@@ -41,7 +37,7 @@ export function AppShell() {
             type="button"
             aria-label="Close navigation menu"
             onClick={() => setDrawerOpen(false)}
-            className="drawer-backdrop absolute inset-0 size-full bg-black/50"
+            className="drawer-backdrop absolute inset-0 size-full border-0 bg-black/50"
           />
           <div
             id="app-sidebar-drawer"
@@ -57,10 +53,15 @@ export function AppShell() {
         </div>
       ) : null}
 
-      <div className={cn('min-h-screen', collapsed ? 'lg:pl-[76px]' : 'lg:pl-[264px]')}>
+      <div className="min-h-screen lg:pl-[264px]">
         <Topbar onMenuClick={() => setDrawerOpen(true)} menuOpen={drawerOpen} />
 
-        <div className="mx-auto w-full max-w-[1180px] px-4 py-6 sm:px-6">
+        {/* The reading column grows in steps rather than staying pinned at
+            1180px, so a 1440 or 2560 display gets wider cards and more
+            columns in the auto-fit grids instead of empty gutters. The deep
+            bottom padding below lg keeps the footer clear of the mobile tab
+            bar, which is fixed over the content. */}
+        <div className="mx-auto w-full max-w-[1180px] px-4 pb-28 pt-6 sm:px-6 lg:pb-6 xl:max-w-[1360px] 2xl:max-w-[1600px] 2xl:px-8">
           <SafetyBanner />
           <main id="main-content">
             <div key={pathname} className="page-enter">
@@ -73,6 +74,8 @@ export function AppShell() {
           </footer>
         </div>
       </div>
+
+      <MobileNav onMoreClick={() => setDrawerOpen(true)} menuOpen={drawerOpen} />
     </div>
   );
 }

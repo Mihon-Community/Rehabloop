@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { Minus, TrendingDown, TrendingUp } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { Minus, TrendingDown, TrendingUp } from '@/components/icon';
+import { Card } from '@/components/base';
 
 interface Trend {
   direction: 'up' | 'down' | 'flat';

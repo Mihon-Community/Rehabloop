@@ -1,37 +1,38 @@
 import { NavLink } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 import {
   Activity,
   Box,
   ClipboardList,
   FileText,
+  HeartPulse,
   Home,
-  PanelLeftClose,
-  PanelLeftOpen,
+  type IconComponent,
   Settings,
-  Sparkles,
   Stethoscope,
   Video,
   X,
-  type LucideIcon,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from '@/components/icon';
 
 interface NavItem {
   to: string;
   label: string;
-  icon: LucideIcon;
+  icon: IconComponent;
 }
 
+/* Grouped the way a care team talks about the work — who the patient is, the
+   capture itself, the clinical record, then recovery — rather than by the
+   screens' technical names. */
 const groups: { name: string; items: NavItem[] }[] = [
   {
-    name: 'Overview',
+    name: 'Patient',
     items: [
       { to: '/', label: 'Overview', icon: Home },
       { to: '/home', label: 'Patient home', icon: Activity },
     ],
   },
   {
-    name: 'Sessions',
+    name: 'Session capture',
     items: [
       { to: '/setup', label: 'Camera setup', icon: Video },
       { to: '/sessions/session-demo-1/live', label: 'Live session', icon: Activity },
@@ -39,7 +40,7 @@ const groups: { name: string; items: NavItem[] }[] = [
     ],
   },
   {
-    name: 'Clinical',
+    name: 'Clinical record',
     items: [
       { to: '/protocols/protocol-demo-1', label: 'Protocol', icon: ClipboardList },
       { to: '/clinician', label: 'Clinician', icon: Stethoscope },
@@ -56,89 +57,52 @@ const groups: { name: string; items: NavItem[] }[] = [
 ];
 
 interface SidebarProps {
-  collapsed?: boolean;
-  onToggle?: () => void;
   onNavigate?: () => void;
   onClose?: () => void;
 }
 
-export function Sidebar({ collapsed = false, onToggle, onNavigate, onClose }: SidebarProps) {
+export function Sidebar({ onNavigate, onClose }: SidebarProps) {
   return (
     <div className="sidebar-shell relative flex h-full flex-col bg-[var(--sidebar)] text-[var(--sidebar-foreground)]">
-      {onToggle ? (
-        <button
-          type="button"
-          onClick={onToggle}
-          aria-expanded={!collapsed}
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className="sidebar-collapse-toggle absolute -right-3 top-[52px] z-10 flex size-7 items-center justify-center rounded-full border border-[var(--sidebar-border)] bg-[var(--card)] text-[var(--muted-foreground)] shadow-[var(--card-shadow)]"
-        >
-          {collapsed ? (
-            <PanelLeftOpen className="size-3.5" aria-hidden="true" />
-          ) : (
-            <PanelLeftClose className="size-3.5" aria-hidden="true" />
-          )}
-        </button>
-      ) : null}
       <div className="sidebar-glow" aria-hidden="true" />
-      <div
-        className={cn(
-          'relative flex h-16 shrink-0 items-center gap-3 border-b border-[var(--sidebar-border)] px-5',
-          collapsed && 'justify-center px-0',
-        )}
-      >
+      <div className="relative flex h-16 shrink-0 items-center gap-3 border-b border-[var(--sidebar-border)] px-5">
         <span className="sidebar-logo-badge flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--sidebar-primary)] text-[var(--sidebar)]">
-          <Sparkles className="size-5" aria-hidden="true" />
+          <HeartPulse className="size-5" aria-hidden="true" />
         </span>
-        {!collapsed ? (
-          <>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-bold tracking-tight">RehabLoop</p>
-              <p className="truncate text-[11px] text-[var(--sidebar-foreground)] opacity-70">
-                Movement intelligence · prototype
-              </p>
-            </div>
-            {onClose ? (
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Close navigation menu"
-                className="sidebar-action rounded-md p-1.5 hover:bg-[var(--sidebar-accent)]"
-              >
-                <X className="size-4" aria-hidden="true" />
-              </button>
-            ) : null}
-          </>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-bold tracking-tight">RehabLoop</p>
+          <p className="truncate text-[11px] text-[var(--sidebar-foreground)] opacity-70">
+            Movement intelligence · prototype
+          </p>
+        </div>
+        {onClose ? (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close navigation menu"
+            className="sidebar-action icon-btn-flush flex size-10 shrink-0 items-center justify-center rounded-md border-transparent bg-transparent text-[var(--sidebar-foreground)] hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-foreground)]"
+          >
+            <X className="size-4" aria-hidden="true" />
+          </button>
         ) : null}
       </div>
 
       <nav aria-label="Screens" className="flex-1 space-y-5 overflow-y-auto px-3 py-5">
         {groups.map((group) => (
           <div key={group.name}>
-            {!collapsed ? (
-              <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest opacity-60">
-                {group.name}
-              </p>
-            ) : (
-              <div
-                className="mx-3 mb-3 border-t border-[var(--sidebar-border)]"
-                aria-hidden="true"
-              />
-            )}
+            <p className="sidebar-group-label">{group.name}</p>
             <ul className="space-y-1">
               {group.items.map(({ to, label, icon: Icon }) => (
                 <li key={to}>
                   <NavLink
                     to={to}
                     end={to === '/'}
-                    title={collapsed ? label : undefined}
-                    aria-label={collapsed ? label : undefined}
                     onClick={onNavigate}
                     className={({ isActive }) =>
                       cn(
-                        'app-sidebar-link flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-                        collapsed && 'justify-center px-0',
+                        /* py-3 keeps every row a 44px touch target, which
+                           matters most in the mobile drawer. */
+                        'app-sidebar-link flex min-h-11 items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors',
                         isActive
                           ? 'bg-[var(--sidebar-accent)] text-[var(--sidebar-foreground)]'
                           : 'opacity-75 hover:bg-[var(--sidebar-accent)] hover:opacity-100',
@@ -146,7 +110,7 @@ export function Sidebar({ collapsed = false, onToggle, onNavigate, onClose }: Si
                     }
                   >
                     <Icon className="size-[18px] shrink-0" aria-hidden="true" />
-                    {!collapsed ? <span className="truncate">{label}</span> : null}
+                    <span className="truncate">{label}</span>
                   </NavLink>
                 </li>
               ))}
@@ -154,6 +118,28 @@ export function Sidebar({ collapsed = false, onToggle, onNavigate, onClose }: Si
           </div>
         ))}
       </nav>
+
+      {/* Standing mode indicator, the sidebar's equivalent of the mode light on
+          a monitor: it restates that nothing here is real patient data, on
+          every screen, without competing with the safety banner's full text. */}
+      <div className="shrink-0">
+        <svg
+          className="ecg-rule block h-2.5 w-full px-3 text-[var(--sidebar-primary)]"
+          viewBox="0 0 240 10"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path d="M0 5h88l5-4 4 8 5-8 4 4h130" />
+        </svg>
+        <div className="sidebar-status">
+          <span className="sidebar-status-dot" aria-hidden="true" />
+          <p className="sidebar-status-text">
+            Demo mode · fixture data only
+            <br />
+            No patient-identifiable information
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

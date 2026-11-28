@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
-import { Check, ChevronDown, Palette } from 'lucide-react';
 import { useTheme } from '@/app/themeStore';
 import { themes, type ThemeDefinition, type ThemeId } from '@/app/themes';
+import { cn } from '@/lib/utils';
+import { Check, ChevronDown, Palette } from '@/components/icon';
 
-function Swatch({ colors }: { colors: ThemeDefinition['preview'] }) {
+function Swatch({ colors, className }: { colors: ThemeDefinition['preview']; className?: string }) {
   return (
-    <span className="flex shrink-0 items-center gap-0.5" aria-hidden="true">
+    <span className={cn('flex shrink-0 items-center gap-0.5', className)} aria-hidden="true">
       {colors.map((color) => (
         <span
           key={color}
@@ -69,13 +70,15 @@ export function ThemePicker() {
         aria-controls="theme-menu"
         aria-label={`Color theme: ${theme.label}. Open theme picker`}
         onClick={() => setOpen((value) => !value)}
-        className="icon-btn flex h-9 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--card)] px-2.5 text-sm font-medium text-[var(--foreground)] hover:bg-[var(--accent)]"
+        className="icon-btn flex h-9 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--card)] px-2.5 text-sm font-medium text-[var(--foreground)] hover:bg-[var(--accent)] pointer-coarse:h-11"
       >
         <Palette className="size-4 text-[var(--primary)]" aria-hidden="true" />
         <span className="hidden max-w-28 truncate sm:inline">{theme.label}</span>
-        <Swatch colors={theme.preview} />
+        {/* The preview swatch and caret are affordances, not information;
+            on a phone the bar needs those pixels for the page title. */}
+        <Swatch colors={theme.preview} className="hidden sm:flex" />
         <ChevronDown
-          className={`size-3.5 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`hidden size-3.5 transition-transform sm:block ${open ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </button>

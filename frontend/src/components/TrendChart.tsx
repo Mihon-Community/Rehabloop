@@ -3,25 +3,31 @@ import {
   Area,
   CartesianGrid,
   ComposedChart,
-  Legend,
+  LabelList,
   Line,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
-import { Activity, ChartNoAxesCombined, Gauge, TableProperties } from 'lucide-react';
 import { useTheme } from '@/app/themeStore';
-import { Button } from '@/components/ui/button';
-import { EChartsBarChart, type ChartConfig } from '@/components/evilcharts/charts/echarts-bar-chart';
+import {
+  EChartsBarChart,
+  type ChartConfig,
+} from '@/components/evilcharts/charts/echarts-bar-chart';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { SimulatedBadge } from './SimulatedBadge';
 import type { DataSource, SessionRecord } from '@/types';
+import { Activity, ChartNoAxesCombined, Gauge, TableProperties } from '@/components/icon';
+import { Button } from '@/components/base';
 
-// Series colors reference the active theme's own tokens (see src/index.css),
-// so the bar automatically matches every color theme — never a fixed hex.
+// Series colours reference the active theme's own tokens (see src/index.css),
+// so every chart matches the active theme — never a fixed hex. Both charts here
+// plot a SINGLE series, so both take slot 1: the hue means "the measured
+// series", and the two are told apart by title and axis, not by colour. Slot 2
+// stays reserved for the one real two-mark comparison (the Recovery Twin).
 const qualityChartConfig = {
-  quality: { label: 'Usable frames (%)', colors: { light: ['var(--chart-2)'] } },
+  quality: { label: 'Usable frames (%)', colors: { light: ['var(--chart-1)'] } },
 } satisfies ChartConfig;
 
 interface Props {
@@ -83,13 +89,13 @@ function ChartCard({
   table: ReactNode;
 }) {
   return (
-    <section className="card chart-card" aria-labelledby={titleId}>
-      <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 id={titleId} className="mt-0 flex items-center gap-2.5">
-            <span className="icon-chip" aria-hidden="true">
-              {icon}
-            </span>
+    <section className="card chart-card card-chart-paper" aria-labelledby={titleId}>
+      <div className="card-chart-head flex-wrap">
+        <span className="icon-chip" aria-hidden="true">
+          {icon}
+        </span>
+        <div className="min-w-0">
+          <h2 id={titleId} className="card-chart-title">
             {title}
           </h2>
           <SimulatedBadge source={source} />
@@ -105,7 +111,10 @@ function ChartCard({
           {children}
         </div>
       </figure>
-      {showTable ? <div className="mt-4">{table}</div> : null}
+      {/* The table has four columns of numbers that cannot usefully be
+          squeezed below about 30rem, so it scrolls sideways within the card
+          rather than widening the page. */}
+      {showTable ? <div className="mt-4 overflow-x-auto">{table}</div> : null}
     </section>
   );
 }
@@ -129,6 +138,9 @@ export function TrendChart({ sessions, source }: Props) {
   }));
   const repCount = data.filter((point) => point.reps !== null).length;
   const qualityCount = data.filter((point) => point.quality !== null).length;
+  // Index of the most recent reported value — the only point that gets a
+  // direct label.
+  const lastRepIndex = data.reduce((last, point, i) => (point.reps !== null ? i : last), -1);
 
   const table = (
     <table className="data-table">
@@ -183,7 +195,7 @@ export function TrendChart({ sessions, source }: Props) {
                   <stop offset="100%" stopColor="var(--chart-1)" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+              <CartesianGrid stroke="var(--border)" vertical={false} />
               <XAxis
                 dataKey="date"
                 tick={axisTick}
@@ -203,14 +215,15 @@ export function TrendChart({ sessions, source }: Props) {
                 label={{ value: 'Reps (count)', angle: -90, position: 'insideLeft', ...axisLabel }}
                 allowDecimals={false}
               />
+              {/* A hairline crosshair rather than Recharts' default grey band,
+                  and no legend: one series needs no legend box — the card
+                  title already names it. */}
               <Tooltip
+                cursor={{ stroke: 'var(--muted-foreground)', strokeWidth: 1 }}
                 content={
-                  <ChartTooltip
-                    formatValue={(value) => `Completed reps: ${value} repetitions`}
-                  />
+                  <ChartTooltip formatValue={(value) => `Completed reps: ${value} repetitions`} />
                 }
               />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
               <Area
                 type="monotone"
                 dataKey="reps"
@@ -226,13 +239,48 @@ export function TrendChart({ sessions, source }: Props) {
                 dataKey="reps"
                 name="Completed repetitions (count)"
                 stroke="var(--chart-1)"
-                strokeWidth={2.5}
-                dot={{ r: 4, fill: 'var(--chart-1)' }}
-                activeDot={{ r: 6 }}
+                strokeWidth={2}
+                dot={{ r: 4, fill: 'var(--chart-1)', stroke: 'var(--card)', strokeWidth: 2 }}
+                activeDot={{ r: 6, stroke: 'var(--card)', strokeWidth: 2 }}
                 connectNulls={false}
                 isAnimationActive={!reducedMotion}
                 animationDuration={450}
-              />
+              >
+                {/* One direct label, on the latest session only. A value beside
+                    every point goes unread; the newest number is the one a
+                    patient looks for, and the axis plus tooltip carry the rest. */}
+                <LabelList
+                  dataKey="reps"
+                  position="top"
+                  offset={10}
+                  fontSize={12}
+                  fontWeight={700}
+                  fill="var(--foreground)"
+                  content={(props) => {
+                    const { x, y, value, index } = props as {
+                      x?: number;
+                      y?: number;
+                      value?: number | null;
+                      index?: number;
+                    };
+                    if (index !== lastRepIndex || value == null || x == null || y == null) {
+                      return null;
+                    }
+                    return (
+                      <text
+                        x={x}
+                        y={y - 10}
+                        textAnchor="middle"
+                        fontSize={12}
+                        fontWeight={700}
+                        fill="var(--foreground)"
+                      >
+                        {value}
+                      </text>
+                    );
+                  }}
+                />
+              </Line>
             </ComposedChart>
           </ResponsiveContainer>
         ) : (
@@ -260,7 +308,7 @@ export function TrendChart({ sessions, source }: Props) {
             config={qualityChartConfig}
             xDataKey="date"
             className="h-full w-full"
-            barRadius={6}
+            barRadius={4}
           >
             <EChartsBarChart.XAxis
               dataKey="date"
