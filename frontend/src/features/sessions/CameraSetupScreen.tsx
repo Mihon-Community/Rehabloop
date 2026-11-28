@@ -5,8 +5,7 @@ import { useDemo } from '../../app/demoStore';
 import { SimulatedBadge } from '../../components/SimulatedBadge';
 import { StateMessage } from '../../components/StateMessage';
 import { StatusPill } from '../../components/StatusPill';
-import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert';
-import { Button } from '../../components/ui/button';
+import { Alert, AlertDescription, AlertTitle, Button } from '../../components/base';
 import { ApiError, api } from '../../lib/api';
 import {
   createCameraConsent,
