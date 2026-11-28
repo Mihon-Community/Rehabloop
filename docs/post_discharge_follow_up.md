@@ -121,6 +121,7 @@ review.
 ## Related project guidance
 
 - [Backend implementation proposal](post_discharge_follow_up_backend.md)
+- [Frontend implementation proposal](post_discharge_follow_up_frontend.md)
 - [Architecture](ARCHITECTURE.md)
 - [API contract](api_contract.md)
 - [Backend guide](backend_guide.md)
