@@ -1,10 +1,9 @@
 # Frontend guide
 
 Owner: **Steve** (`frontend/`). This guide describes the frontend in the current
-`feature/lennox` checkout and the intended direction for unfinished screens.
-It was checked after the merge from `develop` at `d0391d3`. That merge did not
-change the feature branch's file tree; this guide therefore treats the current
-frontend and backend code as the source of truth.
+`feature/lennox` checkout, distinguishes live API behavior from demo-only UI,
+and lists integration gaps against the backend currently in this repository.
+Source code and the API schemas are the source of truth when behavior changes.
 
 For a visual reference, open the [frontend screen reference](frontend_visual_reference.pdf)
 or its [HTML source](frontend_visual_reference.html). The PDF labels implemented
@@ -23,69 +22,67 @@ protocol and interprets the measurements.
 
 Status labels used below:
 
-- **Implemented** means the current source contains the working screen or flow.
-- **Placeholder** means a route renders descriptive scaffold content rather
-  than the intended product experience.
-- **Planned** means a recommended future design or behavior, not a feature in
-  the current app.
-- **Backend available** means the current API has an endpoint; the frontend may
-  not call it yet.
+- **Implemented UI** means a working screen or interaction exists; it may still
+  use fixtures or local state.
+- **Live integration** means the screen currently calls a backend endpoint.
+- **Gap** means the UI, adapter, or API response still needs work before the
+  flow can use real records end to end.
 
 | Area | Current state |
 |---|---|
-| App shell and navigation | Implemented; navigation links are always visible. |
-| Sign in | Implemented with Supabase password sign-in and a development-only synthetic account. |
-| Patient home | Placeholder. |
-| Protocol detail | Placeholder. |
-| Camera setup and consent prompt | Implemented; consent wording remains prototype copy. |
-| Live camera session | Implemented; sends sampled JPEG frames and renders measurements and quality feedback. |
-| Session result | Implemented; fetches the canonical session summary. |
-| Clinician dashboard | Placeholder. |
-| Recovery Twin | Placeholder; no 3D scene or landmark trace is supplied by the current stream API. |
-| Route protection and sign out | Not implemented in the UI. Backend authorization remains authoritative. |
-| Progress charts and summary narrative | Backend endpoints exist; current screens do not render these features. |
+| App shell and navigation | Implemented UI. Theme, demo-role, notifications, and camera-mode controls are browser/demo behavior. |
+| Sign in and sign up | Implemented UI; Supabase credentials are used when configured, with a development-only synthetic sign-in. |
+| Patient home | Implemented UI; assigned protocols are live; recent sessions and trend chart are simulated fixtures. |
+| Protocol detail | Implemented read-only UI; protocol values come from the assigned-protocol endpoint or labelled fixtures. |
+| Camera setup and consent prompt | Live integration for profile, protocols, session creation/start, and consent markers; consent wording still needs review. |
+| Live camera session | Live WebSocket flow for sampled frames, measurements, quality feedback, pause/resume, and completion. |
+| Session result | Live session fetch and summary request; local unavailable-service fallback is labelled. Backend fixture provenance and backend deterministic-summary provenance are not mapped consistently yet. |
+| Clinician dashboard | Implemented demo UI; its fixture patient IDs are not UUIDs, so the live progress request is rejected. If given a UUID, its response still needs mapping. Patient list and protocol editor are local fixtures/state. |
+| Recovery Twin | Implemented interactive 3D projected-angle replay for fixtures; the backend does not return replay frames, so it is not connected to real session traces. |
+| Sign out and route access | Sign-out controls exist. Route guards and expired-session redirects do not; backend authorization remains authoritative. |
+| Post-session comparison | An available NVIDIA summary may use numeric metrics from a prior completed session on the same patient and protocol. The UI has no structured comparison field; Twin comparison is fixture-only. |
 
-The purple **DEMO BUILD** badge appears unconditionally in the shell. It does
-not identify the inference mode. Fixture output has a separate **SIMULATED**
-label in the live screen. Check backend health/configuration to determine the
-active vision and storage modes; do not infer them from the shell badge.
-
-The app renders a safety notice inside each screen and another in the shell
-footer, so it currently appears twice on most routes. This is a known UI
-cleanup item, not a requirement to duplicate it in new components.
+The top bar's **DEMO** label describes the current demo UI; it does not report
+the backend's inference or storage mode. Several screens show **SIMULATED** for
+fixture data, but result-screen model provenance still has a gap described
+below. Check backend health and active service configuration for vision and
+storage modes; do not infer them from the top-bar label.
 
 ## 2. Routes and source map
 
-The route definitions live in `frontend/src/app/routes.tsx`. The shell and
-seven navigation links are in `frontend/src/App.tsx`.
+The route definitions live in `frontend/src/app/routes.tsx`; the shared shell
+and navigation are in `frontend/src/components/layout/`.
 
 | Path | Component | State | Current behavior / source |
 |---|---|---|---|
-| `/` | `features/sessions/AuthScreen.tsx` | Implemented | Sign in, local synthetic sign in in development, or continue link to patient home. |
-| `/home` | `features/sessions/PatientHomeScreen.tsx` | Placeholder | Describes assigned protocols and recent-session intent; does not fetch data. |
-| `/protocols/:id` | `features/protocols/ProtocolDetailScreen.tsx` | Placeholder | Describes the planned protocol view; does not fetch a protocol. |
-| `/setup` | `features/sessions/CameraSetupScreen.tsx` | Implemented | Loads the signed-in profile and assigned protocols; consent, camera preview, framing checks, and session start. |
-| `/sessions/:id/live` | `features/sessions/LiveSessionScreen.tsx` | Implemented | Requires stream token and consent context passed in route state by setup; sends camera frames to the WebSocket. |
-| `/sessions/:id/result` | `features/sessions/SessionResultScreen.tsx` | Implemented | Fetches and displays the canonical session summary. |
-| `/clinician` | `features/protocols/ClinicianDashboardScreen.tsx` | Placeholder | Describes intended patient, protocol, session, and trend views. |
-| `/twin` | `features/recovery-twin/RecoveryTwinScreen.tsx` | Placeholder | Describes a possible projected-motion visualization; no scene is implemented. |
-| `*` | `AuthScreen` | Implemented fallback | Unknown paths display sign in. |
+| `/` | `features/landing/LandingPage.tsx` | Implemented | Public landing page with sign-in and sign-up navigation. |
+| `/sign-in` | `features/auth/SignInScreen.tsx` | Implemented | Supabase password sign-in when configured; profile lookup selects the role landing page. |
+| `/sign-up` | `features/auth/SignUpScreen.tsx` | Implemented | Supabase sign-up UI; backend profile/role setup still governs access. |
+| `/demo` | `features/sessions/AuthScreen.tsx` | Demo | Legacy development/demo sign-in flow. |
+| `/home` | `features/sessions/PatientHomeScreen.tsx` | Implemented, partly simulated | Loads assigned protocols; recent session history and chart use fixtures. |
+| `/protocols/:id` | `features/protocols/ProtocolDetailScreen.tsx` | Implemented | Reads the protocol from the assigned protocol list; does not edit it. |
+| `/setup` | `features/sessions/CameraSetupScreen.tsx` | Live integration | Loads profile/protocols, records consent markers, opens camera, and starts a session. |
+| `/sessions/:id/live` | `features/sessions/LiveSessionScreen.tsx` | Live integration | Sends sampled frames to the WebSocket and handles stream events and controls. |
+| `/sessions/:id/result` | `features/sessions/SessionResultScreen.tsx` | Live integration | Loads aggregate session metrics and requests the controlled summary. |
+| `/clinician` | `features/protocols/ClinicianDashboardScreen.tsx` | Demo with partial live call | Patient and protocol data are fixtures; progress request is not yet correctly adapted. |
+| `/twin` | `features/recovery-twin/RecoveryTwinScreen.tsx` | Fixture-backed UI | Replays an illustrative angle trace; no real trace is returned by the API. |
+| `/settings` | `features/settings/SettingsScreen.tsx` | Implemented demo settings | Browser theme/demo preferences and sign-out control. |
+| `*` | `LandingPage` | Implemented fallback | Unknown paths return to the landing page. |
 
-The shell's navigation includes `/protocols/demo` and `/sessions/demo/result`
-as example links. These do not refer to seeded records and can display an API
-error or missing-session state. The app currently has no role-based navigation,
-protected-route wrapper, session refresh redirect, or sign-out control. A link
-on the sign-in screen also navigates directly to `/home`; this is not an
-authorization boundary. Every protected request must continue to be authorized
-by the backend.
+The app has sign-out controls but no protected-route wrapper or automatic
+expired-session redirect. A role selection in demo settings changes the view,
+not the authenticated identity. Every protected request must continue to be
+authorized by the backend.
 
 Useful source files:
 
 ```text
 frontend/src/
   main.tsx                             React entry point and BrowserRouter
-  App.tsx                              shell, navigation, DEMO BUILD badge, footer
+  App.tsx                              providers and route composition
   app/routes.tsx                       route table
+  components/layout/AppShell.tsx       app shell and navigation
+  components/layout/Topbar.tsx         top bar, demo controls, and sign out
   index.css                            shared visual styling and responsive rule
   components/SafetyBanner.tsx          current prototype/safety copy
   components/ScreenPlaceholder.tsx     scaffold for unfinished pages
@@ -107,28 +104,18 @@ frontend/src/
 
 ## 3. Visual direction
 
-The [PDF reference](frontend_visual_reference.pdf) shows the current shared
-shell, then the four implemented screens, then clearly marked planned screens.
-It is an illustrative product direction, not a screenshot of a running browser
-or a promise that the planned features exist.
+The [PDF reference](frontend_visual_reference.pdf) is an illustrative design
+artifact, not a screenshot of the running browser. Use the route/status table
+above and current source to determine which behavior is implemented.
 
 ### Current visual system
 
-Values below are read from `frontend/src/index.css` and describe the current
-prototype. Extend these shared styles before adding one-off visual systems.
-
-| Element | Current value / behavior |
-|---|---|
-| Font | System UI, then platform sans-serif fallbacks. |
-| Page background | `#f5f7fa`; main text `#10243a`. |
-| Main content | Centered shell, max width `1060px`, `1.5rem` padding. |
-| Screen card | White, `#d7dee8` border, `10px` radius, `1.25rem` padding. |
-| Main action | Deep teal `#155e75`, white label. |
-| Safety notice | Pale amber `#fff8e1`, dark amber left rule `#b45309`. |
-| Fixture badge | Purple `#4c1d95`; use only when data is simulated. |
-| Status pills | Green for connected/ready and amber for waiting/paused states. Always show text as well as color. |
-| Live layout | Camera preview and metric panel in a 1.6:0.8 two-column grid; one column at widths up to `720px`. |
-| Results | Auto-fit metric cards with a minimum width of `13rem`. |
+`frontend/src/index.css` defines shared CSS variables and six selectable themes.
+Components use those tokens for page, card, border, status, and chart colors;
+use the shared tokens and base components rather than copying fixed colors into
+new screens. Fixture badges use their own simulated color tokens. The shell and
+screens use responsive cards and grids, including stacked layouts at narrow
+widths.
 
 ### Intended screen composition
 
@@ -156,51 +143,50 @@ standard. Treat those as implementation work, not assumed capabilities.
 
 ## 4. Screen behavior and design requirements
 
-### 4.1 Sign in (`/`) — implemented
+### 4.1 Sign in (`/sign-in`) — implemented
 
-**Current layout:** a sign-in card with email and password fields when both
-public Supabase settings are configured; a setup notice when they are not; a
-development-only synthetic sign-in option; an error area; and a link to patient
-home. The safety notice is shown in the card and the global footer.
+**Current layout:** the public landing page links to separate sign-in and
+sign-up screens. Sign-in offers email/password when public Supabase settings
+are configured and a development-only synthetic sign-in option in a Vite dev
+build.
 
-**Current behavior:** Supabase `signInWithPassword()` runs first, then the
-frontend calls `GET /api/v1/me`. Patient profiles navigate to `/home`; other
-roles navigate to `/clinician`. The local synthetic button sets a token in
+**Current behavior:** Supabase `signInWithPassword()` runs, then the frontend
+calls `GET /api/v1/me`. Patient profiles navigate to `/home`; clinician profiles
+navigate to `/clinician`. The local synthetic button sets a token in
 `sessionStorage`, calls the same profile endpoint, and is only rendered by a
 Vite development build. Local backend auth also requires `APP_ENV=local` and
 `AUTH_MODE=dev`.
 
-**Still needed:** protected-route handling for presentation, a sign-out action,
-and clear handling for expired sessions and role changes. The server remains
-the source of authorization. Do not put the service-role key in browser code or
-in any `VITE_*` variable.
+**Still needed:** protected-route handling for presentation and clear handling
+for expired sessions and role changes. Sign-out controls are available in the
+top bar and Settings. The server remains the source of authorization. Do not
+put the service-role key in browser code or in any `VITE_*` variable.
 
-### 4.2 Patient home (`/home`) — placeholder
+### 4.2 Patient home (`/home`) — implemented with simulated history
 
-The current page only describes its purpose. The intended view should summarize
-assigned clinician-approved protocol(s), the next available patient action,
-and recent session status. It should link to protocol detail, camera setup, and
-previous results when those records exist.
+The page calls `GET /api/v1/patients/me/protocols` through `loadProtocols()`.
+It shows the first active, approved protocol, configured values that are
+present, a protocol-review link, and an explicit empty state when no approved
+protocol is available. It also shows a camera-mode choice and recent-session
+cards with a trend chart.
 
-The API has `GET /api/v1/patients/me/protocols` and
-`GET /api/v1/patients/{id}/progress`; the screen currently calls neither. Show
-an explicit empty state if no active approved protocol is assigned. In that
-state, do not suggest or start an exercise. Distinguish unavailable data from
-an empty protocol list and from an in-memory record that was not saved.
+The recent-session list and chart currently come from `loadSessions()`, which
+always returns labelled synthetic fixtures. The backend progress endpoint
+exists, but patient home does not call it. Connect it only after the response
+adapter handles its actual nested `metrics` shape and the missing per-session
+`started_at` field; until then, preserve the simulated label and do not present
+fixture history as a patient's actual record.
 
-### 4.3 Protocol detail (`/protocols/:id`) — placeholder
+### 4.3 Protocol detail (`/protocols/:id`) — implemented read-only view
 
-The current page is scaffold text. The planned read-only patient view should
-show the protocol name and version, assigned side, clinician-authored
-instructions, configured repetitions or ranges when present, approval/status,
-and clinician-provided stop instructions. Only render fields actually present
-in the validated protocol response. The patient view must not edit approved
-parameters. A confirmation step can acknowledge that the patient read the
-protocol before opening camera setup; it is not medical consent.
-
-The current patient protocol endpoint returns the assigned list. If the screen
-needs a different lookup or a new field, align it with `docs/api_contract.md`
-and get the required shared review before changing the API.
+The page loads the assigned protocol list and selects the matching route ID. It
+shows protocol identity/version, side, repetitions and target range when those
+fields exist, optional hold/camera values, approval state, and a confirmation
+that the patient read the protocol. It then links to camera setup. The screen
+does not edit the protocol. Live protocol parameters are free-form backend
+values, so absent or unrecognized fields must remain “Not configured”; the
+screen must not invent instructions or clinical text that are not in the API
+response.
 
 ### 4.4 Camera setup (`/setup`) — implemented
 
@@ -273,46 +259,76 @@ backend contract rounds the transmitted estimate to one decimal place. Keep the
 label explicit: **projected 2D knee-angle estimate**. The PDF uses invented,
 clearly illustrative display values, not model validation evidence.
 
-### 4.6 Session result (`/sessions/:id/result`) — implemented
+### 4.6 Session result (`/sessions/:id/result`) — live aggregate and summary
 
-The result screen fetches `GET /api/v1/sessions/{id}` and shows loading/error
-states, session status, completed repetitions, target repetitions, projected
-knee-angle range, the percentage of frames passing quality checks, quality
-flags, and the raw-video-stored statement. It checks `persisted=false` to say
-that an in-memory session was not saved for later.
+The result screen fetches `GET /api/v1/sessions/{id}` and requests
+`POST /api/v1/sessions/{id}/summary`. It displays the canonical stored metrics,
+quality flags, session/protocol/model provenance, and whether the record was
+persisted. On API failure, the frontend shows a local deterministic
+fixture/unavailable fallback with a simulated label. A successful API response
+is currently treated as non-fallback, even when the backend's `source` says
+`deterministic_fallback`. It keeps the measurements visually ahead of
+explanatory text and states that the summary is not clinical advice.
 
-The current screen does **not** show a frame-by-frame event list, a trend chart,
-or an AI/NVIDIA explanation, and does not call the summary endpoint. Do not
-write copy suggesting those features are active. If a summary is added, render
-canonical numbers from the session record; treat generated text only as a
-validated explanation of those values. Never display invented or text-only
-clinical claims.
+The session endpoint returns aggregate metrics only. `loadSession()` currently
+adds empty `events` and `angle_trace` arrays because no event history or replay
+trace is returned by the backend. The event table therefore has no live records
+to display, and the result's small avatar is a schematic of the peak projected
+angle, not a replay. The “Share with assigned clinician” control currently
+shows a browser alert; it does not export or send the record.
 
-The current result screen also does not show a fixture/simulated badge. The
-session response includes a model version, but the current UI does not use it
-to label fixture-derived results. Close this labeling gap before showing
-fixture results as patient measurements.
+When NVIDIA is configured and returns a valid response, the backend summary
+generator may include numeric comparisons with the most recent completed
+session it finds for the same patient and protocol. Its deterministic backend
+fallback summarizes only the current session. The response schema exposes
+explanatory text, not a structured prior/current comparison object, so the UI
+cannot independently render a labelled side-by-side comparison yet. Keep any
+wording limited to returned measured values and do not describe them as
+recovery or clinical progression.
 
-### 4.7 Clinician dashboard (`/clinician`) — placeholder
+There are two provenance details to fix before relying on result labels:
+`loadSession()` currently treats any successful API response as `source: live`,
+even if its `model_version` identifies fixture inference. Also,
+`loadSummary()` treats any successful summary response as non-fallback and its
+frontend type omits the backend `source` and model metadata. A backend-generated
+deterministic summary can therefore be titled “AI-generated” and appear live.
+Map backend provenance fields after the shared API contract review, and keep
+“API response received” separate from “real model output.”
 
-The current page is descriptive scaffold content. The intended dashboard can
-include clinician-assigned patients, protocol creation/versioning, session
-review, and patient progress. The API has clinician protocol write and patient
-progress endpoints, but the frontend does not yet call them. Every patient,
-protocol, and session query must remain scoped by backend authorization and
-clinician assignment. Protocol edits create a new version; do not imply that
-the app automatically updates a treatment plan.
+### 4.7 Clinician dashboard (`/clinician`) — demo UI with a partial live request
 
-### 4.8 Recovery Twin (`/twin`) — placeholder
+The dashboard presents patient selection, a protocol editor, session table,
+quality flags, and trend chart. Patient names and IDs are fixtures. Editing and
+“saving” a protocol only changes local React state; it does not call the
+backend's `POST /api/v1/protocols` or `PATCH /api/v1/protocols/{id}`. The
+assigned-patient list is not available from a backend endpoint.
 
-The current page has no avatar or timeline; Three.js and related dependencies
-are installed but unused. The current stream API sends measurements, not a
-landmark trace, so a faithful skeleton replay cannot be built from the present
-payload alone. Any future view should be described as a visualization of
-projected movement in the measured plane, not true 3D biomechanics. Show gaps
-for missing/low-quality frames and provide text labels alongside color.
-Confirm data availability, API contract, model/art asset licensing, and
-clinical wording before building a scene.
+The screen calls `GET /api/v1/patients/{id}/progress` using fixture IDs such as
+`patient-demo-1`, but the backend route requires a UUID. The request therefore
+gets a 422 validation error and `loadProgress()` does not currently convert
+that error into fixture data. If supplied a real UUID, `loadProgress()` still
+casts the response to the frontend's flattened `SessionRecord[]` instead of
+mapping it: backend items contain `session_id` and nested `metrics`, and omit
+`started_at`; the table/chart expect `id`, flattened metrics, and a date. The
+UI needs valid authorized patient IDs, an explicit response mapper, and a
+reviewed date field before it can show live dated history. Keep the clinician
+view marked simulated until that integration works. Server-side role and
+assignment checks remain required for every real record.
+
+### 4.8 Recovery Twin (`/twin`) — implemented for fixture traces only
+
+The screen has a 3D projected-angle avatar, timeline, playback controls, visible
+gaps for unusable measurements, and a comparison display. It loads a fixed demo
+session ID and compares against a hard-coded earlier fixture trace. The backend
+currently returns no per-frame angle trace, and the session mapper intentionally
+does not invent one. As a result, the real endpoint cannot populate this
+replay; the visible comparison is not a comparison of a patient's two videos.
+
+The avatar visualizes a measured projected angle; it is not a true 3D body
+model or clinical biomechanics analysis. To use real recordings here, the API
+would need a reviewed way to return the permitted per-frame measurements and
+identify the earlier session. Preserve missing-frame gaps and numeric-only
+comparison language; do not claim recovery or clinical progression.
 
 ## 5. Frontend/backend integration
 
@@ -326,14 +342,20 @@ status and response body.
 |---|---|---|
 | `api.health()` | `GET /api/v1/health` | Synthetic consent helper checks storage mode. |
 | `api.me()` | `GET /api/v1/me` | Sign in and camera setup. |
-| `api.myProtocols()` | `GET /api/v1/patients/me/protocols` | Camera setup. |
+| `api.myProtocols()` | `GET /api/v1/patients/me/protocols` | Patient home, protocol detail, and camera setup. |
 | `api.createSession(protocolId)` | `POST /api/v1/sessions` | Camera setup. |
 | `api.startSession(id, consentId)` | `POST /api/v1/sessions/{id}/start` | Camera setup and resume. |
 | `api.completeSession(id)` | `POST /api/v1/sessions/{id}/complete` | Live session end. |
-| `api.getSession(id)` | `GET /api/v1/sessions/{id}` | Result screen. |
-| `api.progress(patientId)` | `GET /api/v1/patients/{id}/progress` | Helper exists; no screen uses it. |
-| `api.createSummary(id)` | `POST /api/v1/sessions/{id}/summary` | Helper exists; no screen uses it. |
+| `api.getSession(id)` | `GET /api/v1/sessions/{id}` | Result screen; Twin requests a fixed demo ID and receives a fixture fallback or aggregate-only record. |
+| `api.progress(patientId)` | `GET /api/v1/patients/{id}/progress` | Clinician dashboard through `loadProgress()`; response shape is not mapped correctly yet. |
+| `api.createSummary(id)` | `POST /api/v1/sessions/{id}/summary` | Result screen; falls back to deterministic fixture text when unavailable. |
 | `sessionStreamUrl(id, token)` | `WS /api/v1/sessions/{id}/stream?token=...` | Live session. Token is short-lived and session-scoped. |
+
+`loadSessions()` has no API call and always returns demo fixtures. There is no
+separate list-sessions endpoint; the patient-scoped progress endpoint does
+return session summaries. Its `sessions[]` items omit the date in the API
+response and use the backend wire shape rather than the UI's flattened
+`SessionRecord` shape.
 
 All business routes require authenticated identity and backend authorization;
 health is public. The server validates roles, patient assignment, session
@@ -400,14 +422,15 @@ in-memory demo. Keep these distinctions visible in user-facing states:
   with the repository's named COCO-17 mapping. Fixture mode is synthetic and
   must be labeled. The frontend receives estimates and quality events, not the
   keypoint array; there is no browser skeleton overlay.
-- **Summaries:** the API has a controlled summary endpoint. Only validated
-  numeric metrics may be sent to the provider; the backend validates output and
-  can use a deterministic fallback. The current result page does not request
-  or display this summary.
+- **Summaries:** the result screen calls the controlled summary endpoint. Only
+  validated numeric metrics (including a limited same-patient/same-protocol
+  prior-session comparison when available) may be sent to the provider; the
+  backend validates output and can use a deterministic fallback. The response
+  does not expose a structured comparison object.
 - **Operational state:** `.env.example` defaults to fixture mode; a local
   `.env` or deployment may select another supported mode. Read health and
   current environment configuration through approved channels rather than
-  assuming the mode from the `DEMO BUILD` badge.
+  assuming the mode from the top-bar `DEMO` label.
 - **Supabase migrations:** follow `docs/backend_guide.md` and the authorized
   Supabase workflow. Local and remote migration ledgers can have different
   versions; do not run `supabase db push` until they are reconciled.
@@ -466,16 +489,20 @@ secrets or actual values into this guide.
 
 ## 8. Current tests and verification
 
-The frontend currently has four Vitest tests in three files:
+Frontend unit and component tests are present in:
 
-| File | Coverage in the current test |
-|---|---|
-| `src/App.test.tsx` | Shell and safety notice; mock data declares simulation. |
-| `src/features/sessions/CameraSetupScreen.test.tsx` | Consent before camera access; framing confirmations before session start. |
-| `src/features/sessions/LiveSessionScreen.test.tsx` | WebSocket frame/measurement flow, simulated label, and camera stop/resume. |
+- `src/App.test.tsx`
+- `src/lib/data.test.ts` and `src/lib/stream.test.ts`
+- `src/features/sessions/CameraSetupScreen.test.tsx`,
+  `LiveSessionScreen.test.tsx`, `PatientHomeScreen.test.tsx`, and
+  `SessionResultScreen.test.tsx`
+- `src/features/recovery-twin/angleMapping.test.ts` and
+  `RecoveryTwinScreen.test.tsx`
 
-There is no current `SessionResultScreen` test. Existing tests do not provide
-end-to-end, real-camera, clinical-accuracy, or production-readiness evidence.
+These tests cover selected data fallbacks, camera/session flows, results, and
+fixture replay behavior. They do not provide end-to-end, real-camera,
+clinical-accuracy, or production-readiness evidence. This document update does
+not claim that tests were run.
 
 Available commands from `frontend/`:
 
@@ -502,50 +529,59 @@ typecheck, tests, and build. For future behavior work, add focused tests for:
 This guide change is documentation; the test commands above document the
 existing workflow rather than claiming those checks were run here.
 
-## 9. Prioritized frontend work
+## 9. Remaining frontend integration work
 
-### P0 — before patient-facing use
+### First: use the existing records consistently
 
-1. Have product/legal/privacy reviewers approve camera consent wording and
-   terms. Build consent withdrawal/revocation behavior and handle the existing
-   consent row when camera permission is denied or setup is abandoned.
-2. Add a sign-out path and presentation route guards. Keep server checks as the
-   actual security boundary; cover role changes and expired sessions.
-3. Review accessibility and usability on keyboard, mobile widths, and screen
-   readers; reduce the duplicated safety banner and clarify the global DEMO
-   BUILD versus per-event SIMULATED indicators.
-4. Clearly represent fixture mode, memory storage, unavailable vision, and
-   invalid measurement states, including a simulated label on results. Never
-   show stale angle values after a quality failure.
+1. Update `loadProgress()` to validate and map `ProgressResponse.sessions[]`:
+   each item has `session_id` and nested `metrics`, while the UI currently
+   expects `id` and flattened metrics. The backend response also omits
+   `started_at`, which the table and chart need for dates. Agree a reviewed
+   response field or leave dates unavailable; do not fabricate them. The
+   clinician screen must also stop sending fixture IDs to a UUID route, and the
+   helper needs deliberate handling for malformed demo requests.
+2. Connect patient home to the existing patient progress endpoint after the
+   mapping is correct. At present its history and trend chart are always
+   simulated even if stored progress is available.
+3. Map summary provenance (`source`, model ID, persistence) from the backend
+   response. Do not call every successful API response AI-generated: the
+   backend may return its deterministic fallback when NVIDIA is unavailable.
+4. Keep summary output beside canonical session metrics. An available NVIDIA
+   summary may include a constrained prior-session comparison in text, but the
+   API does not return a structured prior/current comparison that the UI can
+   independently label.
 
-### P1 — complete the main patient journey
+For the project's post-discharge follow-up record, this means presenting the
+existing session record, summary, and comparable measurements clearly. These
+gaps do not require a separate discharge, appointment, messaging, or treatment
+management system. See the [follow-up scope](post_discharge_follow_up.md) and
+[frontend implementation note](post_discharge_follow_up_frontend.md) for the
+focused design.
 
-1. Implement patient home from assigned protocols and session history with
-   explicit loading, empty, error, and not-persisted states.
-2. Implement read-only protocol detail using only fields present in the
-   approved protocol response.
-3. Add result screen tests and decide, with the API contract owners, whether
-   the patient result should request the existing summary endpoint or link to
-   clinician review.
-4. Add clear navigation from sign-in to the actual patient/clinician landing
-   pages, rather than relying on demo links.
+### Clinician and optional replay work
 
-### P2 — clinician workflow
+1. The clinician page needs an authorized assigned-patient list before its
+   fixture selector can represent live patients. The backend currently has no
+   such listing endpoint.
+2. Wire the local protocol editor to the existing create/update endpoints,
+   map the API parameter names correctly, and show server validation and
+   persistence outcomes. Its current “saved” message only changes local state.
+3. Real Twin replay requires a reviewed way to expose per-frame measurements
+   and select the earlier session. The stream events are transient to the live
+   screen and `GET /sessions/{id}` currently returns aggregates only. Keep the
+   Twin clearly fixture-backed until an agreed contract supports real replay.
 
-1. Implement assigned-patient list and session review with server-enforced
-   clinician/patient assignment.
-2. Add protocol creation/version review only after mapping the current API
-   request and response fields and handling validation and revoked access.
-3. Add progress charts only from canonical progress responses; label estimates
-   and missing data clearly. Do not add automated treatment changes.
+### Before patient-facing use
 
-### P3 — optional movement visualization
-
-Confirm that an approved, sufficiently detailed movement trace can be exposed
-before building a Recovery Twin. The current API does not provide the landmarks
-needed for a skeleton overlay. Any new data shape requires shared contract
-review. Keep the visualization limited to the measured projection and use
-visible gaps instead of interpolation for missing frames.
+- Review the camera-consent wording and legal/privacy terms; complete a
+  consent-revocation path for setup abandonment and camera denial.
+- Add presentation route guards and expired-session handling. Server checks
+  remain the authorization boundary. Sign-out controls already exist.
+- Review keyboard, mobile, and screen-reader behavior; represent fixture mode,
+  memory storage, unavailable vision, and unusable measurements with text.
+- Do not show stale angles after a quality failure, and do not present
+  projected estimates or generated summaries as diagnosis, treatment,
+  prognosis, recovery, or clinical progression.
 
 ## 10. UX, safety, and accessibility checklist
 
@@ -577,6 +613,8 @@ visible gaps instead of interpolation for missing frames.
 - [Architecture](ARCHITECTURE.md) — system boundaries and data flow.
 - [Backend guide](backend_guide.md) — local services, Supabase, vision, and summaries.
 - [Backend status](BACKEND_STATUS.md) — current integration checks and remaining limits.
+- [Post-discharge follow-up scope](post_discharge_follow_up.md) — use of the existing session record for follow-up.
+- [Post-discharge frontend note](post_discharge_follow_up_frontend.md) — focused UI integration details.
 - [Camera setup guide](camera-setup.md) — local camera test steps and limitations.
 - [Model smoke test](model-smoke-test.md) — fixture and CPU MoveNet wiring checks.
 - [Git workflow](GIT_WORKFLOW.md) — PR and shared review practices.

@@ -33,11 +33,15 @@ flowchart LR
   API -->|named keypoints request| V[Vision service: MoveNet / fixture]
   V -->|2D landmarks + confidence| E[Movement engine: gates, smoothing, angle, rep FSM]
   E -->|measurement / quality events| API
-  API -->|WS events + 3D metric trace| B
-  API -->|aggregates + versions| S[(Supabase Postgres + RLS)]
+  API -->|transient measurement / quality events| B
+  API -->|session aggregates, protocol versions, summaries| S[(Supabase Postgres + RLS)]
   API -->|numbers only, strict JSON| N[NVIDIA hosted LLM]
   N -->|validated text or deterministic fallback| API
 ```
+
+The stream response is not a stored frame trace. Session reads return aggregate
+metrics and provenance; they do not currently return frame-by-frame angles,
+events, or landmarks for replay.
 
 Vision starts first, then API, then frontend (Compose `depends_on` health ordering).
 
@@ -50,7 +54,7 @@ backend/app/
 ├── core/{config,logging,errors}.py   # pydantic-settings, logging, error contract
 ├── schemas/{common,session,protocol,summary}.py  # Pydantic request/response types
 └── services/{session_service,movement_engine,nvidia_summary,supabase_repository}.py
-backend/tests/              # health + Appendix A3 angle tests (passing)
+backend/tests/              # auth, health, session/stream, summaries, movement engine, vision client
 vision_service/app/{main,inference,keypoint_adapter,schemas,config}.py
 vision_service/config/movenet_keypoint_mapping.yaml
 vision_service/tests/
@@ -287,31 +291,74 @@ reviewed and merged into `develop`.
 - **Fixtures** — labelled synthetic test data, always marked simulated.
 - **RLS / service role** — row-level authorization / backend-only DB credential.
 
-## 14. Known limitations
+## 14. Implemented record flow and backend gaps
 
-Angles are 2D projected estimates; clinical accuracy and real-time performance
-are not validated. The synthetic MoveNet overlay was visually checked, but
-clinical accuracy remains unvalidated. Supabase JWT verification and HTTP
-PostgREST behavior are covered by mocks only; live SQL/RLS/RPC checks used
-synthetic accounts. No real patient data was used. The
+The current backend supports the existing movement-record workflow: an
+authorized patient receives assigned protocols, starts a consent-gated camera
+session, streams transient frames, and receives measurement/quality events. On
+completion, the API exposes aggregate metrics, quality flags, model and
+protocol-version provenance, and a controlled summary. When NVIDIA is
+configured and returns a valid response, its summary prompt can include numeric
+metrics from a completed session for the same patient and protocol. The
+deterministic fallback summarizes the current session only. The progress
+endpoint returns the patient's session summaries under the existing
+patient/clinician authorization checks.
 
+This supports a post-discharge record using the project's existing measurements
+and summaries. There is no separate discharge, appointment, messaging, or
+treatment-management subsystem in the backend, and those are outside this
+integration scope.
 
-## 15. Remaining integration steps
+The following gaps explain why some frontend views remain simulated or partial:
 
-1. Complete the required clinical, privacy and legal review before any
-   patient-facing use of MoveNet measurements.
-2. Have Steve review the proposed API contract and coordinate the camera
-   consent UI with the backend's required purpose/version markers.
-3. Enable leaked-password protection in Supabase Auth and reconcile the
+| Area | Current backend behavior | Missing for full frontend integration |
+|---|---|---|
+| Patient session history | `GET /api/v1/patients/{id}/progress` returns `patient_id`, `sessions[]`, and `persisted`. Each session item is a `SessionSummaryResponse` with `session_id` and nested `metrics`. | The response item has no `started_at`, while the frontend's history view expects a date, `id`, and flattened metric fields. The repository already has `started_at`, but the response projection omits it; exposing it requires a reviewed additive contract change. The frontend adapter must also map the wire shape. |
+| Clinician patient list | Progress is readable for a patient by that patient or a clinician assigned to them. | There is no endpoint to list the clinician's assigned patients. The UI cannot get its patient selector from the API. |
+| Protocol editor | `POST /api/v1/protocols` and `PATCH /api/v1/protocols/{id}` support authorized create/version updates. | The frontend editor does not call these endpoints. Protocol `parameters` is a flexible map; coordinate the UI's field names with `_protocol_configuration` and validate requests server-side. |
+| Session replay | `GET /api/v1/sessions/{id}` returns aggregate metrics, quality flags, status, and provenance. WebSocket events are delivered during the active stream. | There is no response field or endpoint for stored frame-by-frame angle/event history or landmarks. A real Recovery Twin trace cannot be loaded from current session reads. Any trace exposure needs a reviewed contract and data-handling decision. |
+| Prior-session comparison | When NVIDIA is configured and returns a valid response, summary generation may pass numeric metrics from a completed session with the same patient and `protocol_id` to the constrained prompt. The deterministic fallback summarizes the current session only. | The summary schema returns prose, not a structured prior/current comparison. `_previous_session_metrics()` excludes the current record and selects the most recently started matching completed record, but does not verify that its start time is earlier than the current session. The API does not let the UI choose an earlier session. |
+
+For the currently intended user-facing record, prefer the existing session
+aggregate and summary flow. Do not infer recovery, prognosis, or treatment
+changes from a difference between sessions. Any change to API fields or
+endpoints belongs in `docs/api_contract.md` under its shared review process.
+The [post-discharge backend note](post_discharge_follow_up_backend.md) describes
+the same narrow integration using the existing movement-session records.
+
+## 15. Remaining integration and readiness steps
+
+1. Resolve the progress response/UI shape mismatch and decide, with Steve,
+   whether a date field is needed in `ProgressResponse`. Keep additions
+   backward-compatible and document them in the shared API contract.
+2. Decide whether clinician patient listing is needed for the existing
+   dashboard. If it is, propose the smallest assignment-scoped endpoint and
+   obtain Steve's review before implementation/merge.
+3. Integrate the existing protocol create/update endpoints in the frontend only
+   after mapping request parameters, approval/version behavior, and validation
+   errors. The current UI's local “save” is not a backend write.
+4. Keep replay fixture-only until an approved contract and persistence policy
+   support returning real per-frame measurements. Do not add raw video
+   retention; `STORE_RAW_VIDEO` must remain false.
+5. Complete clinical, privacy, and legal review before any patient-facing use
+   of MoveNet measurements or generated summaries. Projected angles remain
+   unvalidated estimates.
+6. Enable leaked-password protection in Supabase Auth and reconcile
    MCP-generated remote migration versions with local migration filenames
    before returning to the Supabase CLI workflow.
-4. NVIDIA's live numeric summary check passed; its verified model is pinned in
-   the ignored local `.env`. Re-run the smoke script after changing provider or
-   model configuration.
+7. Re-run the NVIDIA synthetic numeric-summary smoke check after changing the
+   provider or model configuration. Keep credentials in ignored server-side
+   configuration only.
 
 ## Current local backend workflow
 
-This section describes the no-Docker fixture workflow. The API has in-memory protocol/session handlers and a fixture WebSocket path. Local demo identities work only with `APP_ENV=local`; Supabase JWT verification is implemented but has only been tested with mocks here. Values below are synthetic test configuration, not clinical targets.
+This section describes the no-Docker fixture workflow. With Supabase variables
+unset, the API uses in-memory protocol/session storage and a fixture WebSocket
+path. Supabase-backed storage and authentication are selected when configured.
+Local demo identities work only with `APP_ENV=local`; JWT verification tests
+cover the HTTP/JWT layer with mocks, while connected-project database/RLS/RPC
+smoke checks used synthetic records. Values below are synthetic test
+configuration, not clinical targets.
 
 Start the vision worker in a PowerShell terminal:
 
@@ -369,8 +416,8 @@ configuration passed this live check.
 ### Supabase and authentication limits
 
 PostgREST is selected only when both SUPABASE_URL and
-SUPABASE_SERVICE_ROLE_KEY are configured. Supabase repository and JWT behavior
-remain covered by mocks at the HTTP/JWT layer. The corrective migrations,
-table grants, RLS policies, and atomic RPCs were tested against the connected
-Supabase project with synthetic records in a rollback-only transaction. No
-real patient data was used.
+SUPABASE_SERVICE_ROLE_KEY are configured. JWT verification and repository
+HTTP/PostgREST behavior are covered by mocks at the HTTP/JWT layer. Separately,
+the corrective migrations, table grants, RLS policies, and atomic RPCs were
+checked against the connected Supabase project with synthetic records in a
+rollback-only transaction. No real patient data was used.
