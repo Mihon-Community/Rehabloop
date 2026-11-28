@@ -235,9 +235,9 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
               Explore without an account
             </h2>
             <p className="text-sm text-[var(--muted-foreground)]">
-              No Supabase project is configured in this build, so no real account is created and no
-              user is signed in. Demo access only changes what is displayed; the backend verifies
-              real roles and patient assignment.
+              {supabaseConfigured
+                ? 'Demo access signs nobody in — it only changes what this build displays, using labelled synthetic data. Viewing live data still needs a real account, because the backend verifies real roles and patient assignment.'
+                : 'No Supabase project is configured in this build, so no real account is created and no user is signed in. Demo access only changes what is displayed; the backend verifies real roles and patient assignment.'}
             </p>
             <div className="mt-4 space-y-2">
               <p className="text-sm font-semibold">View the demo as</p>

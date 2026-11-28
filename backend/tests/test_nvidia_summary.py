@@ -11,6 +11,7 @@ from app.core.config import Settings
 from app.services.nvidia_summary import (
     CLINICIAN_REVIEW_NOTE,
     NON_CLINICAL_DISCLAIMER,
+    build_prompt,
     generate_summary,
     summary_response_format,
     validate_summary,
@@ -35,6 +36,16 @@ VALID_CONTENT = {
     "data_quality_note": "87.5% of sampled frames met the configured checks.",
     "clinician_review_note": "The clinician can review these measurements.",
 }
+
+PREVIOUS_METRICS = SessionMetrics(
+    completed_reps=2,
+    target_reps=8,
+    projected_knee_angle_min_deg=75.0,
+    projected_knee_angle_max_deg=115.0,
+    target_range_hit_count=1,
+    usable_frame_pct=92.0,
+    session_duration_seconds=55.0,
+)
 
 
 def _settings() -> Settings:
@@ -173,6 +184,72 @@ def test_retries_invalid_summary_then_uses_deterministic_fallback() -> None:
     assert result.model_id is None
     assert result.generated_by == "deterministic"
     assert result.disclaimer == NON_CLINICAL_DISCLAIMER
+
+
+def test_single_session_prompt_is_unchanged_without_previous_metrics() -> None:
+    """Regression: adding the comparison feature must not alter the existing,
+    already-tested single-session request shape."""
+    _, user = build_prompt(METRICS)
+    assert json.loads(user) == METRICS.model_dump(mode="json")
+
+
+def test_comparison_prompt_nests_current_and_previous() -> None:
+    system, user = build_prompt(METRICS, PREVIOUS_METRICS)
+    assert json.loads(user) == {
+        "current": METRICS.model_dump(mode="json"),
+        "previous": PREVIOUS_METRICS.model_dump(mode="json"),
+    }
+    assert "never" in system.lower() and "difference" in system.lower()
+
+
+def test_validate_summary_allows_a_previous_value_only_when_previous_is_supplied() -> None:
+    # 92.0 is only in PREVIOUS_METRICS's usable_frame_pct, not METRICS's.
+    content = {**VALID_CONTENT, "headline": "Usable frames were 92.0 percent."}
+    assert validate_summary(content, METRICS) is None
+    assert validate_summary(content, METRICS, PREVIOUS_METRICS) is not None
+
+
+def test_validate_summary_rejects_comparison_verdict_language() -> None:
+    """Regression: a model comparing two sessions reaches for "better/worse/
+    improved" rather than diagnosis/recovery words, and nothing caught that
+    before DISALLOWED_CLAIMS was extended for this feature."""
+    for phrase in (
+        "Usable frames improved to 92.0 percent.",
+        "The range got worse this session.",
+        "Repetitions declined from 2 to 4.",
+        "This is a regression in range of motion.",
+    ):
+        content = {**VALID_CONTENT, "headline": phrase}
+        assert validate_summary(content, METRICS, PREVIOUS_METRICS) is None, phrase
+
+
+def test_generate_summary_sends_both_sessions_when_previous_is_supplied() -> None:
+    seen: list[httpx.Request] = []
+    comparison_content = {
+        **VALID_CONTENT,
+        "headline": "Repetitions were 4 this session and 2 previously.",
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        return _provider_response(comparison_content)
+
+    result = asyncio.run(
+        generate_summary(
+            METRICS,
+            _settings(),
+            previous_metrics=PREVIOUS_METRICS,
+            transport=httpx.MockTransport(handler),
+        )
+    )
+
+    assert result.source == "nvidia"
+    body = json.loads(seen[0].content)
+    sent_user = json.loads(body["messages"][1]["content"])
+    assert sent_user == {
+        "current": METRICS.model_dump(mode="json"),
+        "previous": PREVIOUS_METRICS.model_dump(mode="json"),
+    }
 
 
 def test_unconfigured_client_returns_deterministic_fallback() -> None:

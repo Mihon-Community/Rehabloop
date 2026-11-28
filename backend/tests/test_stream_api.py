@@ -13,6 +13,7 @@ from app.main import create_app
 from app.schemas.stream import FrameEvent, VisionResponse
 from app.services.in_memory_repository import DEMO_CONSENT_ID, InMemoryRepository
 from fastapi.testclient import TestClient
+from scripts.generate_synthetic_fixtures import generated_fixtures
 
 PATIENT = {"Authorization": "Bearer demo-patient-token"}
 PARAMETERS = {
@@ -64,10 +65,32 @@ def _make_client(vision: SyntheticVisionClient, *, max_frame_rate: int = 60) -> 
     return TestClient(app)
 
 
+def _load_clean_fixture(*, root: Path = FIXTURE_ROOT) -> dict[str, Any]:
+    """Load clean_8_reps.json from disk, falling back to the deterministic
+    generator when the repo-root fixtures/ directory isn't mounted (the
+    backend container only bind-mounts backend/ itself; see
+    docker-compose.yml and backend/scripts/generate_synthetic_fixtures.py,
+    which is the actual source of truth the on-disk file is generated
+    from)."""
+    path = root / "clean_8_reps.json"
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    return generated_fixtures()["clean_8_reps.json"]
+
+
 def _fixture_frames() -> tuple[dict[str, Any], SyntheticVisionClient]:
-    data = json.loads((FIXTURE_ROOT / "clean_8_reps.json").read_text(encoding="utf-8"))
+    data = _load_clean_fixture()
     client = SyntheticVisionClient(data["frames"], data["model"], data["mapping_version"])
     return data, client
+
+
+def test_load_clean_fixture_falls_back_to_generator_when_fixture_root_is_absent(
+    tmp_path: Path,
+) -> None:
+    assert (
+        _load_clean_fixture(root=tmp_path / "does-not-exist")
+        == generated_fixtures()["clean_8_reps.json"]
+    )
 
 
 def _create_and_start(client: TestClient) -> tuple[str, str]:

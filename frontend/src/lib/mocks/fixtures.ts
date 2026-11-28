@@ -18,7 +18,6 @@ export const demoProtocols: DemoProtocol[] = [
   {
     id: 'protocol-demo-1',
     name: 'Seated knee extension — demonstration protocol',
-    clinician_name: 'Dr. A. Njoroge (demo)',
     side: 'right',
     target_reps: 8,
     target_angle_min_deg: 105,
@@ -36,7 +35,6 @@ export const demoProtocols: DemoProtocol[] = [
   {
     id: 'protocol-demo-2',
     name: 'Draft protocol — awaiting clinician approval',
-    clinician_name: 'Unassigned',
     side: 'left',
     target_reps: 6,
     target_angle_min_deg: 95,

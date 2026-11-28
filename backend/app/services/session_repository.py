@@ -35,6 +35,16 @@ class SessionRepository(Protocol):
         self, session_id: str, updates: dict[str, Any]
     ) -> dict[str, Any] | None: ...
 
+    async def pause_active_session(self, session_id: str) -> bool:
+        """Move a session to 'paused' only while it is still 'active'.
+
+        Must be a single atomic compare-and-set, never a read followed by a
+        write: a stream closing races session completion, and a stale write
+        here would revert a completed session to 'paused', permanently
+        blocking its summary. Returns whether this call did the transition.
+        """
+        ...
+
     async def complete_session(
         self,
         session_id: str,

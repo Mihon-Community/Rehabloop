@@ -7,28 +7,62 @@ import { StateMessage } from '../../components/StateMessage';
 import { StatusPill } from '../../components/StatusPill';
 import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert';
 import { Button } from '../../components/ui/button';
+import { ApiError } from '../../lib/api';
 import { loadSession, loadSummary, type SummaryResult } from '../../lib/data';
 import { useAsync } from '../../lib/useAsync';
 import type { SessionDetail } from '../../types';
 
 const TwinAvatar = lazy(() => import('../recovery-twin/TwinAvatar'));
 
+/**
+ * Exactly one of these holds at any time, so a failed request can never be
+ * mistaken for one still in flight. Collapsing failure back into "no summary
+ * yet" is what previously left this screen showing "Preparing explanation…"
+ * forever whenever the summary call rejected.
+ */
+type SummaryState =
+  | { phase: 'loading' }
+  | { phase: 'ready'; result: SummaryResult }
+  | { phase: 'error'; message: string };
+
+/**
+ * Stored metrics are null for a session that never produced usable frames, so
+ * the declared `number` on SessionSummary.metrics does not hold for real rows.
+ * Render a dash rather than letting `undefined` reach a patient as a value.
+ */
+function metricValue(value: number | null | undefined): number | string {
+  return value ?? '—';
+}
+
+function summaryErrorMessage(error: unknown): string {
+  if (error instanceof ApiError) {
+    // 409 is the backend refusing to summarise a session that is not
+    // completed — a different situation from the summary layer being down,
+    // so it deliberately does not fall back to the deterministic template.
+    if (error.status === 409) {
+      return 'This session was never completed, so there are no final measurements to explain. Record and finish a session first.';
+    }
+    return error.body.detail ?? `The explanation request failed (${error.status}).`;
+  }
+  return 'The explanation request could not be completed.';
+}
+
 /** Screen 6 — canonical stored numbers first, AI explanation beside them. */
 export function SessionResultScreen() {
   const { id } = useParams();
   const sessionState = useAsync(() => loadSession(id ?? 'session-demo-1'), [id]);
-  const [summary, setSummary] = useState<SummaryResult | null>(null);
+  const [summaryState, setSummaryState] = useState<SummaryState>({ phase: 'loading' });
 
   useEffect(() => {
     let cancelled = false;
     if (!sessionState.data) return;
-    setSummary(null);
+    setSummaryState({ phase: 'loading' });
     loadSummary(sessionState.data as SessionDetail)
       .then((result) => {
-        if (!cancelled) setSummary(result);
+        if (!cancelled) setSummaryState({ phase: 'ready', result });
       })
-      .catch(() => {
-        if (!cancelled) setSummary(null);
+      .catch((error: unknown) => {
+        if (!cancelled) setSummaryState({ phase: 'error', message: summaryErrorMessage(error) });
       });
     return () => {
       cancelled = true;
@@ -36,6 +70,7 @@ export function SessionResultScreen() {
   }, [sessionState.data]);
 
   const session = sessionState.data;
+  const summary = summaryState.phase === 'ready' ? summaryState.result : null;
 
   return (
     <div className="screen-stack">
@@ -78,37 +113,45 @@ export function SessionResultScreen() {
             <div className="metric-grid motion-stagger">
               <MetricCard
                 label="Completed repetitions"
-                value={session.metrics.completed_reps}
+                value={metricValue(session.metrics.completed_reps)}
                 unit="/ target"
-                hint={`Target: ${session.metrics.target_reps}`}
+                hint={
+                  session.metrics.target_reps == null
+                    ? 'Target not recorded'
+                    : `Target: ${session.metrics.target_reps}`
+                }
               />
               <MetricCard
                 label="Projected knee angle estimate — min"
-                value={session.metrics.projected_knee_angle_min_deg}
+                value={metricValue(session.metrics.projected_knee_angle_min_deg)}
                 unit="°"
               />
               <MetricCard
                 label="Projected knee angle estimate — max"
-                value={session.metrics.projected_knee_angle_max_deg}
+                value={metricValue(session.metrics.projected_knee_angle_max_deg)}
                 unit="°"
               />
               <MetricCard
                 label="Projected range estimate"
-                value={session.metrics.projected_range_deg}
+                value={metricValue(session.metrics.projected_range_deg)}
                 unit="°"
               />
               <MetricCard
                 label="Target range hits"
-                value={session.metrics.target_range_hit_count}
+                value={metricValue(session.metrics.target_range_hit_count)}
                 unit="times"
               />
               <MetricCard
                 label="Median repetition duration"
-                value={session.metrics.median_rep_duration_seconds}
+                value={metricValue(session.metrics.median_rep_duration_seconds)}
                 unit="s"
                 hint="Timing cue only, not clinical tempo"
               />
-              <MetricCard label="Usable frames" value={session.metrics.usable_frame_pct} unit="%" />
+              <MetricCard
+                label="Usable frames"
+                value={metricValue(session.metrics.usable_frame_pct)}
+                unit="%"
+              />
             </div>
 
             <div className="twin-preview">
@@ -153,9 +196,14 @@ export function SessionResultScreen() {
         <section className="card" aria-labelledby="explanation-heading">
           <h2 id="explanation-heading">AI-generated explanation of recorded measurements</h2>
           <SimulatedBadge source={summary?.source ?? sessionState.source ?? 'simulated'} />
-          {!summary ? (
+          {summaryState.phase === 'loading' ? (
             <StateMessage kind="loading" title="Preparing explanation…">
               Requesting a constrained summary; numbers below come only from the stored session.
+            </StateMessage>
+          ) : null}
+          {summaryState.phase === 'error' ? (
+            <StateMessage kind="error" title="No explanation available">
+              {summaryState.message} The stored measurements above are unaffected.
             </StateMessage>
           ) : null}
           {summary ? (

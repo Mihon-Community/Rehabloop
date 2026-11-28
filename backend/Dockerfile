@@ -1,8 +1,13 @@
 # syntax=docker/dockerfile:1
 FROM python:3.12-slim AS deps
 WORKDIR /app
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+# requirements-dev.txt pulls in requirements.txt (-r requirements.txt), so
+# installing it also covers the runtime deps. Installed here (not only in
+# a separate test stage) so `docker compose exec backend pytest/ruff/mypy`
+# works against the running dev container, matching docs/AGENTS.md's
+# documented commands.
+COPY requirements.txt requirements-dev.txt ./
+RUN pip install --no-cache-dir -r requirements-dev.txt
 
 FROM python:3.12-slim AS dev
 WORKDIR /app

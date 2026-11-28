@@ -123,7 +123,7 @@ export function ClinicianDashboardScreen() {
                   type="number"
                   min="1"
                   max="30"
-                  value={draft.target_reps}
+                  value={draft.target_reps ?? ''}
                   onChange={(event) =>
                     setDraft({ ...draft, target_reps: Number(event.target.value) })
                   }
@@ -135,7 +135,7 @@ export function ClinicianDashboardScreen() {
                   type="number"
                   min="0"
                   max="180"
-                  value={draft.target_angle_min_deg}
+                  value={draft.target_angle_min_deg ?? ''}
                   onChange={(event) =>
                     setDraft({ ...draft, target_angle_min_deg: Number(event.target.value) })
                   }
@@ -147,7 +147,7 @@ export function ClinicianDashboardScreen() {
                   type="number"
                   min="0"
                   max="180"
-                  value={draft.target_angle_max_deg}
+                  value={draft.target_angle_max_deg ?? ''}
                   onChange={(event) =>
                     setDraft({ ...draft, target_angle_max_deg: Number(event.target.value) })
                   }

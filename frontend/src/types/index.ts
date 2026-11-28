@@ -106,23 +106,31 @@ export interface ApiErrorBody {
 export type Role = 'patient' | 'clinician';
 
 /**
- * Display-only protocol shape used by demo fixtures and placeholder screens
- * that have not yet been wired to the real `Protocol` contract above.
+ * Flattened display shape for the screens that render a protocol. Live rows are
+ * mapped from `Protocol` above by `toProtocolView` in `lib/data.ts`; demo
+ * fixtures supply the same shape directly.
+ *
+ * Everything the clinician configures is optional because it lives in
+ * `Protocol.parameters`, a free-form map the backend does not type. Screens must
+ * therefore handle absence rather than assume a field is present — rendering
+ * `undefined` as if it were data is what previously hid a real protocol.
+ * `instructions`, `stop_instructions` and `notes` have no backend equivalent at
+ * all and are only ever set by fixtures; never synthesise them for live data,
+ * since that would be inventing clinical text.
  */
 export interface DemoProtocol {
   id: string;
   name: string;
-  clinician_name: string;
-  side: 'left' | 'right';
-  target_reps: number;
-  target_angle_min_deg: number;
-  target_angle_max_deg: number;
+  side?: 'left' | 'right';
+  target_reps?: number;
+  target_angle_min_deg?: number;
+  target_angle_max_deg?: number;
   hold_duration_seconds?: number;
-  instructions: string;
-  stop_instructions: string;
+  instructions?: string;
+  stop_instructions?: string;
   version: number;
   approved: boolean;
-  camera_view: 'side';
+  camera_view?: 'side';
   notes?: string;
 }
 

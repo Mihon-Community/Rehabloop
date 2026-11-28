@@ -282,9 +282,7 @@ class SessionService:
         }
 
     async def pause_stream(self, session_id: str) -> None:
-        session = await self.repository.get_session(session_id)
-        if session is not None and session["status"] == "active":
-            await self.repository.update_session(session_id, {"status": "paused"})
+        await self.repository.pause_active_session(session_id)
         self.token_store.revoke_session(session_id)
 
     async def progress(self, user: AuthUser, patient_id: str) -> ProgressResponse:
@@ -321,12 +319,35 @@ class SessionService:
                     update={"persisted": self.repository.storage_mode == "supabase"}
                 )
         metrics = SessionMetrics.model_validate(session["metrics"])
-        result = await generate_summary(metrics, self.settings)
+        previous_metrics = await self._previous_session_metrics(session)
+        result = await generate_summary(metrics, self.settings, previous_metrics=previous_metrics)
         stored_copy = result.model_copy(
             update={"persisted": self.repository.storage_mode == "supabase"}
         )
         stored = await self.repository.save_summary(session_id, stored_copy.model_dump(mode="json"))
         return result.model_copy(update={"persisted": stored})
+
+    async def _previous_session_metrics(self, session: dict[str, Any]) -> SessionMetrics | None:
+        """The same patient's most recently started, prior completed session on
+        the same protocol — the only comparison build_prompt is allowed to make,
+        since angle targets and rep counts from a different protocol version
+        would not be a meaningful comparison.
+        """
+        candidates = [
+            record
+            for record in await self.repository.list_sessions(session["patient_id"])
+            if record["session_id"] != session["session_id"]
+            and record["protocol_id"] == session["protocol_id"]
+            and record["status"] == "completed"
+            and record.get("started_at")
+        ]
+        if not candidates:
+            return None
+        candidates.sort(key=lambda record: record["started_at"], reverse=True)
+        try:
+            return SessionMetrics.model_validate(candidates[0]["metrics"])
+        except (TypeError, ValueError):
+            return None
 
     async def _get_authorized_session(self, user: AuthUser, session_id: str) -> dict[str, Any]:
         session = await self.repository.get_session(session_id)

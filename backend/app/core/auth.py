@@ -102,7 +102,12 @@ class SupabaseJWTAuthVerifier:
 
         try:
             profile = await self._profile_lookup(user_id)
-        except (httpx.HTTPError, RuntimeError) as exc:
+        except (httpx.HTTPError, RuntimeError, ValueError) as exc:
+            # ValueError covers json.JSONDecodeError: a 2xx upstream response
+            # with a body that isn't valid JSON (SupabaseRepository._request
+            # calls response.json()). Without this, a malformed-but-200
+            # upstream response surfaces as a generic 500 instead of the
+            # intended "Supabase is misbehaving" 503.
             raise HTTPException(
                 status_code=503, detail="Supabase profile lookup is unavailable"
             ) from exc
@@ -142,7 +147,12 @@ class SupabaseJWTAuthVerifier:
                 issuer=self._issuer,
                 options={"require": ["aud", "exp", "iss", "role", "sub"]},
             )
-        except jwt.PyJWKError as exc:
+        except (jwt.PyJWKError, ValueError, TypeError) as exc:
+            # A structurally malformed JWK (bad x/y/n/e fields) can raise a
+            # plain ValueError/TypeError out of the underlying `cryptography`
+            # library rather than a PyJWT exception type. Treated the same as
+            # PyJWKError: the signing key itself is unusable, which is a
+            # Supabase-side problem, not evidence of an invalid token.
             raise HTTPException(
                 status_code=503, detail="Supabase signing key is unavailable"
             ) from exc

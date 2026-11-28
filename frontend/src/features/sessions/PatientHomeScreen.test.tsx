@@ -15,7 +15,6 @@ import { loadProtocols } from '../../lib/data';
 const protocol: DemoProtocol = {
   id: 'p1',
   name: 'Seated knee extension — demonstration protocol',
-  clinician_name: 'Clinician',
   side: 'right',
   target_reps: 8,
   target_angle_min_deg: 105,

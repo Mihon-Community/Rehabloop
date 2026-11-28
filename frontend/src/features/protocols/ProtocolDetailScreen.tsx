@@ -20,6 +20,8 @@ export function ProtocolDetailScreen() {
   const navigate = useNavigate();
   const { status, data, source, error, reload } = useAsync(() => loadProtocols(), []);
   const protocol = data?.find((p) => p.id === id);
+  const targetMin = protocol?.target_angle_min_deg;
+  const targetMax = protocol?.target_angle_max_deg;
 
   return (
     <section className="card" aria-labelledby="protocol-heading">
@@ -56,27 +58,50 @@ export function ProtocolDetailScreen() {
           <dl className="detail-list">
             <dt>Protocol</dt>
             <dd>{protocol.name}</dd>
-            <dt>Configured by</dt>
-            <dd>{protocol.clinician_name}</dd>
             <dt>Version</dt>
             <dd>{protocol.version}</dd>
             <dt>Target side</dt>
-            <dd>{protocol.side} side, one side per session (MVP)</dd>
+            <dd>
+              {protocol.side
+                ? `${protocol.side} side, one side per session (MVP)`
+                : 'not configured'}
+            </dd>
             <dt>Target repetitions</dt>
-            <dd>{protocol.target_reps} (clinician-configured)</dd>
+            <dd>
+              {protocol.target_reps === undefined
+                ? 'not configured'
+                : `${protocol.target_reps} (clinician-configured)`}
+            </dd>
             <dt>Target angle range</dt>
             <dd>
-              {protocol.target_angle_min_deg}–{protocol.target_angle_max_deg}° projected knee angle
-              estimate, configured for this patient — not a universal medical threshold
+              {targetMin !== undefined && targetMax !== undefined
+                ? `${targetMin}–${targetMax}° projected knee angle estimate, configured for this patient — not a universal medical threshold`
+                : 'not configured'}
             </dd>
             <dt>Hold duration</dt>
-            <dd>{protocol.hold_duration_seconds ?? 'not configured'} s</dd>
+            <dd>
+              {protocol.hold_duration_seconds === undefined
+                ? 'not configured'
+                : `${protocol.hold_duration_seconds} s`}
+            </dd>
             <dt>Camera view</dt>
-            <dd>{protocol.camera_view} view; hip, knee and ankle visible</dd>
-            <dt>Instructions</dt>
-            <dd>{protocol.instructions}</dd>
-            <dt>Stop instruction</dt>
-            <dd>{protocol.stop_instructions}</dd>
+            <dd>
+              {protocol.camera_view
+                ? `${protocol.camera_view} view; hip, knee and ankle visible`
+                : 'not configured'}
+            </dd>
+            {protocol.instructions ? (
+              <>
+                <dt>Instructions</dt>
+                <dd>{protocol.instructions}</dd>
+              </>
+            ) : null}
+            {protocol.stop_instructions ? (
+              <>
+                <dt>Stop instruction</dt>
+                <dd>{protocol.stop_instructions}</dd>
+              </>
+            ) : null}
             {protocol.notes ? (
               <>
                 <dt>Notes</dt>
@@ -85,29 +110,34 @@ export function ProtocolDetailScreen() {
             ) : null}
           </dl>
 
-          <div className="twin-preview">
-            <Suspense
-              fallback={
-                <p className="meta" role="status">
-                  Loading schematic preview…
+          {targetMax !== undefined ? (
+            <div className="twin-preview">
+              <Suspense
+                fallback={
+                  <p className="meta" role="status">
+                    Loading schematic preview…
+                  </p>
+                }
+              >
+                <TwinAvatar angle={targetMax} variant="primary" kind="target" />
+              </Suspense>
+              <div>
+                <p className="meta" style={{ marginTop: 0 }}>
+                  Preview of the far end of the target range above ({targetMax}°) — a goal your
+                  clinician configured, not a measurement of you.
                 </p>
-              }
-            >
-              <TwinAvatar angle={protocol.target_angle_max_deg} variant="primary" kind="target" />
-            </Suspense>
-            <div>
-              <p className="meta" style={{ marginTop: 0 }}>
-                Preview of the far end of the target range above ({protocol.target_angle_max_deg}
-                °) — a goal your clinician configured, not a measurement of you.
-              </p>
+              </div>
             </div>
-          </div>
+          ) : null}
 
           <Alert variant="warning" icon={<ShieldAlert className="size-5" />}>
             <AlertTitle>Before you begin</AlertTitle>
             <AlertDescription>
-              {protocol.stop_instructions} The camera only measures estimated movement — it does not
-              decide whether an exercise is safe for you.
+              {protocol.stop_instructions
+                ? `${protocol.stop_instructions} `
+                : 'This protocol record carries no stop instructions — ask your physiotherapist before you begin. '}
+              The camera only measures estimated movement — it does not decide whether an exercise
+              is safe for you.
             </AlertDescription>
           </Alert>
           <label className="confirm-check">

@@ -21,8 +21,28 @@ from scripts.generate_synthetic_fixtures import generated_fixtures
 FIXTURE_ROOT = Path(__file__).resolve().parents[2] / "fixtures" / "synthetic_keypoint_sequences"
 
 
-def _load_fixture(filename: str) -> dict[str, Any]:
-    return json.loads((FIXTURE_ROOT / filename).read_text(encoding="utf-8"))
+def _load_fixture(filename: str, *, root: Path = FIXTURE_ROOT) -> dict[str, Any]:
+    """Load a labelled fixture from disk, falling back to the deterministic
+    generator when the repo-root fixtures/ directory isn't available.
+
+    Locally and in CI the repo root is checked out whole, so `root` resolves
+    via the two-parents-up path above. Inside the backend Docker container
+    only backend/ itself is bind-mounted (docker-compose.yml's backend
+    service has no /fixtures volume, unlike vision_service), so that path
+    doesn't exist there. `generated_fixtures()` is the actual source of
+    truth the on-disk JSON files are a generated snapshot of (see
+    backend/scripts/generate_synthetic_fixtures.py), so falling back to it
+    keeps a single source of truth instead of checking in a duplicate copy.
+    """
+    path = root / filename
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    try:
+        return generated_fixtures()[filename]
+    except KeyError as exc:
+        raise FileNotFoundError(
+            f"No on-disk fixture at {path} and no generated fixture named {filename!r}"
+        ) from exc
 
 
 def _run_fixture(filename: str) -> tuple[MovementEngine, list[Any], dict[str, Any]]:
@@ -177,6 +197,19 @@ def test_variable_sample_rate_only_counts_cycles_that_satisfy_hold_duration() ->
     both count."""
     engine, _results, data = _run_fixture("variable_speed.json")
     assert engine.rep_count == data["expected_completed_reps"] == 2
+
+
+def test_load_fixture_falls_back_to_generator_when_fixture_root_is_absent(
+    tmp_path: Path,
+) -> None:
+    """Regression test for the backend container's missing /fixtures mount:
+    every fixture these tests load must still be reachable without the
+    repo-root fixtures/ directory present on disk."""
+    for filename in generated_fixtures():
+        assert (
+            _load_fixture(filename, root=tmp_path / "does-not-exist")
+            == generated_fixtures()[filename]
+        )
 
 
 def test_model_and_mapping_changes_are_rejected() -> None:

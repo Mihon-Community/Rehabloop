@@ -1,8 +1,12 @@
 # syntax=docker/dockerfile:1
 FROM python:3.12-slim AS deps
 WORKDIR /app
-COPY requirements.txt requirements-cpu.txt ./
-RUN pip install --no-cache-dir -r requirements-cpu.txt
+# requirements-dev.txt pulls in requirements-cpu.txt (-r requirements-cpu.txt),
+# which pulls in requirements.txt, so installing it also covers the runtime
+# deps. Installed here so `docker compose exec vision_service pytest/ruff/mypy`
+# works against the running dev/cpu containers.
+COPY requirements.txt requirements-cpu.txt requirements-dev.txt ./
+RUN pip install --no-cache-dir -r requirements-dev.txt
 
 FROM python:3.12-slim AS dev
 WORKDIR /app

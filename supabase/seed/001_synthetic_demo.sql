@@ -4,16 +4,24 @@
 -- Role escalation to 'clinician' is done here by the trusted seed (service role),
 -- not by user-editable auth metadata.
 
+-- The token columns must be '' and raw_app_meta_data must be non-NULL: GoTrue
+-- scans them into non-nullable Go types, so a NULL makes every sign-in for
+-- these rows fail with a 500 "Database error querying schema" rather than
+-- anything diagnostic. Inserting auth.users directly bypasses the defaults
+-- GoTrue would otherwise have set itself.
 insert into auth.users (
   id, instance_id, email, encrypted_password, email_confirmed_at,
-  created_at, updated_at, aud, role, raw_user_meta_data
+  created_at, updated_at, aud, role, raw_user_meta_data, raw_app_meta_data,
+  confirmation_token, recovery_token, email_change_token_new, email_change
 ) values
   ('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000',
    'synthetic-patient@example.invalid', '', now(), now(), now(), 'authenticated', 'authenticated',
-   '{"display_name":"Synthetic Patient"}'::jsonb),
+   '{"display_name":"Synthetic Patient"}'::jsonb,
+   '{"provider":"email","providers":["email"]}'::jsonb, '', '', '', ''),
   ('00000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000000',
    'synthetic-clinician@example.invalid', '', now(), now(), now(), 'authenticated', 'authenticated',
-   '{"display_name":"Synthetic Clinician"}'::jsonb)
+   '{"display_name":"Synthetic Clinician"}'::jsonb,
+   '{"provider":"email","providers":["email"]}'::jsonb, '', '', '', '')
 on conflict (id) do nothing;
 
 -- New users get a patient profile via the trigger; promote the synthetic clinician.

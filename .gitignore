@@ -60,6 +60,8 @@ skills-lock.json
 *.bin
 *.h5
 *.gguf
+*.tflite
+*.litertlm
 checkpoints/
 weights/
 models/

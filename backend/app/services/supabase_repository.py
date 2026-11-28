@@ -260,6 +260,20 @@ class SupabaseRepository:
             )
         return await self.get_session(session_id)
 
+    async def pause_active_session(self, session_id: str) -> bool:
+        # The status=eq.active filter makes this a compare-and-set in one round
+        # trip, so a stream closing cannot overwrite a session that completed
+        # in the meantime. return=representation is what reports whether any
+        # row actually matched.
+        rows = await self._request(
+            "PATCH",
+            "sessions",
+            params={"id": f"eq.{session_id}", "status": "eq.active"},
+            body={"status": "paused"},
+            prefer="return=representation",
+        )
+        return bool(rows)
+
     async def complete_session(
         self,
         session_id: str,

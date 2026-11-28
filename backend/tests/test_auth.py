@@ -138,6 +138,71 @@ def test_legacy_hs256_token_is_verified_by_auth_with_publishable_key() -> None:
     asyncio.run(run())
 
 
+def test_malformed_profile_lookup_response_maps_to_503_not_500() -> None:
+    """json.JSONDecodeError (a ValueError) from a 2xx-but-malformed upstream
+    profile response must map to 503, not escape as a generic 500."""
+    subject = str(uuid4())
+    private_key, jwk = _ec_key_pair()
+    token = _access_token(private_key, subject)
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={"keys": [jwk]})
+
+    async def profile_lookup(_user_id: str) -> dict[str, object] | None:
+        raise ValueError("simulated json.JSONDecodeError from a malformed upstream body")
+
+    async def run() -> None:
+        verifier = SupabaseJWTAuthVerifier(
+            _settings(), profile_lookup, transport=httpx.MockTransport(handler)
+        )
+        try:
+            with pytest.raises(HTTPException) as error:
+                await verifier.verify(f"Bearer {token}")
+            assert error.value.status_code == 503
+        finally:
+            await verifier.aclose()
+
+    asyncio.run(run())
+
+
+def test_malformed_signing_key_maps_to_503_not_500(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A structurally invalid JWK can raise a plain ValueError/TypeError out
+    of the underlying `cryptography` library rather than a PyJWT exception
+    type. (Empirically, PyJWT 2.15.1's own PyJWK.from_dict already wraps the
+    malformed x/y/n/e cases we checked into InvalidKeyError -- a PyJWTError
+    -- so this exercises the except clause directly via monkeypatch rather
+    than relying on a specific malformed JWK that reproduces a bare
+    ValueError through today's PyJWT internals.) Either way this must map
+    to 503, not escape as a generic 500."""
+    subject = str(uuid4())
+    private_key, jwk = _ec_key_pair()
+    token = _access_token(private_key, subject)
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={"keys": [jwk]})
+
+    def broken_from_dict(_obj: object, _algorithm: str | None = None) -> None:
+        raise ValueError("simulated malformed JWK numeric field")
+
+    monkeypatch.setattr(jwt.PyJWK, "from_dict", staticmethod(broken_from_dict))
+
+    async def profile_lookup(_user_id: str) -> dict[str, object] | None:
+        return {"role": "patient"}
+
+    async def run() -> None:
+        verifier = SupabaseJWTAuthVerifier(
+            _settings(), profile_lookup, transport=httpx.MockTransport(handler)
+        )
+        try:
+            with pytest.raises(HTTPException) as error:
+                await verifier.verify(f"Bearer {token}")
+            assert error.value.status_code == 503
+        finally:
+            await verifier.aclose()
+
+    asyncio.run(run())
+
+
 def test_legacy_hs256_token_rejects_anonymous_auth_user() -> None:
     subject = str(uuid4())
     token = jwt.encode(

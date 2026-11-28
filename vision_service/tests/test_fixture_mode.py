@@ -131,8 +131,14 @@ def test_movenet_inference_engine_uses_model_specific_runner(monkeypatch):
 
 
 def test_movenet_mode_without_model_path_fails_clearly():
+    # movenet_model_path must be pinned to "" explicitly rather than left to
+    # the fixture_settings() default: a real deployment container sets
+    # MOVENET_MODEL_PATH as a literal process env var (docker-compose.yml),
+    # which pydantic-settings would otherwise pick up ahead of the empty
+    # field default, defeating the "without model path" precondition this
+    # test depends on.
     with pytest.raises(VisionUnavailableError, match="MOVENET_MODEL_PATH"):
-        InferenceEngine(fixture_settings(vision_mode="movenet"))
+        InferenceEngine(fixture_settings(vision_mode="movenet", movenet_model_path=""))
 
 
 def test_invalid_mode_fails_clearly():

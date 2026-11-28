@@ -94,6 +94,13 @@ class InMemoryRepository:
         session.update(deepcopy(updates))
         return deepcopy(session)
 
+    async def pause_active_session(self, session_id: str) -> bool:
+        session = self._sessions.get(session_id)
+        if session is None or session["status"] != "active":
+            return False
+        session["status"] = "paused"
+        return True
+
     async def complete_session(
         self,
         session_id: str,

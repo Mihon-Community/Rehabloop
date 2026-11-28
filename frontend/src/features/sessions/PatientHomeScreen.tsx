@@ -1,5 +1,12 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, CalendarCheck2, ClipboardCheck, GitBranch, ListChecks, Repeat } from 'lucide-react';
+import {
+  ArrowRight,
+  CalendarCheck2,
+  ClipboardCheck,
+  GitBranch,
+  ListChecks,
+  Repeat,
+} from 'lucide-react';
 import { useDemo } from '../../app/demoStore';
 import { MetricCard } from '../../components/MetricCard';
 import { PageHeader } from '../../components/PageHeader';
@@ -35,8 +42,8 @@ export function PatientHomeScreen() {
         <div className="grid gap-3 sm:grid-cols-3 motion-stagger">
           <MetricCard
             label="Target repetitions"
-            value={approved[0].target_reps}
-            unit="reps"
+            value={approved[0].target_reps ?? '—'}
+            unit={approved[0].target_reps === undefined ? undefined : 'reps'}
             hint="Clinician-configured"
             icon={<Repeat className="size-4" aria-hidden="true" />}
           />
@@ -64,8 +71,14 @@ export function PatientHomeScreen() {
             <p className="section-kicker">Next prescribed session</p>
             <h2 className="mt-0 text-lg">{approved[0].name}</h2>
             <p className="meta">
-              {approved[0].side} side · {approved[0].target_reps} repetitions · configured by{' '}
-              {approved[0].clinician_name}
+              {[
+                approved[0].side ? `${approved[0].side} side` : null,
+                approved[0].target_reps === undefined
+                  ? 'repetitions not configured'
+                  : `${approved[0].target_reps} repetitions`,
+              ]
+                .filter(Boolean)
+                .join(' · ')}
             </p>
             <p className="meta">
               <ClipboardCheck className="mr-1 inline size-4" aria-hidden="true" />
@@ -116,8 +129,15 @@ export function PatientHomeScreen() {
                   <div>
                     <strong>{protocol.name}</strong>
                     <p className="meta">
-                      Configured by {protocol.clinician_name} · version {protocol.version} ·{' '}
-                      {protocol.side} side · target {protocol.target_reps} reps
+                      {[
+                        `version ${protocol.version}`,
+                        protocol.side ? `${protocol.side} side` : null,
+                        protocol.target_reps === undefined
+                          ? null
+                          : `target ${protocol.target_reps} reps`,
+                      ]
+                        .filter(Boolean)
+                        .join(' · ')}
                     </p>
                   </div>
                   <div className="button-row">

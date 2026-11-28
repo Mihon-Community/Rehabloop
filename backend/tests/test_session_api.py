@@ -338,3 +338,121 @@ def test_supabase_repository_uses_atomic_backend_write_functions() -> None:
         "/rest/v1/rpc/backend_update_protocol_version",
         "/rest/v1/rpc/backend_complete_session",
     ]
+
+
+def test_closing_a_stream_never_reverts_a_completed_session() -> None:
+    """Regression: closing a stream raced session completion.
+
+    `pause_stream` used to read the status and then write 'paused' in a
+    separate round trip. A session that completed inside that window was
+    reverted to 'paused', which permanently blocked its summary with 409 —
+    observed in the live stack on 2026-11-27.
+    """
+    repository = InMemoryRepository()
+    app = create_app(_settings(), repository=repository)
+    with TestClient(app) as client:
+        protocol_id = _create_protocol(client)
+        session_id = client.post(
+            "/api/v1/sessions", headers=PATIENT, json={"protocol_id": protocol_id}
+        ).json()["session_id"]
+        started = client.post(
+            f"/api/v1/sessions/{session_id}/start",
+            headers=PATIENT,
+            json={"consent_record_id": DEMO_CONSENT_ID, "camera_checks_passed": True},
+        )
+        assert started.status_code == 200
+        assert (
+            client.post(
+                f"/api/v1/sessions/{session_id}/complete", headers=PATIENT, json={}
+            ).status_code
+            == 200
+        )
+
+        # The stream close lands after completion, as it did in the live race.
+        asyncio.run(app.state.session_service.pause_stream(session_id))
+        assert asyncio.run(repository.pause_active_session(session_id)) is False
+
+        session = client.get(f"/api/v1/sessions/{session_id}", headers=PATIENT).json()
+        assert session["status"] == "completed"
+        assert (
+            client.post(f"/api/v1/sessions/{session_id}/summary", headers=PATIENT).status_code
+            == 200
+        )
+
+
+def test_previous_session_metrics_only_match_completed_same_protocol_sessions() -> None:
+    """Regression target: a comparison must never cross protocols (different
+    clinician-set targets) or include a session that isn't actually finished."""
+    from app.core.auth import SessionTokenStore
+    from app.services.session_service import SessionService
+
+    repository = InMemoryRepository()
+    service = SessionService(_settings(), repository, SessionTokenStore())
+
+    async def seed(
+        session_id: str, protocol_id: str, status: str, started_at: str | None, completed_reps: int
+    ):
+        await repository.create_session(
+            {
+                "session_id": session_id,
+                "patient_id": DEV_PATIENT_ID,
+                "protocol_id": protocol_id,
+                "status": status,
+                "started_at": started_at,
+                "metrics": {
+                    "completed_reps": completed_reps,
+                    "target_reps": 8,
+                    "projected_knee_angle_min_deg": 70.0,
+                    "projected_knee_angle_max_deg": 110.0,
+                    "target_range_hit_count": 1,
+                    "usable_frame_pct": 80.0,
+                    "session_duration_seconds": 30.0,
+                },
+            }
+        )
+
+    async def run() -> SessionMetrics | None:
+        await seed("other-protocol", "protocol-b", "completed", "2026-01-01T00:00:00+00:00", 99)
+        await seed("not-finished", "protocol-a", "active", "2026-01-02T00:00:00+00:00", 98)
+        await seed("older-completed", "protocol-a", "completed", "2026-01-01T12:00:00+00:00", 50)
+        await seed("newest-completed", "protocol-a", "completed", "2026-01-03T00:00:00+00:00", 7)
+        current = {
+            "session_id": "current",
+            "patient_id": DEV_PATIENT_ID,
+            "protocol_id": "protocol-a",
+        }
+        return await service._previous_session_metrics(current)
+
+    from app.services.schemas_metrics import SessionMetrics
+
+    result = asyncio.run(run())
+    assert result is not None
+    # Must pick "newest-completed" (2026-01-03, completed_reps=7) — not the
+    # older same-protocol session, the different protocol, or the unfinished one.
+    assert result.completed_reps == 7
+
+
+def test_supabase_pause_is_a_single_conditional_patch() -> None:
+    settings = _settings(
+        app_env="staging",
+        auth_mode="supabase",
+        supabase_url="https://supabase.test",
+        supabase_service_role_key="unit-test-key",
+    )
+    calls: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        return httpx.Response(200, json=[])
+
+    repo = SupabaseRepository(settings, transport=httpx.MockTransport(handler))
+    session_id = "22222222-2222-4222-8222-222222222222"
+    paused = asyncio.run(repo.pause_active_session(session_id))
+
+    # No row matched, so the session was not active and must not be touched.
+    assert paused is False
+    assert len(calls) == 1
+    assert calls[0].method == "PATCH"
+    params = dict(calls[0].url.params)
+    assert params["id"] == f"eq.{session_id}"
+    assert params["status"] == "eq.active"
