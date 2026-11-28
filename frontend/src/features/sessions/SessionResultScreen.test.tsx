@@ -38,7 +38,7 @@ describe('session result explanation', () => {
     renderResult();
 
     expect(await screen.findByText(/no explanation available/i)).toBeInTheDocument();
-    expect(screen.getByText(/never completed/i)).toBeInTheDocument();
+    expect(screen.getByText(/this session was not completed/i)).toBeInTheDocument();
     expect(screen.queryByText(/preparing explanation/i)).not.toBeInTheDocument();
   });
 
