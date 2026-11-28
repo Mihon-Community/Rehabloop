@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Bell, ClipboardCheck, LogOut, Palette, Video } from 'lucide-react';
 import { useDemo } from '@/app/demoStore';
 import { pageTitle } from '@/app/themes';
-import NotificationStack, {
-  type StackNotification,
-} from '@/components/kokonutui/notification-stack';
-import { Badge } from '@/components/ui/badge';
 import { signOut } from '@/lib/auth';
 import { HamburgerIcon } from './HamburgerIcon';
 import { ThemePicker } from './ThemePicker';
+import { Bell, ClipboardCheck, LogOut, Palette, Stethoscope, Video } from '@/components/icon';
+import { Badge, NotificationList, type StackNotification } from '@/components/base';
 
 const demoNotifications: StackNotification[] = [
   {
@@ -103,25 +100,52 @@ export function Topbar({ onMenuClick, menuOpen }: TopbarProps) {
         aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
         aria-expanded={menuOpen}
         aria-controls={menuOpen ? 'app-sidebar-drawer' : 'app-sidebar'}
-        className="icon-btn flex size-10 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] icon-btn-flush text-[var(--foreground)] hover:bg-[var(--accent)] lg:hidden"
+        className="icon-btn icon-btn-flush flex size-11 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--accent)] sm:size-10 lg:hidden"
       >
         <HamburgerIcon open={menuOpen} />
       </button>
 
+      <span
+        className="hidden size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] text-[var(--primary)] sm:flex"
+        aria-hidden="true"
+      >
+        <Stethoscope className="size-[18px]" />
+      </span>
+
       <div className="min-w-0 flex-1">
-        <h1 className="flex min-w-0 items-baseline truncate text-sm font-semibold text-[var(--foreground)] sm:text-base">
-          <span className="shrink-0">RehabLoop</span>
-          <span className="mx-1 shrink-0 opacity-50" aria-hidden="true">
+        {/* A breadcrumb, not the page heading — it was an <h1>, which gave
+            every screen inside the shell two h1s once PageHeader renders the
+            real one. Styled identically; it is now a <p> with a nav landmark
+            name instead. Below sm the product name gives way to the page title
+            alone: with the menu button and four controls in the bar there is
+            no room for two parts, and the name is already on the drawer. */}
+        <p
+          aria-label="Current screen"
+          className="m-0 flex min-w-0 items-baseline text-sm font-semibold text-[var(--foreground)] sm:text-base"
+        >
+          <span className="hidden shrink-0 sm:inline">RehabLoop</span>
+          <span className="mx-1 hidden shrink-0 opacity-50 sm:inline" aria-hidden="true">
             /
           </span>
-          <span className="min-w-0 truncate font-normal text-[var(--muted-foreground)]">
+          <span className="min-w-0 truncate font-semibold text-[var(--foreground)] sm:font-normal sm:text-[var(--muted-foreground)]">
             {pageTitle(pathname)}
           </span>
-        </h1>
+        </p>
         <p className="hidden text-xs text-[var(--muted-foreground)] sm:block">
           Clinician-prescribed movement review
         </p>
       </div>
+
+      {/* Clinical signature for the bar, kept to a hairline so it reads as
+          chrome. Only appears from xl up, where there is width to spare after
+          the breadcrumb and the actions. */}
+      <svg
+        className="ecg-rule hidden h-3 w-32 shrink-0 xl:block"
+        viewBox="0 0 120 10"
+        aria-hidden="true"
+      >
+        <path d="M0 5h34l4-4 4 8 4-8 4 4h18l4-3 4 6 4-6 3 3h34" />
+      </svg>
 
       <div className="ml-auto flex shrink-0 items-center gap-2">
         <Badge variant="outline" className="hidden md:inline-flex" title="Display-only demo role">
@@ -143,7 +167,7 @@ export function Topbar({ onMenuClick, menuOpen }: TopbarProps) {
               aria-label={`Notifications (${remainingNotifications.length} remaining)`}
               aria-expanded={notificationsOpen}
               aria-controls="notifications-panel"
-              className="icon-btn relative flex size-9 items-center justify-center rounded-lg border border-transparent icon-btn-flush text-[var(--foreground)]"
+              className="icon-btn relative flex size-9 pointer-coarse:size-11 items-center justify-center rounded-lg border border-transparent icon-btn-flush text-[var(--foreground)]"
             >
               <Bell aria-hidden="true" />
               {remainingNotifications.length ? (
@@ -159,9 +183,9 @@ export function Topbar({ onMenuClick, menuOpen }: TopbarProps) {
                 aria-label="Notifications"
                 className="fixed left-4 right-4 top-16 z-50 rounded-xl border border-[var(--border)] bg-[var(--popover)] p-4 shadow-xl sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-[360px]"
               >
-                <NotificationStack
+                <NotificationList
                   notifications={demoNotifications}
-                  onDismiss={(id) =>
+                  onDismiss={(id: string) =>
                     setDismissedIds((previous) =>
                       previous.includes(id) ? previous : [...previous, id],
                     )
@@ -177,7 +201,7 @@ export function Topbar({ onMenuClick, menuOpen }: TopbarProps) {
             onClick={handleSignOut}
             aria-label="Sign out and return to landing page"
             title="Sign out / return to landing page"
-            className="icon-btn flex size-9 shrink-0 items-center justify-center rounded-lg border border-transparent icon-btn-flush text-[var(--foreground)]"
+            className="icon-btn icon-btn-flush flex size-9 shrink-0 items-center justify-center rounded-lg border border-transparent text-[var(--foreground)] pointer-coarse:size-11"
           >
             <LogOut aria-hidden="true" />
           </button>

@@ -8,41 +8,27 @@ export interface ThemeDefinition {
   preview: [string, string, string];
 }
 
+/* Each theme is named for the clinical setting it suits, because that is how
+   staff pick one: the palette matters less than whether it reads under ward
+   lighting, at a bedside at night or in a bright physio gym. Ids are stable —
+   they are persisted per browser, so labels may change but ids may not. */
 export const themes: ThemeDefinition[] = [
   {
     id: 'clinical-teal',
     label: 'Clinical Teal',
-    description: 'Calm teal, cool white, soft slate',
+    description: 'Theatre teal on cool white — the default clinical surface',
     preview: ['#f6f9fa', '#0f766e', '#e6f4f1'],
   },
   {
     id: 'ocean-blue',
-    label: 'Ocean Blue',
-    description: 'Deep blue, sky accents, pale blue-gray',
+    label: 'Hospital Blue',
+    description: 'Deep medical blue, sky accents, pale blue-grey charts',
     preview: ['#f3f7fc', '#1d4ed8', '#e3efff'],
   },
   {
-    id: 'sage-green',
-    label: 'Sage Green',
-    description: 'Muted green, warm white, natural neutrals',
-    preview: ['#f6f8f4', '#3f6f52', '#e5f0e3'],
-  },
-  {
-    id: 'lavender-calm',
-    label: 'Lavender Calm',
-    description: 'Calming periwinkle, soft lilac, cool neutrals',
-    preview: ['#f7f5fb', '#4f61b0', '#eee7fb'],
-  },
-  {
-    id: 'warm-sand',
-    label: 'Warm Sand',
-    description: 'Warm terracotta, cream, soft charcoal',
-    preview: ['#faf6f0', '#a85d3f', '#f6e8dc'],
-  },
-  {
     id: 'midnight',
-    label: 'Midnight',
-    description: 'Dark navy, light text, bright teal',
+    label: 'Night Shift',
+    description: 'Dark navy and bright teal for low-light bedside use',
     preview: ['#0b1622', '#2dd4bf', '#173a3d'],
   },
 ];

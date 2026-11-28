@@ -938,7 +938,9 @@ function buildMainAxes(ctx: OptionBuildContext): { xAxis: XAxisOption; yAxis: YA
     splitLine: {
       // Hidden while loading — the skeleton floats on a clean canvas.
       show: showGrid && !isLoading,
-      lineStyle: { color: splitLineColor, type: [3, 3] as [number, number], width: 1 },
+      // Solid hairline, not a dash: dashing reads as "projection" or
+      // "threshold" when this is only a grid, and adds noise behind the marks.
+      lineStyle: { color: splitLineColor, type: "solid" as const, width: 1 },
     },
     axisLabel: {
       // Hidden while loading — skeleton values are meaningless, and the Recharts
@@ -1754,7 +1756,11 @@ export function EChartsBarChart<TData extends Record<string, unknown>>({
     });
     themeObserver.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["class"],
+      // data-theme as well as class: this app selects its palette by
+      // data-theme, and series colours are snapshotted to rgba() at push
+      // time, so without it the canvas keeps the previous theme's colours
+      // until the next resize or re-render.
+      attributeFilter: ["class", "data-theme"],
     });
 
     // Expandable hover, driven by the pointer's COLUMN rather than the bar element.

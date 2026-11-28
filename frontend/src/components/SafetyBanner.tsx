@@ -1,5 +1,5 @@
-import { ShieldCheck } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ShieldCheck } from '@/components/icon';
+import { Alert, AlertDescription, AlertTitle } from '@/components/base';
 
 /** Visible on every screen — copy is deliberately unchanged. */
 export function SafetyBanner() {

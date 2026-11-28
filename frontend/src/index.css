@@ -4,12 +4,8 @@
    screens keep their styling; new shadcn-style primitives use the mapped names. */
 :root {
   --radius: 0.875rem;
-  --card-shadow:
-    0 1px 2px rgb(23 48 67 / 0.05),
-    0 10px 28px -6px rgb(23 48 67 / 0.07);
-  --card-shadow-hover:
-    0 2px 4px rgb(23 48 67 / 0.07),
-    0 20px 44px -8px rgb(23 48 67 / 0.14);
+  --card-shadow: 0 1px 2px rgb(23 48 67 / 0.05), 0 10px 28px -6px rgb(23 48 67 / 0.07);
+  --card-shadow-hover: 0 2px 4px rgb(23 48 67 / 0.07), 0 20px 44px -8px rgb(23 48 67 / 0.14);
   --camera-surface: #122634;
   --camera-point: #5eead4;
   --camera-text: #d6e6ef;
@@ -33,11 +29,22 @@
   --border: #dce7ec;
   --input: #cfdce3;
   --ring: #0f766e;
-  --chart-1: #0f766e;
-  --chart-2: #3b82a6;
-  --chart-3: #8a6fb3;
-  --chart-4: #c08552;
-  --chart-5: #6b8f71;
+  /* Series colours. Two slots, not five: every chart on this app plots a single
+     series (the card title names it), and the only genuine two-mark comparison
+     is the Recovery Twin's measured-vs-earlier pair. Slot 1 tracks the theme's
+     own hue; slot 2 is its blue/amber counterpart, the one axis that survives
+     protanopia and deuteranopia.
+
+     These are not hand-picked. Every theme's pair clears OKLCH chroma >= 0.10,
+     the lightness band, >= 3:1 on that theme's card surface, a colour-blind
+     separation of CVD dE >= 8 and a normal-vision dE >= 15 (OKLab x100, all
+     pairs). The previous five-slot set failed three of those: four of its five
+     tokens sat under the chroma floor and read as grey, and chart-2 vs chart-3
+     measured dE 2.2 under deuteranopia. Adding a third series means re-running
+     the validator, not appending a hex — in this palette the third slot lands
+     on red or plum, which would impersonate --danger. */
+  --chart-1: #129086;
+  --chart-2: #c17f11;
   --success: #14663f;
   --success-soft: #e8f5ee;
   --warning: #8a5a12;
@@ -52,6 +59,22 @@
   --sidebar-accent: #24515b;
   --sidebar-border: #2c5a64;
   --sidebar-primary: #5eead4;
+
+  /* Triage tones. Severity in a clinical UI has to survive being printed,
+     photocopied and read by a colour-blind clinician, so every level below is
+     paired with an icon or text label at the call site and never used alone.
+     They default to the semantic tones above and are overridden per theme only
+     where a theme's own hues would collide with them. */
+  --triage-stable: var(--success);
+  --triage-stable-soft: var(--success-soft);
+  --triage-caution: var(--warning);
+  --triage-caution-soft: var(--warning-soft);
+  --triage-critical: var(--danger);
+  --triage-critical-soft: var(--danger-soft);
+  /* Faint squared rule used behind measurement panels, in the spirit of ECG
+     chart paper. Kept well under the text contrast floor so it never competes
+     with the numbers printed on top of it. */
+  --chart-paper: color-mix(in srgb, var(--primary) 9%, transparent);
 
   /* Legacy aliases used by existing components. */
   --ink: var(--foreground);
@@ -96,11 +119,8 @@
   --border: #d4e2f0;
   --input: #c5d7e8;
   --ring: #1d4ed8;
-  --chart-1: #2563eb;
-  --chart-2: #0891b2;
-  --chart-3: #7c3aed;
-  --chart-4: #d97706;
-  --chart-5: #0f766e;
+  --chart-1: #2352cf;
+  --chart-2: #c17f11;
   --info-soft: #e8f1fb;
   --simulated-bg: #ede8fb;
   --simulated-fg: #5b21b6;
@@ -109,111 +129,6 @@
   --sidebar-accent: #1d3555;
   --sidebar-border: #2a4262;
   --sidebar-primary: #60a5fa;
-}
-
-[data-theme='sage-green'] {
-  --background: #f6f8f4;
-  --foreground: #24352a;
-  --card: #ffffff;
-  --card-foreground: #24352a;
-  --popover: #ffffff;
-  --popover-foreground: #24352a;
-  --primary: #3f6f52;
-  --primary-foreground: #ffffff;
-  --primary-hover: #345c44;
-  --secondary: #eaf1e8;
-  --secondary-foreground: #2e4d38;
-  --muted-bg: #edf2eb;
-  --muted-foreground: #5f7163;
-  --accent: #e5f0e3;
-  --accent-foreground: #2e4d38;
-  --destructive: #b42318;
-  --border: #d9e4d7;
-  --input: #c9d9c6;
-  --ring: #3f6f52;
-  --chart-1: #4d7c5f;
-  --chart-2: #6b8f71;
-  --chart-3: #8a6fb3;
-  --chart-4: #c08552;
-  --chart-5: #3b82a6;
-  --info-soft: #eaf3ea;
-  --simulated-bg: #efe8fb;
-  --simulated-fg: #5b21b6;
-  --sidebar: #1e3327;
-  --sidebar-foreground: #f1f7f1;
-  --sidebar-accent: #2c4a37;
-  --sidebar-border: #3a5a46;
-  --sidebar-primary: #86c39c;
-}
-
-[data-theme='lavender-calm'] {
-  --background: #f7f5fb;
-  --foreground: #2c2440;
-  --card: #ffffff;
-  --card-foreground: #2c2440;
-  --popover: #ffffff;
-  --popover-foreground: #2c2440;
-  --primary: #4f61b0;
-  --primary-foreground: #ffffff;
-  --primary-hover: #3f4f93;
-  --secondary: #f0ebfa;
-  --secondary-foreground: #3d3159;
-  --muted-bg: #f0ecf7;
-  --muted-foreground: #6b6280;
-  --accent: #eee7fb;
-  --accent-foreground: #3d3159;
-  --destructive: #b42318;
-  --border: #e1daf0;
-  --input: #d4cae8;
-  --ring: #4f61b0;
-  --chart-1: #4f61b0;
-  --chart-2: #8b9fe0;
-  --chart-3: #3b82a6;
-  --chart-4: #0f766e;
-  --chart-5: #c08552;
-  --info-soft: #f0ebfa;
-  --simulated-bg: #e8e0fb;
-  --simulated-fg: #5b21b6;
-  --sidebar: #2a2142;
-  --sidebar-foreground: #f5f1fb;
-  --sidebar-accent: #3b2f5b;
-  --sidebar-border: #4a3d6d;
-  --sidebar-primary: #9aa8e6;
-}
-
-[data-theme='warm-sand'] {
-  --background: #faf6f0;
-  --foreground: #382c24;
-  --card: #ffffff;
-  --card-foreground: #382c24;
-  --popover: #ffffff;
-  --popover-foreground: #382c24;
-  --primary: #a85d3f;
-  --primary-foreground: #ffffff;
-  --primary-hover: #8c4a32;
-  --secondary: #f4ebe0;
-  --secondary-foreground: #4c3b30;
-  --muted-bg: #f3ece3;
-  --muted-foreground: #77685c;
-  --accent: #f6e8dc;
-  --accent-foreground: #4c3b30;
-  --destructive: #b42318;
-  --border: #e8dacb;
-  --input: #dac8b6;
-  --ring: #a85d3f;
-  --chart-1: #a85d3f;
-  --chart-2: #d2996c;
-  --chart-3: #8a6fb3;
-  --chart-4: #0f766e;
-  --chart-5: #3b82a6;
-  --info-soft: #f6ece1;
-  --simulated-bg: #efe8fb;
-  --simulated-fg: #5b21b6;
-  --sidebar: #3a2b22;
-  --sidebar-foreground: #faf3ea;
-  --sidebar-accent: #50392d;
-  --sidebar-border: #63493b;
-  --sidebar-primary: #dca07c;
 }
 
 [data-theme='midnight'] {
@@ -239,11 +154,8 @@
   --border: #25415a;
   --input: #33536e;
   --ring: #2dd4bf;
-  --chart-1: #2dd4bf;
-  --chart-2: #60a5fa;
-  --chart-3: #c084fc;
-  --chart-4: #fbbf24;
-  --chart-5: #f472b6;
+  --chart-1: #20b6a4;
+  --chart-2: #d58d16;
   --success: #4ade80;
   --success-soft: #10352a;
   --warning: #fbbf24;
@@ -286,9 +198,9 @@
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
+  --color-triage-stable: var(--triage-stable);
+  --color-triage-caution: var(--triage-caution);
+  --color-triage-critical: var(--triage-critical);
 }
 
 * {
@@ -307,30 +219,37 @@ body {
     sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  /* Model versions, keypoint-mapping ids and session references are long
+     unbroken tokens; without this they push a phone viewport sideways. */
+  overflow-wrap: break-word;
 }
 
-h1 {
-  font-size: 1.75rem;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  margin: 0;
-  font-weight: 700;
-}
-h2 {
-  font-size: 1.15rem;
-  line-height: 1.3;
-  margin: 1.6rem 0 0.65rem;
-  font-weight: 650;
-}
-h3 {
-  font-size: 1rem;
-  margin: 1rem 0 0.5rem;
-  font-weight: 650;
-}
-p {
-  line-height: 1.6;
-}
+/* Heading defaults belong in @layer base for the same reason the button
+   baseline does: unlayered element rules outrank every Tailwind utility, so a
+   `text-sm` on the topbar's <h1> was silently losing to `font-size: 1.75rem`
+   and rendering the page title at 28px inside a 64px bar. */
 @layer base {
+  h1 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 1.15rem;
+    line-height: 1.3;
+    margin: 1.6rem 0 0.65rem;
+    font-weight: 650;
+  }
+  h3 {
+    font-size: 1rem;
+    margin: 1rem 0 0.5rem;
+    font-weight: 650;
+  }
+  p {
+    line-height: 1.6;
+  }
   a {
     color: var(--primary);
     text-decoration-color: color-mix(in srgb, var(--primary) 40%, transparent);
@@ -359,91 +278,6 @@ p {
 }
 .skip-link:focus {
   left: 1rem;
-}
-
-.app-shell {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 4rem;
-}
-
-.app-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: 0.5rem 0 1rem;
-}
-.app-title {
-  font-size: 1.6rem;
-  font-weight: 750;
-  letter-spacing: -0.03em;
-  margin: 0;
-  color: var(--foreground);
-}
-.app-subtitle {
-  margin: 0.25rem 0 0;
-  color: var(--muted-foreground);
-  font-size: 0.92rem;
-}
-
-.header-badges {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-.role-badge,
-.simulated-badge {
-  display: inline-block;
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-.role-badge {
-  background: var(--secondary);
-  color: var(--secondary-foreground);
-}
-.simulated-badge {
-  background: var(--simulated-bg);
-  color: var(--simulated-fg);
-}
-
-.app-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin: 0.5rem 0 1.25rem;
-  padding: 0.35rem;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  width: fit-content;
-  max-width: 100%;
-}
-.nav-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 0.85rem;
-  border-radius: 999px;
-  color: var(--muted-foreground);
-  font-size: 0.88rem;
-  font-weight: 600;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.nav-link:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
-  text-decoration: none;
-}
-.nav-link.active {
-  background: var(--primary);
-  color: var(--primary-foreground);
-  box-shadow: 0 1px 3px rgb(15 118 110 / 0.3);
 }
 
 /* App topbar: a frosted bar rather than a flat one, consistent with the
@@ -602,18 +436,24 @@ p {
   color: var(--primary);
 }
 
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  /* A thin inner top highlight reads as a soft "glass" edge in every theme —
-     mixed from --foreground rather than literal white, so light and dark
-     themes both get a believable, subtle amount of it. */
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent),
-    var(--card-shadow);
+/* Layered, so a call site can still cancel the defaults. Unlayered, `.card`
+   outranked every Tailwind utility: `card p-0` kept its 1.5rem padding and
+   `card mb-0` kept a bottom margin that doubled up with `.screen-stack`'s own
+   1rem gap. The defaults below are unchanged — they are just overridable now. */
+@layer components {
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    /* A thin inner top highlight reads as a soft "glass" edge in every theme —
+       mixed from --foreground rather than literal white, so light and dark
+       themes both get a believable, subtle amount of it. */
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent),
+      var(--card-shadow);
+  }
 }
 .card > h2:first-child,
 .card > h1:first-child {
@@ -666,8 +506,13 @@ p {
 .card-accent-left {
   border-left: 4px solid var(--primary);
 }
+/* minmax(0, 1fr), not the implicit auto track: an auto track takes the
+   min-content width of its widest item, so one wide child (a chart's SVG, a
+   data table) grew the single column and stretched every other row on the
+   screen past the viewport on a phone. */
 .screen-stack {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 .screen-title-row {
@@ -677,62 +522,75 @@ p {
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
 }
-.section-kicker {
-  font-size: 0.72rem;
-  font-weight: 750;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--primary);
-  margin: 0 0 0.35rem;
-}
-.screen-intro {
-  color: var(--muted-foreground);
-  max-width: 70ch;
-  margin: 0.25rem 0 1.25rem;
+/* In @layer components, not unlayered: these carry default margins and a
+   measure, and an unlayered class outranks every Tailwind layer — so
+   `screen-intro mt-5` and `section-kicker mb-0` were silently no-ops at the
+   call site. Layered, the defaults still apply but a utility can override. */
+@layer components {
+  .section-kicker {
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: 0 0 0.35rem;
+  }
+  .screen-intro {
+    color: var(--muted-foreground);
+    max-width: 70ch;
+    margin: 0.25rem 0 1.25rem;
+  }
+  .meta {
+    color: var(--muted-foreground);
+    font-size: 0.86rem;
+    margin: 0.4rem 0;
+  }
 }
 
-.meta {
-  color: var(--muted-foreground);
-  font-size: 0.86rem;
-  margin: 0.4rem 0;
-}
 .app-footer {
   margin-top: 2rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border);
 }
 
-button,
-.button-link {
-  font: inherit;
-  padding: 0.6rem 1rem;
-  border-radius: 9px;
-  border: 1px solid var(--input);
-  background: var(--card);
-  color: var(--foreground);
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition:
-    background-color 120ms ease,
-    border-color 120ms ease;
-}
-button:hover:not(:disabled),
-.button-link:hover {
-  background: var(--accent);
-  border-color: var(--primary);
-  color: var(--accent-foreground);
-  text-decoration: none;
-}
-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
+/* The bare-element button baseline lives in @layer base so that per-button
+   utility classes (and the Button primitive's variants) can override it:
+   unlayered rules outrank every Tailwind layer no matter how specific the
+   utility is, which previously left `<Button variant="default">` wearing this
+   neutral card surface instead of its own. Opt-in classes below stay
+   unlayered so `className="primary"` still wins over the baseline. */
+@layer base {
+  button,
+  .button-link {
+    font: inherit;
+    padding: 0.6rem 1rem;
+    border-radius: 9px;
+    border: 1px solid var(--input);
+    background: var(--card);
+    color: var(--foreground);
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition:
+      background-color 120ms ease,
+      border-color 120ms ease,
+      color 120ms ease;
+  }
+  button:hover:not(:disabled),
+  .button-link:hover {
+    background: var(--accent);
+    border-color: var(--primary);
+    color: var(--accent-foreground);
+    text-decoration: none;
+  }
+  button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
 }
 /* Icon-only square buttons (navbar bell/sign-out/hamburger, notification
-   dismiss) need zero padding so a fixed-size flex box doesn't crush its
-   icon. Tailwind's utility classes (e.g. `p-0`) live in a cascade layer that
-   loses to this unlayered sheet, so the override has to live here instead. */
+   dismiss) need zero padding so a fixed-size flex box doesn't crush its icon. */
 .icon-btn-flush {
   padding: 0;
 }
@@ -742,10 +600,57 @@ button.primary,
   border-color: var(--primary);
   color: var(--primary-foreground);
 }
+/* --primary-hover rather than a literal teal: the old hardcoded value turned
+   every theme's primary button teal on hover. */
 button.primary:hover:not(:disabled),
 .button-link.primary:hover {
-  background: #0b5f59;
-  color: #fff;
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: var(--primary-foreground);
+}
+
+/* Clinical action buttons. Confirming, acknowledging and stopping are
+   different kinds of act in a care workflow, so each gets its own tone
+   instead of one neutral grey for all three. Each still carries its own text
+   label — colour is never the only signal. */
+button.clinical-confirm,
+.button-link.clinical-confirm {
+  background: var(--success-soft);
+  border-color: color-mix(in srgb, var(--success) 45%, var(--border));
+  color: var(--success);
+}
+button.clinical-confirm:hover:not(:disabled),
+.button-link.clinical-confirm:hover {
+  background: color-mix(in srgb, var(--success-soft) 80%, var(--success));
+  border-color: var(--success);
+  color: var(--success);
+}
+button.clinical-stop,
+.button-link.clinical-stop {
+  background: var(--danger-soft);
+  border-color: color-mix(in srgb, var(--danger) 45%, var(--border));
+  color: var(--danger);
+}
+button.clinical-stop:hover:not(:disabled),
+.button-link.clinical-stop:hover {
+  background: color-mix(in srgb, var(--danger-soft) 80%, var(--danger));
+  border-color: var(--danger);
+  color: var(--danger);
+}
+/* Reserved for the one irreversible control on a screen (ending a live
+   capture). Filled rather than tinted so it never reads as a peer of the
+   tinted buttons beside it. */
+button.clinical-critical,
+.button-link.clinical-critical {
+  background: var(--destructive);
+  border-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+button.clinical-critical:hover:not(:disabled),
+.button-link.clinical-critical:hover {
+  background: color-mix(in srgb, var(--destructive) 85%, black);
+  border-color: color-mix(in srgb, var(--destructive) 85%, black);
+  color: var(--destructive-foreground);
 }
 .button-row {
   display: flex;
@@ -827,6 +732,12 @@ button.primary:hover:not(:disabled),
   background: var(--muted-bg);
   padding: 1.25rem;
   border-radius: 12px;
+}
+/* For use inside a `surface="paper"` card, where the opaque muted fill of the
+   default would hide the chart-paper grid underneath it. */
+.detail-list-plain {
+  background: transparent;
+  padding: 0;
 }
 .detail-list dt {
   font-weight: 650;
@@ -949,14 +860,6 @@ fieldset {
   border: 1px solid var(--border);
   border-radius: 12px;
 }
-.role-picker {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  margin: 1rem 0;
-  padding: 1rem;
-}
-.role-picker label,
 .form-grid label {
   display: grid;
   gap: 0.35rem;
@@ -1035,6 +938,13 @@ input[type='range'] {
   grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
   gap: 1.5rem;
 }
+/* The WebGL canvas carries a fixed pixel width between resize observations,
+   which otherwise becomes the automatic minimum of the track holding it and
+   widens the page on a narrow phone. */
+.live-grid > *,
+.twin-grid > * {
+  min-width: 0;
+}
 .live-metrics {
   display: grid;
   gap: 0.75rem;
@@ -1073,16 +983,130 @@ input[type='range'] {
 }
 
 .twin-canvas {
-  height: 280px;
+  /* Scales down on a phone instead of eating half the viewport, and stops at
+     280px so it never dominates a desktop card. */
+  height: clamp(200px, 46vw, 280px);
+  /* The WebGL canvas reports a wide intrinsic size; without this it grows the
+     grid or flex track it sits in on a narrow phone. */
+  min-width: 0;
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
-  background: var(--muted-bg);
+  /* A soft pool of light behind the figure rather than a flat fill: it gives
+     the schematic somewhere to stand and keeps the eye on the joint, which
+     sits just above centre. Both stops are theme tokens, so it follows the
+     active palette like everything else. */
+  /* Three layers, all token-derived: a soft pool of light behind the figure, a
+     quiet floor-ward darkening that reads as a surface without drawing one, and
+     the base wash. This is the grounding channel — a 3D shadow catcher cannot
+     do the job at the shallow camera elevation the knee angle requires (see
+     TwinAvatar). Kept as a vignette rather than a figure-shaped smudge, because
+     it cannot track the rig as the view orbits and should not pretend to. */
+  background:
+    radial-gradient(
+      76% 58% at 50% 40%,
+      color-mix(in srgb, var(--card) 92%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      120% 46% at 50% 108%,
+      color-mix(in oklab, var(--muted-bg) 72%, black),
+      transparent 68%
+    ),
+    linear-gradient(180deg, var(--muted-bg), color-mix(in oklab, var(--muted-bg) 90%, black));
   transition: border-color 180ms ease;
 }
 .twin-canvas:hover {
   border-color: var(--primary);
 }
+/* Referenced by TwinAvatar's no-WebGL and error paths. These carried no rules
+   at all, so the fallback message sat in the corner of an unsized box. */
+.twin-fallback {
+  display: grid;
+  place-content: center;
+  height: 100%;
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+.twin-fallback-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Interactive viewer: the canvas plus its own control bar. The controls sit
+   outside the canvas so they are reachable by keyboard and screen readers,
+   and so the measured values printed below the canvas are never covered. */
+.twin-viewer {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+/* The viewer card spans the full content column, which made the canvas a
+   ~3.8:1 letterbox strip: the camera fit solves for height there, so the rig
+   filled the frame vertically with wide dead margins either side. Capping the
+   width gives it a panel shape close to the rig's own 2.5:1 footprint. */
+.twin-viewer .twin-canvas {
+  /* width:100% is load-bearing: `margin-inline: auto` on a grid item cancels
+     the default stretch, so without it the box shrank to fit its own <canvas>,
+     which R3F had sized from the box — a feedback loop that settled at 302px. */
+  width: 100%;
+  max-width: 40rem;
+  margin-inline: auto;
+}
+.twin-viewer .twin-canvas:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+/* While the viewer is armed, scrolling over it zooms instead of scrolling the
+   page. Saying so with a visible edge keeps that from being a surprise. */
+.twin-viewer .twin-canvas[data-armed] {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+.twin-viewer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+.twin-viewer-hint {
+  flex: 1 1 14rem;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+}
+.twin-viewer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.twin-viewer-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  /* 2.75rem = 44px, the touch-target floor. */
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+.twin-viewer-button-wide {
+  padding: 0 0.7rem;
+}
+
 /* Only the WebGL canvas is draggable; the 2D fallback keeps a normal cursor. */
 .twin-canvas canvas {
   cursor: grab;
@@ -1173,26 +1197,6 @@ input[type='range'] {
   z-index: 0;
 }
 
-/* Floating collapse toggle — straddles the sidebar's edge rather than taking a
-   full-width row, so it reads as chrome, not navigation. */
-.sidebar-collapse-toggle {
-  transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease,
-    transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 200ms ease;
-}
-.sidebar-collapse-toggle:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-  transform: scale(1.08);
-  box-shadow: var(--card-shadow-hover);
-}
-.sidebar-collapse-toggle:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
 .app-sidebar-link {
   position: relative;
   transition:
@@ -1378,31 +1382,402 @@ input[type='range'] {
   opacity: 0.08;
 }
 
+/* ---------------------------------------------------------------------------
+   Clinical chrome
+   The shared vocabulary that makes this read as a care tool rather than a
+   generic dashboard: a chart-header rule, triage accents, ECG-paper panels and
+   a vitals strip. All of it is token-driven, so every theme gets it for free.
+   --------------------------------------------------------------------------- */
+
+/* A card titled like a section of a paper chart: label, optional meta line,
+   then a hairline rule separating the heading from the readings below it. Any
+   trailing element (a status pill, a timestamp) is pushed to the right. */
+.card-chart-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+/* Layout convention: icon chip first, the title block second, any trailing
+   action third. Letting the title block absorb the free space puts a trailing
+   action hard right without pushing the title there when there isn't one. */
+.card-chart-head > :nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.card-chart-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--card-foreground);
+}
+.card-chart-meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted-foreground);
+}
+
+/* Triage accent: a 4px spine down the leading edge, mirroring the coloured
+   tab on a physical patient file. Paired with a status pill at the call site
+   so the level is never carried by hue alone. */
+.card-triage {
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+.card-triage-stable {
+  border-left-color: var(--triage-stable);
+}
+.card-triage-caution {
+  border-left-color: var(--triage-caution);
+}
+.card-triage-critical {
+  border-left-color: var(--triage-critical);
+}
+/* Critical panels also get a faint tinted wash, because a single stripe is
+   easy to miss when a page is dense with cards. */
+.card-triage-critical {
+  background-image: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--triage-critical) 7%, transparent),
+    transparent 180px
+  );
+}
+
+/* ECG-paper backing for panels that display a measurement. The grid is
+   masked to fade downward so it never fights with the content's baseline. */
+/* The grid sits ABOVE the card's background and the content sits above the
+   grid. It used to be a z-index:-1 pseudo-element, which — under this rule's
+   own `isolation: isolate` — painted behind the card's opaque background and
+   so never appeared at all. Same lift pattern as `.medical-bg` below. */
+.card-chart-paper {
+  position: relative;
+  isolation: isolate;
+}
+.card-chart-paper > * {
+  position: relative;
+  z-index: 1;
+}
+.card-chart-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(to right, var(--chart-paper) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--chart-paper) 1px, transparent 1px);
+  background-size: 18px 18px;
+  mask-image: linear-gradient(to bottom, black, transparent 72%);
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent 72%);
+}
+
+/* Vitals strip: a compact row of label/value pairs separated by hairlines,
+   the way an obs chart groups readings. Collapses to one column on narrow
+   screens via the media query at the end of this file. */
+.vitals-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--muted-bg);
+  overflow: hidden;
+}
+.vitals-strip > * {
+  padding: 0.75rem 1rem;
+  border-left: 1px solid var(--border);
+}
+.vitals-strip > :first-child {
+  border-left: 0;
+}
+.vitals-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+/* A caveat that belongs to one reading rather than the whole strip — e.g. that
+   an angle is a projected estimate and not a medical threshold. */
+.vitals-note {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: var(--muted-foreground);
+}
+.vitals-value {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+/* Measured numbers line up column-to-column and don't jitter as they tick. */
+.metric-value,
+.data-table td,
+.vitals-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Patient-banner strip: the always-visible context header a clinical record
+   screen carries, so it is never ambiguous whose data is on screen. */
+.patient-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--card-shadow);
+}
+.patient-banner-name {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.patient-banner-field {
+  font-size: 0.82rem;
+  color: var(--muted-foreground);
+}
+.patient-banner-field strong {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+/* A single ECG complex used as a hairline accent in the topbar and above the
+   sidebar footer. Static by design: an animated trace would imply a live
+   reading, and nothing here is measuring anything. Sizing and display are left
+   to the call site: this class is unlayered, so a `display` or `width` here
+   would beat `hidden` and `w-*` and leave the trace forcing a flex row wider
+   than a phone viewport. */
+.ecg-rule {
+  color: var(--primary);
+  opacity: 0.5;
+}
+.ecg-rule path {
+  stroke: currentColor;
+  stroke-width: 1.25;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Mobile bottom navigation. A ward-floor device is held one-handed, so the
+   primary destinations sit in the thumb zone rather than behind a menu at the
+   top of the screen. Frosted like the topbar, with the same primary-tinted
+   hairline on its leading (top) edge. */
+.mobile-nav {
+  background-color: color-mix(in srgb, var(--card) 94%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -8px 24px -18px rgb(15 23 42 / 0.35);
+  /* Keeps the row clear of the iOS home indicator / Android gesture bar. */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.mobile-nav-link {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  /* 2.75rem of target height plus padding clears the 44px touch minimum. */
+  min-height: 3.25rem;
+  padding: 0.4rem 0.25rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: 0.65rem;
+  font-weight: 650;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.mobile-nav-link:hover:not(:disabled) {
+  background: transparent;
+  color: var(--primary);
+}
+.mobile-nav-link[aria-current='page'] {
+  color: var(--primary);
+}
+.mobile-nav-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+/* The pill behind the active icon, rather than a top border: it reads at a
+   glance on a small screen and leaves the label legible. */
+.mobile-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+.mobile-nav-link[aria-current='page'] .mobile-nav-icon,
+.mobile-nav-icon.is-active {
+  background: var(--accent);
+  color: var(--primary);
+}
+.mobile-nav-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* Sidebar department headers: a label with a rule running out to the edge, so
+   the nav groups read as wards on a directory board. */
+.sidebar-group-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem 0.5rem;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sidebar-foreground);
+  opacity: 0.55;
+}
+.sidebar-group-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--sidebar-primary) 30%, transparent),
+    transparent
+  );
+}
+
+/* Standing status block at the foot of the sidebar — the equivalent of the
+   mode light on a monitor. The dot pulses; the text states the mode outright
+   so the meaning does not depend on the animation. */
+.sidebar-status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0.75rem 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--sidebar-border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--sidebar-accent) 55%, transparent);
+}
+.sidebar-status-dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--sidebar-primary);
+  animation: vital-pulse 2.6s ease-in-out infinite;
+}
+.sidebar-status-text {
+  min-width: 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--sidebar-foreground);
+  opacity: 0.8;
+}
+@keyframes vital-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--sidebar-primary) 50%, transparent);
+  }
+  55% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--sidebar-primary) 0%, transparent);
+  }
+}
+
 /* App page and card entrance motion — one-shot, never looping. */
+/* Page shell: an opacity-only fade. It used to also translate, which stacked
+   with the card rise below and read as two things sliding at once. */
 .page-enter {
-  animation: page-in 320ms ease-out both;
+  animation: page-in 300ms ease-out backwards;
 }
 @keyframes page-in {
   from {
-    opacity: 0.75;
-    transform: translateY(6px);
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Cards settle into place: a fade with a short rise, on the same
+   cubic-bezier the hover lift uses, so entrance and interaction read as one
+   motion language rather than two. */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
     transform: none;
   }
 }
-.motion-stagger > * {
-  animation: reveal-in 420ms ease-out both;
+
+/* `backwards`, never `both`. A forwards-filled animation keeps its final
+   `transform: none` applied as an ANIMATED value, and animated values outrank
+   the cascade — which silently killed the hover lift on every card inside a
+   stagger grid (the card reported :hover, the transform stayed identity).
+   `backwards` holds the start state through the delay, then hands the element
+   back to its normal styles, so hover works the moment the entrance ends. */
+:is(.screen-stack, .motion-stagger) > * {
+  /* Reset, not a `var()` fallback. --stagger is a custom property and so it
+     INHERITS: a stagger row is itself a stack child, so its own delay leaked
+     down into its first card — the only one with no nth-child rule of its own
+     — and that card started *after* its siblings. Declaring it here shadows
+     the inherited value; the nth-child rules below still win on specificity. */
+  --stagger: 0ms;
+  animation: card-in 440ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--stagger);
 }
-.motion-stagger > *:nth-child(2) {
-  animation-delay: 70ms;
+
+/* A capped ladder. The old rule gave every child past the third the same
+   190ms, so a six-card grid arrived as "one, two, three, then everything
+   else at once"; leaving it uncapped instead makes a long list crawl. The
+   steps shorten as they go, so the tail feels like it is catching up. */
+:is(.screen-stack, .motion-stagger) > *:nth-child(2) {
+  --stagger: 60ms;
 }
-.motion-stagger > *:nth-child(3) {
-  animation-delay: 140ms;
+:is(.screen-stack, .motion-stagger) > *:nth-child(3) {
+  --stagger: 115ms;
 }
-.motion-stagger > *:nth-child(n + 4) {
-  animation-delay: 190ms;
+:is(.screen-stack, .motion-stagger) > *:nth-child(4) {
+  --stagger: 165ms;
+}
+:is(.screen-stack, .motion-stagger) > *:nth-child(5) {
+  --stagger: 205ms;
+}
+:is(.screen-stack, .motion-stagger) > *:nth-child(6) {
+  --stagger: 235ms;
+}
+:is(.screen-stack, .motion-stagger) > *:nth-child(n + 7) {
+  --stagger: 255ms;
+}
+
+/* A nested stack (TrendChart renders its own inside a screen's) would
+   otherwise add its parent's delay to its own and arrive late. */
+:is(.screen-stack, .motion-stagger) :is(.screen-stack, .motion-stagger) > * {
+  animation-duration: 380ms;
 }
 
 /* Landing motion — decorative only; reduced-motion users see final state. */
@@ -1459,19 +1834,25 @@ input[type='range'] {
   }
 }
 
-@media (max-width: 720px) {
-  .app-shell {
-    padding: 1rem 1rem 3rem;
+/* Phone-width actions: side-by-side buttons below roughly 30rem end up as
+   two-line text in boxes too narrow to read, so the row becomes a stack of
+   full-width targets instead. */
+@media (max-width: 30rem) {
+  .button-row {
+    flex-direction: column;
+    align-items: stretch;
   }
-  .app-nav {
-    border-radius: 16px;
+  .button-row > * {
     width: 100%;
-    overflow-x: auto;
-    flex-wrap: nowrap;
+    justify-content: center;
+    text-align: center;
   }
+}
+
+@media (max-width: 720px) {
   .live-grid,
   .twin-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .detail-list {
     grid-template-columns: 1fr;
@@ -1482,6 +1863,18 @@ input[type='range'] {
   }
   .card {
     padding: 1.15rem;
+  }
+  /* Column flow would squeeze four readings into unreadable slivers; stack
+     them and move the hairlines to the horizontal edges instead. */
+  .vitals-strip {
+    grid-auto-flow: row;
+  }
+  .vitals-strip > * {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+  .vitals-strip > :first-child {
+    border-top: 0;
   }
 }
 

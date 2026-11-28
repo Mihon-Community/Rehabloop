@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Camera, ClipboardList, FileText } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { ArrowRight, Camera, ClipboardList, FileText } from '@/components/icon';
+import { Badge } from '@/components/base';
 
 interface Step {
   number: string;

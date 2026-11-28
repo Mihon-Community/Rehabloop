@@ -1,6 +1,6 @@
-import { Badge } from '@/components/ui/badge';
 import { SIMULATED_LABEL } from '@/lib/mocks/fixtures';
 import type { DataSource } from '@/types';
+import { Badge } from '@/components/base';
 
 /** Every screen backed by fixtures must render this badge. */
 export function SimulatedBadge({ source }: { source: DataSource }) {
